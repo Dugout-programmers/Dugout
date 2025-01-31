@@ -16,19 +16,44 @@ const games = computed(() =>
 
 const selectedGame = ref("");
 
+// 현재 경로에서 게임 타입을 확인하는 함수 추가
+const getCurrentGameType = (path) => {
+  // 퀴즈 관련 모든 경로
+  if (path.includes("/game/quizselect")) {
+    return "quiz";
+  }
+  // 토너먼트 관련 모든 경로
+  if (path.includes("/game/tournamentselect")) {
+    return "tournament";
+  }
+  // 기타 게임
+  const gamePath = path.split("/game/")[1];
+  return gamePath;
+};
+
 watch(
   () => route.path,
   (newPath) => {
-    const currentPath = newPath.split("/").pop();
-    const matchedGame = games.value.find((game) => game.path === currentPath);
-    selectedGame.value = matchedGame ? matchedGame.name : "";
+    const gameType = getCurrentGameType(newPath);
+    const matchedGame = games.value.find((game) => game.path === gameType);
+    if (matchedGame) {
+      selectedGame.value = matchedGame.name;
+    }
   },
   { immediate: true }
 );
 
 const selectGame = (game) => {
-  selectedGame.value = game.name;
-  router.push(game.url);
+  if (game.path === "quiz") {
+    selectedGame.value = game.name;
+    router.push("/game/quizselect");
+  } else if (game.path === "tournament") {
+    selectedGame.value = game.name;
+    router.push("/game/tournamentselect");
+  } else {
+    selectedGame.value = game.name;
+    router.push(game.url);
+  }
 };
 </script>
 
