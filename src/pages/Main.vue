@@ -383,11 +383,11 @@ onMounted(async () => {
   </section>
   <section class="h-[calc(100vh-100px)] w-screen bg-black01 relative">
     <div
-      class="absolute left-1/2 bottom-0 -translate-x-1/2 w-[80%] max-w-[1200px]">
-      <img :src="Monitor" class="w-full h-[600px]" />
+      class="absolute left-1/2 bottom-0 -translate-x-1/2 w-[100%] max-w-[1200px]">
+      <img :src="Monitor" class="w-full h-[calc(100vh-130px)]" />
     </div>
     <div
-      class="absolute left-1/2 -translate-x-1/2 bottom-[130px] w-full flex flex-col items-center gap-[50px] text-white01">
+      class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-[50px] text-white01">
       <div class="font-Galmuri11 text-[24px]">
         야구와 관련된 다양한 게임도 플레이할 수 있어요!
       </div>
