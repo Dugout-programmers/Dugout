@@ -37,7 +37,7 @@ const fetchPosts = async () => {
       restoreScrollPosition();
     }, 0);
   } else {
-    console.log("특정 게시물 데이터 가져오기 실패!");
+    console.log("직관 크루 모집 게시물이 없습니다.");
   }
 };
 
@@ -118,7 +118,11 @@ watch(
           />
         </template>
         <template v-else>
-          <h1>데이터가 없습니다.</h1>
+          <div class="flex justify-center items-center w-full col-span-3">
+            <span class="text-center">
+              게시물이 없습니다. 게시물을 작성해보세요!
+            </span>
+          </div>
         </template>
       </div>
     </div>

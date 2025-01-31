@@ -192,9 +192,11 @@ const fetchPostDetails = async () => {
     myAge.value = post.value.author_age;
     crewGender.value = post.value.crew_sex;
     crewAge.value = post.value.crew_age;
+
+    // 🏆 "2명" -> "2" 숫자만 추출
     const membersData = post.value.members;
     const [numberPart, statusPart] = membersData.split(" ");
-    peopleNum.value = numberPart;
+    peopleNum.value = numberPart.replace(/\D/g, ""); // 숫자만 추출
     peopleStatus.value = statusPart;
   } else {
     alert("게시물 정보를 가져오는 데 실패했습니다.");

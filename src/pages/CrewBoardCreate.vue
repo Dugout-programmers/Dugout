@@ -53,17 +53,15 @@ const stadiumOptions = [
   "마산 야구장",
 ];
 const myGender = ref("");
-const myGenderOptions = ["여자", "남자", "비공개"];
+const myGenderOptions = ["여자", "남자", "비공개", "무관"];
 const myAge = ref("");
-const myAgeOptions = ["20대", "30대", "50대", "60대"];
+const myAgeOptions = ["무관", "10대", "20대", "30대", "40대", "50대", "60대"];
 const crewGender = ref("");
-const crewGenderOptions = ["여자", "남자", "무관", "비공개"];
+const crewGenderOptions = ["여자", "남자", "비공개", "무관"];
 const crewAge = ref("");
-const crewAgeOptions = ["20대", "30대", "50대", "60대"];
+const crewAgeOptions = ["무관", "10대", "20대", "30대", "40대", "50대", "60대"];
 const isCrewGenderDisabled = ref(false);
-const thisDate = new Date();
 
-console.log(thisDate);
 // 필수 입력값 검증 함수
 const validateInputs = () => {
   if (!content.value) {
@@ -226,15 +224,7 @@ const handleRegister = async () => {
       member_range: peopleStatus.value,
       game_stadium: stadium.value,
     });
-
-    modalStore.openModal({
-      message: "게시글이 성공적으로 등록되었습니다.",
-      type: "oneBtn",
-      onConfirm: () => {
-        modalStore.closeModal();
-        router.push(`/${currentTeam}/crewboard/`);
-      },
-    });
+    router.push(`/${currentTeam}/crewboard/`);
   } catch (error) {
     console.error("게시글 등록 실패:", error);
     modalStore.openModal({
@@ -272,8 +262,8 @@ onMounted(async () => {
             <textarea
               type="text"
               v-model="content"
-              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4"
-              placeholder="직관 크루 모집글을 작성해보세요"
+              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4 bg-white01"
+              placeholder=" 직관 크루 모집글을 작성해보세요"
             />
           </div>
         </div>
