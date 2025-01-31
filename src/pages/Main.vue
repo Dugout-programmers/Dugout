@@ -381,7 +381,8 @@ onMounted(async () => {
       </div>
     </div>
   </section>
-  <section class="h-[calc(100vh-100px)] w-screen bg-black01 relative">
+  <section
+    class="h-[calc(100vh-100px)] w-screen bg-black01 relative overflow-hidden">
     <div
       class="absolute left-1/2 bottom-0 -translate-x-1/2 w-[100%] max-w-[1200px]">
       <img :src="Monitor" class="w-full h-[calc(100vh-130px)]" />
