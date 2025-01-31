@@ -53,7 +53,9 @@ const reactiveTitle = ref(props.title);
 // });
 
 // 본인 게시물인지 여부 확인 (본인 게시물 아니면 수정, 삭제 버튼 보이지 않게 처리)
-const isOwner = computed(() => authStore.user.id === props.post.member_id);
+const isOwner = computed(() => {
+  return authStore.user?.id === props.post.member_id;
+});
 
 watchEffect(() => {
   reactiveTitle.value = props.title;
@@ -92,13 +94,14 @@ const goToEditPage = () => {
         <img
           :src="post.author_image || BaseballLogo"
           alt="유저 프로필"
-          class="w-[25px] h-[25px] rounded-full"
-        />
+          class="w-[25px] h-[25px] rounded-full" />
         <span class="text-xs text-gray03">{{ props.post.author_name }}</span>
         <span class="text-xs text-gray02">{{ props.time }}</span>
       </div>
       <!-- 수정 삭제 버튼 -->
-      <div v-if="isOwner" class="flex text-xs text-gray02 gap-[4px]">
+      <div
+        v-if="authStore.user && isOwner"
+        class="flex text-xs text-gray02 gap-[4px]">
         <button @click="goToEditPage" class="hover:text-gray03">수정</button>
         <span>|</span>
         <button @click="confirmDelete" class="hover:text-gray03">삭제</button>
