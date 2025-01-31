@@ -27,14 +27,12 @@ const navigationAndAnimation = async (team) => {
   <EnteringComunityAnimation v-if="teamStore.isEnterAnimationOn" />
   <div
     v-if="isOpen"
-    class="w-[770px] h-[60px] fixed bottom-[40px] left-1/2 -translate-x-1/2 flex items-center justify-center px-[25px] gap-[35px] bg-white drop-shadow-md rounded-[20px]"
-  >
+    class="w-[770px] h-[60px] fixed bottom-[40px] left-1/2 -translate-x-1/2 flex items-center justify-center px-[25px] gap-[35px] bg-white drop-shadow-md rounded-[20px] animate-slideUp">
     <button
       v-for="(team, index) in teamList"
       :key="index"
       class="flex-shrink-0"
-      @click="navigationAndAnimation(team)"
-    >
+      @click="navigationAndAnimation(team)">
       <img :src="team.logo" class="w-[40px] h-auto" />
     </button>
   </div>
@@ -42,12 +40,25 @@ const navigationAndAnimation = async (team) => {
     <img
       :src="teamToggleIcon"
       :class="
-        twMerge(
-          'transition-transform duration-100',
-          isOpen ? 'rotate-180' : 'rotate-0'
-        )
+        twMerge('transition-transform', isOpen ? '-scale-100' : 'rotate-0')
       "
-      alt="Team Toggle"
-    />
+      alt="Team Toggle" />
   </button>
 </template>
+
+<style scoped>
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 30px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.2s ease-out forwards;
+}
+</style>
