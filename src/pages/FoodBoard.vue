@@ -36,7 +36,7 @@ const selectTag = (tag) => {
 };
 
 const postsFilteredWithTag = computed(() => {
-  return restaurantPosts.value.filter(
+  return restaurantPosts.value?.filter(
     (post) => selectedTag.value === null || post.tags.includes(selectedTag.value)
   );
 });
@@ -66,7 +66,6 @@ watch(selectedTag, () => {
 // 페이지가 로드될 때 데이터를 한 번 불러옴
 onMounted(async () => {
   const { data, error } = await fetchFoodBoardList();
-  console.log("데이터를 마운팅 했습니다.", data);
 
   if (error) {
     console.error("데이터를 불러오는 도중에 오류가 발생했습니다.");
@@ -99,7 +98,7 @@ const removeDuplicatePosts = (posts) => {
   const uniquePosts = [];
   const postIds = new Set();
 
-  posts.forEach((post) => {
+  posts?.forEach((post) => {
     if (!postIds.has(post.id)) {
       uniquePosts.push(post);
       postIds.add(post.id);
@@ -112,7 +111,6 @@ const removeDuplicatePosts = (posts) => {
 watch(
   () => route.params.team,
   (newTeamName, _) => {
-    // 업데이트
     clubId.value = teamID[newTeamName];
     fetchFoodBoardList();
   }
@@ -123,9 +121,8 @@ watch(
   <div class="flex flex-col px-[50px] py-[30px] items-center">
     <div class="w-[990px] gap-[50px] flex flex-col">
       <GoToCreate :text="'직관 맛집 공유하기'" />
-      <div class="min-h-[39px] overflow-x-auto scrollbar-hide">
+      <section class="min-h-[39px] overflow-x-auto scrollbar-hide">
         <div class="flex items-center gap-x-[10px] w-max flex-nowrap">
-          <!-- 태그 버튼 -->
           <button
             v-for="(tag, index) of foodBoardTag"
             :key="index"
@@ -145,27 +142,21 @@ watch(
             />
           </button>
         </div>
-      </div>
+      </section>
       <section class="flex flex-col gap-[30px]">
         <!-- 게시물 필터링 후 출력 -->
-        <div
-          v-if="
-            restaurantPosts.length === 0 ||
-            postsFilteredWithTag.length === 0
-          "
-        >
-          <section
-            class="flex items-center justify-center w-full h-screen bg-white02 border border-white02 rounded-[10px]"
-          >
-            <h1>게시물이 없습니다</h1>
-          </section>
-        </div>
         <FoodBoardCard
+          v-if="postsFilteredWithTag"
           v-for="(restaurantPost, index) in removeDuplicatePosts(postsFilteredWithTag)"
           :key="index"
           :restaurantPostData="restaurantPost"
           :teamName
         />
+        <div
+            v-else class="flex justify-center"
+          >
+            <h1>게시물이 없습니다. 게시물을 작성해보세요!</h1>
+      </div>
       </section>
     </div>
   </div>

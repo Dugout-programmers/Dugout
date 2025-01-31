@@ -1,5 +1,6 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
+import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import lgMascot from "@/assets/images/mascot_lg.svg";
 import doosanMascot from "@/assets/images/mascot_doosan.svg";
 import kiwoomMascot from "@/assets/images/mascot_kiwoom.svg";  
@@ -48,6 +49,9 @@ const imageClass = "w-full h-full object-cover rounded-[10px] flex justify-cente
       </div>
       <figure v-else-if="post.post_type === 'crewboard'" :class="imageClass">
         <img :src="mascort[post.club_eng_name] || mascort.lg" class="h-40 opacity-50"/>
+      </figure>
+      <figure v-else :class="imageClass">
+        <img :src="defaultImg" :class="imageClass">
       </figure>
       <div class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 p-5">
         <span class="text-white text-[18px]">{{ post.post_title || '제목 없음' }}</span>

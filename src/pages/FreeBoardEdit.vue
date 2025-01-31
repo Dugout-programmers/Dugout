@@ -7,6 +7,7 @@ import {
   getFreePostDetailsById,
   updateFreePost,
 } from "@/api/supabase-api/freePost";
+import { useModalStore } from "@/stores/useModalStore";
 
 const props = defineProps({
   id: String, // post_id
@@ -16,10 +17,10 @@ const props = defineProps({
 const title = ref("");
 const content = ref("");
 const thumbnailUrl = ref("");
-
-const clubId = ref(teamID[props.team]); // 팀 id 가져오기
+const thumbnailCount = ref(0);
 
 const router = useRouter();
+const modalStore = useModalStore();
 
 // 첫 번째 이미지 링크 추출
 const findThumbnailImage = () => {
@@ -37,12 +38,14 @@ const findThumbnailImage = () => {
 // 게시물 수정 등록 함수
 const handleRegister = async () => {
   findThumbnailImage(); // 썸네일 지정하기
+  findThumbnailCount(); // 썸네일 개수 확인하기
   try {
     await updateFreePost(
       props.id,
       content.value,
       title.value,
-      thumbnailUrl.value
+      thumbnailUrl.value,
+      thumbnailCount.value
     );
     router.push(`/${props.team}/freeboard`);
   } catch (error) {
@@ -68,6 +71,23 @@ const handleCancel = () => {
   router.push(`/${props.team}/freeboard/${props.id}`);
 };
 
+// 이미지 갯수 확인하기
+const findThumbnailCount = () => {
+  thumbnailCount.value = (content.value.match(/<img\s[^>]*>/g) || []).length;
+};
+
+// 수정 모달 띄우기
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleRegister();
+      modalStore.closeModal();
+    },
+  });
+};
+
 onMounted(() => {
   fetchFreeboardDetail();
 });
@@ -75,7 +95,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister :handleCancel />
+      <CreateHeader :handleRegister="openEditModal" :handleCancel />
       <!-- 제목부분 -->
       <div>
         <input

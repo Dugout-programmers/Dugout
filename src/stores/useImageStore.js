@@ -11,8 +11,8 @@ export const useImageStore = defineStore("image", () => {
   };
 
   const uploadImage = async (file, index) => {
-    // 파일 크기 제한 체크 (3MB 이하)
-    if (file.size > 3 * 1024 * 1024) {
+    // 파일 크기 제한 체크 (5MB 이하)
+    if (file.size > 5 * 1024 * 1024) {
       errorMessage.value = "파일 크기가 너무 큽니다. 3MB 이하의 파일을 선택해주세요.";
       return;
     } else {

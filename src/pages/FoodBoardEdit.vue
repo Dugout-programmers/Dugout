@@ -11,7 +11,9 @@ import { updateRestaurantPostImage } from '@/api/supabase-api/restaurantImage';
 import { useMapStore } from '@/stores/mapStore';
 import { useImageStore } from '@/stores/useImageStore';
 import { useModalStore } from '@/stores/useModalStore';
+import { useAuthStore } from '@/stores/auth';
 
+const authStore = useAuthStore()
 const imageStore = useImageStore();
 const mapStore = useMapStore();
 const router = useRouter();
@@ -37,13 +39,22 @@ const loadPostDetail = async () => {
     ...data,
     images: data.images?.map((img) => img.url),
     };
+
+    if (postDetails.value.member_id !== authStore.user?.id) {
+      router.push({ name: "NotFound" });  // NotFound 페이지로 리디렉션
+      return; 
+    }
+    
     title.value = postDetails.value.title;
     content.value = postDetails.value.content;
     selectedTags.value = postDetails.value.tags;
     location.value = postDetails.value.location
+
     mapStore.setFinalSelectedLocation({place_name:location.value.name,address_name:location.value.address,category_name: location.value.category, x: location.value.longitude, y: location.value.latitude, phone: location.value.contact, place_url: location.value.url})
     mapStore.setIsSelectedLocationVisable(true);
     imageStore.setImageUrls(postDetails.value.images);
+
+    console.log("디테일 데이터 출력", postDetails.value)
   } catch (error) {
     console.error("게시물 불러오기 실패", error);
   }
