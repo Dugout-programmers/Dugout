@@ -82,12 +82,20 @@ const searchResults = computed(() => searchStore.filteredPosts);
       <GoToCreate :text="'직관 인증 포토 올리러 가기'" />
       <!-- 목록 -->
       <div class="w-full h-auto mb-[100px]">
-        <div v-if="photoboardList" class="grid grid-cols-3 gap-[30px] w-full">
+        <div
+          v-if="searchResults.length > 0"
+          class="grid grid-cols-3 gap-[30px] w-full"
+        >
           <PhotoboardCard
             v-for="post in searchResults"
             :key="post.id"
             :post="post"
           />
+        </div>
+        <div v-else class="flex justify-center items-center w-full col-span-3">
+          <span class="text-center"
+            >게시물이 없습니다. 게시물을 작성해보세요!</span
+          >
         </div>
       </div>
     </div>
