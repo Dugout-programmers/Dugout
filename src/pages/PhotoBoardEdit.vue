@@ -171,9 +171,10 @@ const handleRegister = async () => {
   }
 };
 
-const handleCancel = () => {
-  router.push(`/${route.params.team}/photoboard/${postId}`);
-};
+// createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   router.push(`/${route.params.team}/photoboard/${postId}`);
+// };
 
 const confirmMaxLength = () => {
   modalStore.openModal({
@@ -214,10 +215,7 @@ onMounted(() => {
   <div><h1>수정페이지</h1></div>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader
-        :handleRegister="handleRegister"
-        :handleCancel="handleCancel"
-      />
+      <CreateHeader :handleRegister="handleRegister" />
       <Modal />
       <div>
         <input

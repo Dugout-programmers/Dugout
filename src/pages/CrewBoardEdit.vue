@@ -235,10 +235,10 @@ const handleUpdate = () => {
   }
 };
 
-// 게시글 작성 취소 함수
-const handleCancel = () => {
-  router.push(`/${currentTeam}/crewboard/`);
-};
+// 게시글 작성 취소 함수 -> createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   router.push(`/${currentTeam}/crewboard/`);
+// };
 
 watch(gameDateStatus, (newDate) => {
   formattedGameDate.value = formatDate(newDate);
@@ -251,7 +251,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="px-[50px]">
-    <CreateHeader :handleRegister="handleUpdate" :handleCancel="handleCancel" />
+    <CreateHeader :handleRegister="handleUpdate" />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
         <div>

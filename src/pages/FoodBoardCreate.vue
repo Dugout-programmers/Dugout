@@ -27,12 +27,15 @@ const clubId = ref(teamID[teamName.value]);
 const title = ref("");
 const content = ref("");
 const selectedTags = ref([]);
-const isMapNull = ref(false)
+const isMapNull = ref(false);
 const finalSelectedLocation = computed(() => mapStore.finalSelectedLocation);
 
 const tagErrorClass = ref("");
-const errorMessage = ref(['장소를 지도에서 선택해주세요', '태그를 1개 이상 선택해주세요']);
-const mapNullErrorClass = ref("")
+const errorMessage = ref([
+  "장소를 지도에서 선택해주세요",
+  "태그를 1개 이상 선택해주세요",
+]);
+const mapNullErrorClass = ref("");
 
 const handleTagUpdate = (tags) => {
   selectedTags.value = tags;
@@ -127,10 +130,11 @@ const submitRestaurantPost = async () => {
   }
 };
 
-const cancelRestaurantPost = () => {
-  router.go(-1);
-  mapStore.resetLocationData();
-};
+// -> 일단은 취소 공통함수를 사용하려고해서 주석처리햇습니다.
+// const cancelRestaurantPost = () => {
+//   router.go(-1);
+//   mapStore.resetLocationData();
+// };
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -143,10 +147,7 @@ const toolbarOptions = [
 <template>
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader
-        :handleRegister="submitRestaurantPost"
-        :handleCancel="cancelRestaurantPost"
-      />
+      <CreateHeader :handleRegister="submitRestaurantPost" />
       <div>
         <input
           v-model="title"
@@ -159,12 +160,12 @@ const toolbarOptions = [
         id="post_content--input"
         class="flex flex-col gap-[30px] mb-[142px] w-full"
       >
-         <div v-if="isMapNull" class="flex gap-[10px] items-center pt-[20px]">
-            <img :src="Baseball" class="w-[18px] h-[18px]" />
-            <p :class="mapNullErrorClass" class="text-[14px] text-gray03">
-              {{ errorMessage[0] }}
-            </p>
-          </div>
+        <div v-if="isMapNull" class="flex gap-[10px] items-center pt-[20px]">
+          <img :src="Baseball" class="w-[18px] h-[18px]" />
+          <p :class="mapNullErrorClass" class="text-[14px] text-gray03">
+            {{ errorMessage[0] }}
+          </p>
+        </div>
         <MapSelectAndView />
         <div class="w-full border border-white02">
           <QuillEditor
