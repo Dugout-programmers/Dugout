@@ -162,8 +162,8 @@ const handleRegister = async () => {
     );
 
     if (updatedPost) {
-      alert("게시물이 수정되었습니다.");
-      router.replace(`/${route.params.team}/photoboard`);
+      // alert("게시물이 수정되었습니다.");
+      router.replace(`/${route.params.team}/photoboard/${postId}`);
     }
   } catch (error) {
     console.error("게시물 생성 실패:", error);
@@ -171,9 +171,10 @@ const handleRegister = async () => {
   }
 };
 
-const handleCancel = () => {
-  router.push(`/${route.params.team}/photoboard/${postId}`);
-};
+// createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   router.push(`/${route.params.team}/photoboard/${postId}`);
+// };
 
 const confirmMaxLength = () => {
   modalStore.openModal({
@@ -201,6 +202,18 @@ watchEffect(() => {
   }
 });
 
+// 수정 모달 띄우기
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleRegister();
+      modalStore.closeModal();
+    },
+  });
+};
+
 onMounted(() => {
   if (route.params.id && !isNaN(route.params.id)) {
     fetchPostData(route.params.id);
@@ -214,10 +227,7 @@ onMounted(() => {
   <div><h1>수정페이지</h1></div>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader
-        :handleRegister="handleRegister"
-        :handleCancel="handleCancel"
-      />
+      <CreateHeader :handleRegister="openEditModal" />
       <Modal />
       <div>
         <input

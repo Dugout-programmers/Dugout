@@ -112,10 +112,21 @@ export const getFreePostComments = async (postId) => {
 };
 
 // 자유 게시물 수정
-export const updateFreePost = async (postId, content, title, thumbnailUrl) => {
+export const updateFreePost = async (
+  postId,
+  content,
+  title,
+  thumbnailUrl,
+  thumbnailCount
+) => {
   const { data, error } = await supabase
     .from("free_post")
-    .update({ content, title, thumbnail_url: thumbnailUrl })
+    .update({
+      content,
+      title,
+      thumbnail_url: thumbnailUrl,
+      thumbnail_count: thumbnailCount,
+    })
     .eq("id", postId);
 
   if (error) {

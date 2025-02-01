@@ -183,6 +183,16 @@ export const updateRestaurantPostTags = async (postId, newTags) => {
 
 // 맛집 게시물 삭제
 export const deleteRestaurantPost = async (postId) => {
+  const { data, error } = await supabase
+  .from("restaurant_post")
+  .delete()
+  .eq("id", postId);
+
+  if (error) {
+    console.error("Error deleting restaurant post:", error);
+    return null;
+  }
+
   const { error: tagRecordError } = await supabase
     .from("viewing_restaurant_tag_record")
     .delete()
@@ -192,16 +202,4 @@ export const deleteRestaurantPost = async (postId) => {
     console.error("Error deleting tag records:", tagRecordError);
     return null;
   }
-
-  const { data, error } = await supabase
-    .from("restaurant_post")
-    .delete()
-    .eq("id", postId);
-
-  if (error) {
-    console.error("Error deleting restaurant post:", error);
-    return null;
-  }
-
-  return data;
 };

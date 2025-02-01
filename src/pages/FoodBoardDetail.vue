@@ -1,9 +1,10 @@
 <script setup>
-import { getRestaurantPostDetailsById } from "@/api/supabase-api/restaurantPost";
+import { deleteRestaurantPost, getRestaurantPostDetailsById } from "@/api/supabase-api/restaurantPost";
 import backIcon from "@/assets/icons/back.svg";
 import CommentSection from "@/components/CommentSection.vue";
 import PostHeader from "@/components/PostHeader.vue";
 import LocationViewer from "@/components/foodboard/LocationViewer.vue";
+import { useModalStore } from "@/stores/useModalStore";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -14,14 +15,14 @@ dayjs.locale("ko");
 
 const router = useRouter();
 const route = useRoute();
-
+const modalStore = useModalStore()
 const postDetails = ref(null);
 const postImages = ref([]);
-const post_id = ref(route.params.id);
+const postId = ref(route.params.id);
 
 const fetchFoodPostDetail = async () => {
   try {
-    const data = await getRestaurantPostDetailsById(post_id.value);
+    const data = await getRestaurantPostDetailsById(postId.value);
     console.log(data);
     postDetails.value = {
       ...data,
@@ -42,6 +43,28 @@ onMounted(() => {
   fetchFoodPostDetail();
 
 });
+
+const handleDeletePost = async () => {
+  try {
+    await deleteRestaurantPost(postId.value)
+  } catch(error) {
+    console.error("삭제하던 중 오류가 발생했습니다", error)
+  }
+}
+
+const onClickDelete = () => {
+modalStore.openModal({
+    message: "삭제한 후에는 복구할 수 없습니다\n삭제하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleDeletePost()
+      modalStore.closeModal();
+      router.go(-1)
+    }, 
+    onCancel: modalStore.closeModal,
+  });
+}
+
 </script>
 <template>
   <div class="px-[50px] py-[30px] items-center flex flex-col">
@@ -60,7 +83,7 @@ onMounted(() => {
         :title="postDetails.title"
         :post="postDetails"
         :time="calculatedCreatedAt"
-        :confirmDelete
+        :confirmDelete="onClickDelete"
       />
 
       <!-- 게시물 내용 -->

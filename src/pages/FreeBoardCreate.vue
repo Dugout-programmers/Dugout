@@ -81,16 +81,11 @@ const handleRegister = async () => {
     console.error("게시물을 등록하는 도중 오류가 생겼습니다.");
   }
 };
-
-// 취소 눌렀을 때 실행될 함수
-const handleCancel = () => {
-  router.push(`/${props.team}/freeboard`);
-};
 </script>
 <template>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister :handleCancel />
+      <CreateHeader :handleRegister />
       <!-- 제목부분 -->
       <div>
         <input

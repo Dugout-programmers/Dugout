@@ -44,8 +44,6 @@ const isDropdownOpen = ref(false); // 드롭다운 유무 판단
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
-  // 이코드가 필요한지 애매해서 일단 주석처리
-  // localStorage.setItem("dropdownState", isDropdownOpen.value.toString());
 };
 
 // 메뉴 목록

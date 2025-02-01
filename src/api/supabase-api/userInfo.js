@@ -62,16 +62,19 @@ export const getCurrentUser = async () => {
 // 현재 로그인 사용자 로그아웃
 export const signOutUser = async () => {
   try {
-    // 로그아웃 처리
     const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("로그아웃 중 오류 발생:", error);
-      return { success: false, error: error.message };
+    if (error) throw error;
+
+    // 세션이 완전히 제거되었는지 확인
+    const session = await supabase.auth.getSession();
+    if (session?.data?.session) {
+      throw new Error("세션이 제대로 제거되지 않았습니다");
     }
+
     return { success: true };
-  } catch (err) {
-    console.error("알 수 없는 오류 발생:", err);
-    return { success: false, error: "Unexpected Error During Logout" };
+  } catch (error) {
+    console.error("로그아웃 중 오류 발생:", error);
+    return { success: false, error: error.message };
   }
 };
 

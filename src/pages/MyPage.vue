@@ -13,13 +13,12 @@ import ProfileViewAndEdit from "@/components/mypage/ProfileViewAndEdit.test.vue"
 
 const router = useRouter()
 const authStore = useAuthStore();
+
 const currentUserData = computed(() => authStore.user || {});
 const isLoggedIn = computed(() => authStore.isAuthenticated());
-const activeTab = ref("posts");
-const createdPosts = ref([]);
-const commentedPosts = ref([]);
-const likedPosts = ref([]);
 
+
+const activeTab = ref("posts");
 const displayedData = computed(() => {
   switch (activeTab.value) {
     case "posts":
@@ -33,6 +32,9 @@ const displayedData = computed(() => {
   }
 });
 
+const createdPosts = ref([]);
+const commentedPosts = ref([]);
+const likedPosts = ref([]);
 const fetchUserData = async () => {
   if (!isLoggedIn.value) return; 
 

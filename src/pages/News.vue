@@ -44,7 +44,7 @@ const getNewsData = async (keyword) => {
     const { data, status } = await axios.get("/v1/search/news.json", {
       params: {
         query: keyword, // 검색어
-        display: 50, // 출력 개수
+        display: 10, // 출력 개수
         // start: 1, // 시작 위치
         // sort: "sim", // 정렬 기준 (sim: 유사도, date: 날짜)
       },
@@ -54,7 +54,6 @@ const getNewsData = async (keyword) => {
         "X-Naver-Client-Secret": import.meta.env.VITE_NAVER_CLIENT_SECRET,
       },
     });
-    console.log(data, status);
     if (status === 200) {
       newsData.value = data.items;
     }
@@ -68,15 +67,20 @@ onMounted(() => {
 const selectedTeam = ref([]); // 태그 담을 배열
 
 // 태그 선택 함수
-const selectTeam = (team) => {
+const handleSelectTeam = (team) => {
+  // 만약 포함이 안되어 있다면 추가
   if (!selectedTeam.value.includes(team)) {
     selectedTeam.value.push(team);
   }
+  // 만약 추가되어있따면 삭제
+  else {
+    selectedTeam.value = selectedTeam.value.filter((t) => t !== team);
+  }
 };
 // 태그 삭제 함수
-const removeTeam = (team) => {
-  selectedTeam.value = selectedTeam.value.filter((t) => t !== team);
-};
+// const removeTeam = (team) => {
+//   selectedTeam.value = selectedTeam.value.filter((t) => t !== team);
+// };
 // watch 사용 시 깊은 감시자로 설정
 watch(
   selectedTeam,
@@ -103,13 +107,13 @@ watch(
     <div
       class="fixed mt-[100px] w-full bg-white01 px-[30px] pt-[50px] pb-[30px]"
     >
-      <div class="min-h-[39px] overflow-x-auto scrollbar-hide flex">
-        <div class="flex items-center gap-[10px] flex-nowrap">
+      <div class="flex w-full">
+        <div class="flex items-center gap-[10px] min-w-max">
           <button
-            v-for="(team, index) of teamsTags"
-            :key="index"
-            @click="selectTeam(team)"
-            class="inline-flex items-center h-[39px] px-[15px] rounded-[10px] whitespace-nowrap"
+            v-for="team of teamsTags"
+            :key="team"
+            @click="handleSelectTeam(team)"
+            class="flex items-center px-[15px] py-[10px] rounded-[10px]"
             :class="
               twMerge(
                 selectedTeam.includes(team)
@@ -122,12 +126,11 @@ watch(
               )
             "
           >
-            <p>{{ team }}</p>
+            <p class="leading-[19px] whitespace-nowrap">{{ team }}</p>
             <img
               v-if="selectedTeam.includes(team)"
-              @click.stop="removeTeam(team)"
               :src="deleteBtn"
-              class="cursor-pointer"
+              class="cursor-pointer w-[14px] h-[14px]"
             />
           </button>
         </div>

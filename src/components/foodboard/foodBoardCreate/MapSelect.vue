@@ -102,6 +102,7 @@ const saveFinalSelectedLocation = () => {
   overlayVisible.value = false;
   searchResults.value = [];
   keyword.value = null;
+  console.log("최종 선택 장소 저장", mapStore.finalSelectedLocation)
 };
 
 // 카테고리 가공
