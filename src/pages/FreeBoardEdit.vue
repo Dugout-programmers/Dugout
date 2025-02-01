@@ -47,7 +47,7 @@ const handleRegister = async () => {
       thumbnailUrl.value,
       thumbnailCount.value
     );
-    router.push(`/${props.team}/freeboard`);
+    router.push(`/${props.team}/freeboard/${props.id}`);
   } catch (error) {
     console.error("게시물을 수정하는 도중 오류가 생겼습니다.");
   }
@@ -62,13 +62,6 @@ const fetchFreeboardDetail = async () => {
   } catch (error) {
     console.error("데이터를 불러오는 도중에 오류가 발생했습니다.");
   }
-};
-
-// 취소 버튼 눌렀을 때 실행되는 함수
-const handleCancel = () => {
-  console.log("취소");
-  alert("등록이 취소되었습니다");
-  router.push(`/${props.team}/freeboard/${props.id}`);
 };
 
 // 이미지 갯수 확인하기
@@ -95,7 +88,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister="openEditModal" :handleCancel />
+      <CreateHeader :handleRegister="openEditModal" />
       <!-- 제목부분 -->
       <div>
         <input

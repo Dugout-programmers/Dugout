@@ -144,14 +144,15 @@ const handleRegister = async () => {
   }
 };
 
-const handleCancel = () => {
-  title.value = "";
-  content.value = "";
-  gameDate.value = null;
-  clubId.value = "";
-  uploadedImageUrl.value = "";
-  router.push(`/${teamName.value}/photoboard`);
-};
+// createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   title.value = "";
+//   content.value = "";
+//   gameDate.value = null;
+//   clubId.value = "";
+//   uploadedImageUrl.value = "";
+//   router.push(`/${teamName.value}/photoboard`);
+// };
 
 const handleInput = (event) => {
   if (content.value.length > maxLength) {
@@ -168,10 +169,7 @@ watch(gameDate, (newDate) => {
 <template>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader
-        :handleRegister="handleRegister"
-        :handleCancel="handleCancel"
-      />
+      <CreateHeader :handleRegister="handleRegister" />
       <Modal />
       <div>
         <input

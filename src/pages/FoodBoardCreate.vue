@@ -27,12 +27,15 @@ const clubId = ref(teamID[teamName.value]);
 const title = ref("");
 const content = ref("");
 const selectedTags = ref([]);
-const isMapNull = ref(false)
+const isMapNull = ref(false);
 const finalSelectedLocation = computed(() => mapStore.finalSelectedLocation);
 
 const tagErrorClass = ref("");
-const errorMessage = ref(['장소를 지도에서 선택해주세요', '태그를 1개 이상 선택해주세요']);
-const mapNullErrorClass = ref("")
+const errorMessage = ref([
+  "장소를 지도에서 선택해주세요",
+  "태그를 1개 이상 선택해주세요",
+]);
+const mapNullErrorClass = ref("");
 
 const handleTagUpdate = (tags) => {
   selectedTags.value = tags;
@@ -159,12 +162,12 @@ const toolbarOptions = [
         id="post_content--input"
         class="flex flex-col gap-[30px] mb-[142px] w-full"
       >
-         <div v-if="isMapNull" class="flex gap-[10px] items-center pt-[20px]">
-            <img :src="Baseball" class="w-[18px] h-[18px]" />
-            <p :class="mapNullErrorClass" class="text-[14px] text-gray03">
-              {{ errorMessage[0] }}
-            </p>
-          </div>
+        <div v-if="isMapNull" class="flex gap-[10px] items-center pt-[20px]">
+          <img :src="Baseball" class="w-[18px] h-[18px]" />
+          <p :class="mapNullErrorClass" class="text-[14px] text-gray03">
+            {{ errorMessage[0] }}
+          </p>
+        </div>
         <MapSelectAndView />
         <div class="w-full border border-white02">
           <QuillEditor
