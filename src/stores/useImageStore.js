@@ -1,27 +1,35 @@
+// 현재 이미지 스토어는 사용하고 있지 않으나 혹시 몰라 남겨뒀습니다.
+
+import { supabase } from "@/supabase.js";
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { supabase } from "@/supabase.js";
 
 export const useImageStore = defineStore("image", () => {
   const imageUrls = ref([null, null, null]);
   const errorMessage = ref(null);
 
   const setImageUrls = (images) => {
-    imageUrls.value = [...images, ...Array(3 - images.length).fill(null)].slice(0, 3);
+    imageUrls.value = [...images, ...Array(3 - images.length).fill(null)].slice(
+      0,
+      3
+    );
   };
 
   const uploadImage = async (file, index) => {
     // 파일 크기 제한 체크 (5MB 이하)
     if (file.size > 5 * 1024 * 1024) {
-      errorMessage.value = "파일 크기가 너무 큽니다. 3MB 이하의 파일을 선택해주세요.";
+      errorMessage.value =
+        "파일 크기가 너무 큽니다. 3MB 이하의 파일을 선택해주세요.";
       return;
     } else {
       errorMessage.value = null;
     }
 
     // 파일 이름에서 한글 및 특수문자를 제거하고, 안전한 파일 이름 생성
-    const fileName = file.name.replace(/[^a-zA-Z0-9]/g, '_'); // 한글, 공백, 특수문자를 _로 대체
-    const uniqueFileName = `${Date.now()}_${Math.floor(Math.random() * 1000)}_${fileName}`;
+    const fileName = file.name.replace(/[^a-zA-Z0-9]/g, "_"); // 한글, 공백, 특수문자를 _로 대체
+    const uniqueFileName = `${Date.now()}_${Math.floor(
+      Math.random() * 1000
+    )}_${fileName}`;
 
     // 업로드 경로 설정 (viewing_certification 폴더)
     const uploadPath = `viewing_certification/${uniqueFileName}`;

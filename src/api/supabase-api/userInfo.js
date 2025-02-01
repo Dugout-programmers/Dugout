@@ -115,8 +115,8 @@ export const updateUserInfoEnCapsulation = async (userId, updateData) => {
   } catch (error) {
     return {
       success: false,
-      error: "Unexpected Error In UpdataeUserInfo",
-      datils: error,
+      error: "Unexpected Error In UpdateUserInfo",
+      details: error,
     };
   }
 };

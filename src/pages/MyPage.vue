@@ -1,22 +1,21 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useAuthStore } from "@/stores/auth";
 import {
   getCommentedPostsByMemberId,
   getLikedPostsByMemberId,
   getPostsByMemberId,
 } from "@/api/supabase-api/getPostsByMyId";
-import { useRouter } from "vue-router";
-import MyPostCard from "@/components/mypage/MyPostCard.vue";
 import ActiveTabs from "@/components/mypage/ActiveTabs.vue";
-import ProfileViewAndEdit from "@/components/mypage/ProfileViewAndEdit.test.vue";
+import MyPostCard from "@/components/mypage/MyPostCard.vue";
+import ProfileViewAndEdit from "@/components/mypage/ProfileViewAndEdit.vue";
+import { useAuthStore } from "@/stores/auth";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 const authStore = useAuthStore();
 
 const currentUserData = computed(() => authStore.user || {});
 const isLoggedIn = computed(() => authStore.isAuthenticated());
-
 
 const activeTab = ref("posts");
 const displayedData = computed(() => {
@@ -36,7 +35,7 @@ const createdPosts = ref([]);
 const commentedPosts = ref([]);
 const likedPosts = ref([]);
 const fetchUserData = async () => {
-  if (!isLoggedIn.value) return; 
+  if (!isLoggedIn.value) return;
 
   try {
     const userId = currentUserData.value.id;
@@ -57,28 +56,32 @@ const fetchUserData = async () => {
 };
 
 onMounted(async () => {
-  await authStore.fetchCurrentUser(); 
+  await authStore.fetchCurrentUser();
   if (!isLoggedIn.value) {
     router.push("/signin");
   } else {
     fetchUserData();
   }
 });
-
 </script>
 <template>
-  <div class="gap-[148px] mt-[152px]">
+  <div class="gap-[148px] mt-[152px] overflow-x-hidden">
     <div class="px-[147px] flex flex-col items-center">
       <div class="flex w-[990px]">
-        <ProfileViewAndEdit/>
-        <ActiveTabs  v-model:activeTab="activeTab" :createdPostsCount="createdPosts.length" :commentedPostsCount="commentedPosts.length" :likedPostsCount="likedPosts.length"/>
+        <ProfileViewAndEdit />
+        <ActiveTabs
+          v-model:activeTab="activeTab"
+          :createdPostsCount="createdPosts.length"
+          :commentedPostsCount="commentedPosts.length"
+          :likedPostsCount="likedPosts.length"
+        />
       </div>
       <div class="w-full max-w-[990px] mt-[40px]">
         <div
           v-if="displayedData"
           className="py-[10px] mb-[100.33px] border-t border-gray01  grid grid-cols-3 gap-[10px]"
         >
-         <MyPostCard :displayedData="displayedData"/>
+          <MyPostCard :displayedData="displayedData" />
         </div>
       </div>
     </div>

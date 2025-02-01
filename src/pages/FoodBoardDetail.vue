@@ -1,5 +1,8 @@
 <script setup>
-import { deleteRestaurantPost, getRestaurantPostDetailsById } from "@/api/supabase-api/restaurantPost";
+import {
+  deleteRestaurantPost,
+  getRestaurantPostDetailsById,
+} from "@/api/supabase-api/restaurantPost";
 import backIcon from "@/assets/icons/back.svg";
 import CommentSection from "@/components/CommentSection.vue";
 import PostHeader from "@/components/PostHeader.vue";
@@ -15,7 +18,7 @@ dayjs.locale("ko");
 
 const router = useRouter();
 const route = useRoute();
-const modalStore = useModalStore()
+const modalStore = useModalStore();
 const postDetails = ref(null);
 const postImages = ref([]);
 const postId = ref(route.params.id);
@@ -41,30 +44,28 @@ const calculatedCreatedAt = computed(() => {
 
 onMounted(() => {
   fetchFoodPostDetail();
-
 });
 
 const handleDeletePost = async () => {
   try {
-    await deleteRestaurantPost(postId.value)
-  } catch(error) {
-    console.error("삭제하던 중 오류가 발생했습니다", error)
+    await deleteRestaurantPost(postId.value);
+  } catch (error) {
+    console.error("삭제하던 중 오류가 발생했습니다", error);
   }
-}
+};
 
 const onClickDelete = () => {
-modalStore.openModal({
+  modalStore.openModal({
     message: "삭제한 후에는 복구할 수 없습니다\n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: () => {
-      handleDeletePost()
+      handleDeletePost();
       modalStore.closeModal();
-      router.go(-1)
-    }, 
+      router.go(-1);
+    },
     onCancel: modalStore.closeModal,
   });
-}
-
+};
 </script>
 <template>
   <div class="px-[50px] py-[30px] items-center flex flex-col">
@@ -92,7 +93,10 @@ modalStore.openModal({
         class="mt-[50px] gap-[50px] pb-[50px] flex flex-col border-b border-b-gray01"
       >
         <div class="flex flex-col gap-[30px]">
-          <LocationViewer v-if="postDetails.location" :postLocation="postDetails.location" />
+          <LocationViewer
+            v-if="postDetails.location"
+            :postLocation="postDetails.location"
+          />
           <div>
             <div
               v-html="postDetails.content"
