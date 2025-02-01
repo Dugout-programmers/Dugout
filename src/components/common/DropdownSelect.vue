@@ -1,9 +1,7 @@
 <script setup>
 import ToggleDropdown from "@/assets/icons/theme_toggle.svg";
-import CalendarIcon from "@/assets/icons/calendar.svg";
-import { computed, ref } from "vue";
+import {  ref } from "vue";
 import { twMerge } from "tailwind-merge";
-import { DatePicker } from "v-calendar";
 import "v-calendar/style.css";
 
 const props = defineProps({
