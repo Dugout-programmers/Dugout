@@ -70,16 +70,16 @@ const findThumbnailCount = () => {
 };
 
 // 수정 모달 띄우기
-// const openEditModal = () => {
-//   modalStore.openModal({
-//     message: "수정을 완료하시겠습니까?",
-//     type: "twoBtn",
-//     onConfirm: () => {
-//       handleRegister();
-//       modalStore.closeModal();
-//     },
-//   });
-// };
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleRegister();
+      modalStore.closeModal();
+    },
+  });
+};
 
 onMounted(() => {
   fetchFreeboardDetail();
@@ -88,7 +88,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister />
+      <CreateHeader :handleRegister="openEditModal" />
       <!-- 제목부분 -->
       <div>
         <input

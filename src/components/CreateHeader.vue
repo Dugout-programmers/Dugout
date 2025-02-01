@@ -2,7 +2,7 @@
 import { useModalStore } from "@/stores/useModalStore";
 import { useRoute, useRouter } from "vue-router";
 import Modal from "./common/Modal.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { teamList } from "@/constants";
 
 // props로 등록 눌렀을 때 실행될 함수와 취소 버튼 눌렀을 때 실행할 함수 전달하면 됩니다.
@@ -17,6 +17,7 @@ const props = defineProps({
 const modalStore = useModalStore();
 const route = useRoute();
 const router = useRouter();
+const isSubmitDisabled = ref(false); // 중복 제출 허용확인하는 변수
 
 const teamName = computed(() => route.params.team); // 팀이름
 const boardName = computed(() => route.path.split("/")[2]); // 게시판 이름
@@ -56,21 +57,12 @@ const handleCancel =
     }
   });
 
-const openRegisterEditModal = () => {
-  // 편집 페이지 유무에 따라서 메세지 달리하기
+// 호출 제어하는 함수
+const handleSubmit = () => {
+  if (isSubmitDisabled.value) return; // 이미 비활성화되었다면 실행하지 않음
 
-  const message = isEditPage.value
-    ? "수정을 완료하시겠습니까?"
-    : "등록을 완료하시겠습니까?";
-  modalStore.openModal({
-    message,
-    type: "twoBtn",
-    onConfirm: () => {
-      props.handleRegister();
-      modalStore.closeModal();
-    },
-    onCancel: modalStore.closeModal,
-  });
+  isSubmitDisabled.value = true; // 버튼 비활성화
+  props.handleRegister();
 };
 </script>
 <template>
@@ -86,8 +78,9 @@ const openRegisterEditModal = () => {
       </button>
       <button
         class="w-[68px] h-[39px] rounded-[8px] text-black01 text-bold text-4 cursor-pointer"
+        :disabled="isSubmitDisabled"
         :class="nickname ? `bg-${nickname}_opa30` : 'bg-gray01'"
-        @click="openRegisterEditModal"
+        @click="handleSubmit"
       >
         {{ isEditPage ? "수정" : "등록" }}
       </button>

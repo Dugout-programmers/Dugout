@@ -162,7 +162,7 @@ const handleRegister = async () => {
     );
 
     if (updatedPost) {
-      // alert("게시물이 수정되었습니다."); // 통일성을 위해서 일단 주석처리
+      // alert("게시물이 수정되었습니다.");
       router.replace(`/${route.params.team}/photoboard/${postId}`);
     }
   } catch (error) {
@@ -202,6 +202,18 @@ watchEffect(() => {
   }
 });
 
+// 수정 모달 띄우기
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleRegister();
+      modalStore.closeModal();
+    },
+  });
+};
+
 onMounted(() => {
   if (route.params.id && !isNaN(route.params.id)) {
     fetchPostData(route.params.id);
@@ -215,7 +227,7 @@ onMounted(() => {
   <div><h1>수정페이지</h1></div>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister="handleRegister" />
+      <CreateHeader :handleRegister="openEditModal" />
       <Modal />
       <div>
         <input

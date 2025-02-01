@@ -202,7 +202,7 @@ const fetchPostDetails = async () => {
 };
 
 // 작성글 업데이트 함수
-const handleUpdate = async () => {
+const handleUpdate = () => {
   const postId = route.params.id;
   if (!validateInputs()) return;
 
@@ -221,14 +221,14 @@ const handleUpdate = async () => {
   };
 
   try {
-    await updateCrewRecruitmentPost(postId, updatedData);
+    updateCrewRecruitmentPost(postId, updatedData);
     router.push(`/${currentTeam}/crewboard/${postId}`);
     // modalStore.openModal({
     //   message: "게시글이 성공적으로 수정되었습니다.",
     //   type: "oneBtn",
     //   onConfirm: () => {
     //     modalStore.closeModal();
-    //     router.push(`/${currentTeam}/crewboard/`);
+    //     router.push(`/${currentTeam}/crewboard/${postId}`);
     //   },
     // });
   } catch (err) {
@@ -246,13 +246,25 @@ watch(gameDateStatus, (newDate) => {
   isDatePickerOpen.value = false;
 });
 
+// 수정 모달 띄우기
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleUpdate();
+      modalStore.closeModal();
+    },
+  });
+};
+
 onMounted(() => {
   fetchPostDetails();
 });
 </script>
 <template>
   <div class="px-[50px]">
-    <CreateHeader :handleRegister="handleUpdate" />
+    <CreateHeader :handleRegister="openEditModal" />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
         <div>

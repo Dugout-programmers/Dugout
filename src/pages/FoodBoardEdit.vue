@@ -180,19 +180,18 @@ const uploadImages = async () => {
   }
 };
 
-// 모달 통일
-// const onClickCompleteEdit = () => {
-//   modalStore.openModal({
-//     message: "수정을 완료하시겠습니까?",
-//     type: "twoBtn",
-//     onConfirm: () => {
-//       handlePostUpdate();
-//       modalStore.closeModal();
-//       router.go(-1);
-//     },
-//     onCancel: modalStore.closeModal,
-//   });
-// };
+const onClickCompleteEdit = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handlePostUpdate();
+      modalStore.closeModal();
+      // router.go(-1);
+    },
+    onCancel: modalStore.closeModal,
+  });
+};
 
 const cancelRestaurantPost = () => {
   router.go(-1);
@@ -204,7 +203,7 @@ const cancelRestaurantPost = () => {
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader
-        :handleRegister="handlePostUpdate"
+        :handleRegister="onClickCompleteEdit"
         :handleCancel="cancelRestaurantPost"
       />
       <div>
