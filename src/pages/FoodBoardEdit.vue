@@ -1,24 +1,29 @@
 <script setup>
-import CreateHeader from "@/components/CreateHeader.vue";
-import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
-import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
-import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
-import { QuillEditor } from "@vueup/vue-quill";
-import { useRoute, useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+
+import {
+  deleteRestaurantPostImage,
+  updateRestaurantPostImage,
+} from "@/api/supabase-api/restaurantImage";
 import {
   getRestaurantPostDetailsById,
   updateRestaurantLocation,
   updateRestaurantPost,
 } from "@/api/supabase-api/restaurantPost";
-import { updateRestaurantPostImage } from "@/api/supabase-api/restaurantImage";
-import { useMapStore } from "@/stores/mapStore";
-import { useImageStore } from "@/stores/useImageStore";
-import { useModalStore } from "@/stores/useModalStore";
+
+import Baseball from "@/assets/icons/baseball.svg";
+import CreateHeader from "@/components/CreateHeader.vue";
+import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
+import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
+import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useMapStore } from "@/stores/mapStore";
+import { useModalStore } from "@/stores/useModalStore";
+import { QuillEditor } from "@vueup/vue-quill";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const authStore = useAuthStore();
-const imageStore = useImageStore();
+
 const mapStore = useMapStore();
 const router = useRouter();
 const modalStore = useModalStore();
@@ -26,73 +31,89 @@ const route = useRoute();
 const postId = route.params.id;
 const teamName = ref(route.params.team);
 
-const postDetails = ref({});
-const title = ref("");
-const content = ref("");
-const selectedTags = ref([]);
-const location = ref({});
 
 const tagErrorClass = ref("");
 const tagErrorMessage = ref("태그를 1개 이상 선택해주세요");
 
+const postDetails = ref({});
+const title = ref("");
+const location = ref({});
+const content = ref("");
+const imageUrls = ref([null, null, null]);
+const selectedTags = ref([]);
+
+// 기존 포스트 로드
 const loadPostDetail = async () => {
-  try {
-    const data = await getRestaurantPostDetailsById(postId);
-    postDetails.value = {
-      ...data,
-      images: data.images?.map((img) => img.url),
-    };
+  const data = await getRestaurantPostDetailsById(postId);
 
-    if (postDetails.value.member_id !== authStore.user?.id) {
-      router.push({ name: "NotFound" }); // NotFound 페이지로 리디렉션
-      return;
-    }
+  if (!data) throw new Error("게시물 데이터를 가져올 수 없습니다.");
 
-    title.value = postDetails.value.title;
-    content.value = postDetails.value.content;
-    selectedTags.value = postDetails.value.tags;
-    location.value = postDetails.value.location;
 
-    mapStore.setFinalSelectedLocation({
-      place_name: location.value.name,
-      address_name: location.value.address,
-      category_name: location.value.category,
-      x: location.value.longitude,
-      y: location.value.latitude,
-      phone: location.value.contact,
-      place_url: location.value.url,
-    });
-    mapStore.setIsSelectedLocationVisable(true);
-    imageStore.setImageUrls(postDetails.value.images);
+  const {
+    title: postTitle,
+    content: postContent,
+    tags,
+    location: postLocation,
+    member_id,
+    images,
+  } = data;
 
-    console.log("디테일 데이터 출력", postDetails.value);
-  } catch (error) {
-    console.error("게시물 불러오기 실패", error);
+  if (member_id !== authStore.user?.id) {
+    return router.push({ name: "NotFound" });
   }
+
+  postDetails.value = {
+    ...data,
+    images: images?.map((img) => img.url) || [],
+  };
+
+  title.value = postTitle;
+  content.value = postContent;
+  selectedTags.value = tags || [];
+  location.value = postLocation || {};
+
+  mapStore.setFinalSelectedLocation({
+    place_name: location.value.name || "",
+    address_name: location.value.address || "",
+    category_name: location.value.category || "",
+    x: location.value.longitude || "",
+    y: location.value.latitude || "",
+    phone: location.value.contact || "",
+    place_url: location.value.url || "",
+  });
+
+  mapStore.setIsSelectedLocationVisable(true);
+
+  const loadedImages = postDetails.value.images;
+  imageUrls.value = [
+    ...loadedImages,
+    ...Array(3 - loadedImages.length).fill(null),
+  ].slice(0, 3);
 };
 
-onMounted(async () => {
-  await loadPostDetail();
-});
+onMounted(loadPostDetail);
 
-const handleTagUpdate = (tags) => {
+const updateImages = (newImages) => {
+  imageUrls.value = newImages;
+};
+
+const updateTags = (tags) => {
   selectedTags.value = tags;
   if (selectedTags.value.length > 0) {
     tagErrorClass.value = "";
   }
 };
 
-const handlePostUpdate = async () => {
-  if (!isValidForm()) return;
-
-  console.log("장소 데이터 제대로 들어갔는지 location.value", location.value);
-
+const registerEditedPost = async () => {
+  const filteredUrls = imageUrls.value.filter((url) => url !== null);
   try {
     await updateRestaurantPost(
       postId,
       title.value,
       content.value,
-      imageStore.filterNullImage()[0],
+
+      filteredUrls[0] || null,
+
       selectedTags.value
     );
     getFinalLocation();
@@ -109,8 +130,11 @@ const handlePostUpdate = async () => {
       url
     );
     await uploadImages();
+
     router.push(`/${teamName.value}/foodboard/${postId}`);
-    imageStore.resetImageData();
+    // imageStore.resetImageData();
+    // 이미지 리셋해야되나?
+
     mapStore.resetLocationData();
   } catch (error) {
     console.error("게시물 수정 실패", error);
@@ -132,7 +156,7 @@ const getFinalLocation = () => {
 
 const isValidForm = () => {
   if (!title.value.trim()) {
-    focusElement('input[type="text"]');
+    focusElement(".title-input");
     return false;
   }
 
@@ -167,27 +191,31 @@ const handleTagError = () => {
     tagErrorClass.value = "";
   }, 3000);
 };
-
 const uploadImages = async () => {
-  const images = imageStore.filterNullImage();
-  for (const [i, image] of images.entries()) {
-    try {
+  const filteredUrls = imageUrls.value.filter((url) => url !== null);
+
+  try {
+    await deleteRestaurantPostImage(postId);
+    if (imageUrls.value.length === 0) return;
+    for (const [i, image] of filteredUrls.entries()) {
       const imageData = await updateRestaurantPostImage(postId, i, image);
       console.log("이미지 업로드 성공", imageData);
-    } catch (err) {
-      console.error(`이미지 업로드 실패 (index: ${i})`, err);
     }
+  } catch (err) {
+    console.error("이미지 업로드 실패", err);
   }
 };
 
 const onClickCompleteEdit = () => {
+  if (!isValidForm()) return;
+
   modalStore.openModal({
     message: "수정을 완료하시겠습니까?",
     type: "twoBtn",
     onConfirm: () => {
-      handlePostUpdate();
+      registerEditedPost();
       modalStore.closeModal();
-      // router.go(-1);
+      router.go(-1);
     },
     onCancel: modalStore.closeModal,
   });
@@ -211,7 +239,7 @@ const cancelRestaurantPost = () => {
           v-model="title"
           type="text"
           placeholder="제목"
-          class="border-b w-full outline-none text-center py-[15px] text-3xl bg-white01"
+          class="border-b w-full outline-none text-center py-[15px] text-3xl bg-white01 title-input"
         />
       </div>
       <section
@@ -227,16 +255,18 @@ const cancelRestaurantPost = () => {
             theme="snow"
           />
         </div>
-        <PhotoUpload />
+        <PhotoUpload :images="imageUrls" @update:images="updateImages" />
         <div id="tags-select" class="flex flex-col gap-[20px]">
           <div class="flex gap-[10px] items-center">
+            <img :src="Baseball" class="w-[18px] h-[18px]" />
+
             <p :class="tagErrorClass" class="text-[14px] text-gray03">
               {{ tagErrorMessage }}
             </p>
           </div>
           <TagsSelect
             :initial-tags="selectedTags"
-            @update:selectedTag="handleTagUpdate"
+            @update:selectedTag="updateTags"
           />
         </div>
       </section>

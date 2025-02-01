@@ -12,12 +12,10 @@ import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue"
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
 import { teamID } from "@/constants/index";
 import { useMapStore } from "@/stores/mapStore";
-import { useImageStore } from "@/stores/useImageStore";
 import { QuillEditor } from "@vueup/vue-quill";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-const imageStore = useImageStore();
 const mapStore = useMapStore();
 const router = useRouter();
 const route = useRoute();
@@ -25,40 +23,45 @@ const teamName = ref(route.params.team);
 const clubId = ref(teamID[teamName.value]);
 
 const title = ref("");
-const content = ref("");
-const selectedTags = ref([]);
-const isMapNull = ref(false);
 const finalSelectedLocation = computed(() => mapStore.finalSelectedLocation);
+const content = ref("");
+const imageUrls = ref([null, null, null]);
+const selectedTags = ref([]);
 
-const tagErrorClass = ref("");
-const errorMessage = ref([
-  "장소를 지도에서 선택해주세요",
-  "태그를 1개 이상 선택해주세요",
-]);
-const mapNullErrorClass = ref("");
+const currentPostId = ref(null);
 
-const handleTagUpdate = (tags) => {
+const updateImages = (newImages) => {
+  imageUrls.value = newImages;
+};
+
+
+const updateTags = (tags) => {
   selectedTags.value = tags;
   if (selectedTags.value.length > 0) {
     tagErrorClass.value = "";
   }
 };
 
-const submitRestaurantPost = async () => {
-  const filteredImg = imageStore.filterNullImage();
-  const userData = await getCurrentUser();
+const isMapNull = ref(false);
+const tagErrorClass = ref("");
+const mapNullErrorClass = ref("");
+const errorMessage = ref([
+  "장소를 지도에서 선택해주세요",
+  "태그를 1개 이상 선택해주세요",
+]);
 
+const postFormValidation = () => {
   if (!title.value.trim()) {
-    const titleElement = document.querySelector('input[type="text"]');
+    const titleElement = document.querySelector(".title-input");
     titleElement.focus();
-    return;
+    return false; // 유효성 검사 실패
   }
 
   if (!content.value.trim()) {
     const contentElement = document.querySelector(".ql-editor");
     contentElement.focus();
     contentElement.scrollIntoView({ behavior: "smooth" });
-    return;
+    return false;
   }
 
   if (selectedTags.value.length === 0) {
@@ -68,8 +71,7 @@ const submitRestaurantPost = async () => {
     setTimeout(() => {
       tagErrorClass.value = "";
     }, 3000);
-
-    return;
+    return false;
   }
 
   if (!mapStore.finalSelectedLocation) {
@@ -78,53 +80,75 @@ const submitRestaurantPost = async () => {
     setTimeout(() => {
       mapNullErrorClass.value = "";
     }, 3000);
-    return;
+    return false;
   }
+
+  return true; // 유효성 검사 통과
+};
+
+const registerImage = async () => {
+  const filteredImg = imageUrls.value.filter((url) => url !== null);
+  const imagesData = [];
+
+  for (const [i, image] of filteredImg.entries()) {
+    try {
+      console.log(`이미지 업로드 요청 데이터 (index: ${i})`, {
+        postId: currentPostId.value,
+        imageUrl: image,
+        index: i,
+      });
+
+      const imageData = await createRestaurantPostImage(
+        currentPostId.value,
+        image,
+        i
+      );
+      console.log("이미지 업로드 성공", imageData);
+      imagesData.push(imageData);
+    } catch (err) {
+      console.error(`이미지 업로드 실패 (index: ${i})`, err);
+    }
+  }
+};
+
+const registerLocation = async () => {
+  await createRestaurantLocation(
+    currentPostId.value,
+    finalSelectedLocation.value.place_name,
+    finalSelectedLocation.value.address_name,
+    finalSelectedLocation.value.category_name,
+    finalSelectedLocation.value.y,
+    finalSelectedLocation.value.x,
+    finalSelectedLocation.value.phone,
+    finalSelectedLocation.value.place_url
+  );
+};
+
+const submitRestaurantPost = async () => {
+  const filteredImg = imageUrls.value.filter((url) => url !== null);
+  const userData = await getCurrentUser();
+
+  if (!postFormValidation()) return;
+
   try {
     const data = await createRestaurantPost(
       userData.id,
       content.value,
       title.value,
-      filteredImg[0],
+      filteredImg[0] || null,
       selectedTags.value,
       clubId.value
     );
-    console.log("포스팅된 전체 데이터를 확인합니다", data);
 
-    const locationData = await createRestaurantLocation(
-      data[0].id,
-      finalSelectedLocation.value.place_name,
-      finalSelectedLocation.value.address_name,
-      finalSelectedLocation.value.category_name,
-      finalSelectedLocation.value.y,
-      finalSelectedLocation.value.x,
-      finalSelectedLocation.value.phone,
-      finalSelectedLocation.value.place_url
-    );
+    currentPostId.value = data[0].id;
 
-    const imagesData = [];
-    for (const [i, image] of filteredImg.entries()) {
-      try {
-        console.log(`이미지 업로드 요청 데이터 (index: ${i})`, {
-          postId: data[0].id,
-          imageUrl: image,
-          index: i,
-        });
+    await Promise.all([
+      filteredImg.length > 0 ? registerImage() : Promise.resolve(),
+      registerLocation(),
+    ]);
 
-        const imageData = await createRestaurantPostImage(data[0].id, image, i);
-        console.log("이미지 업로드 성공", imageData);
-        imagesData.push(imageData);
-        imageStore.resetImageData();
-      } catch (err) {
-        console.error(`이미지 업로드 실패 (index: ${i})`, err);
-      }
-    }
-
-    console.log("맛집 게시물 등록 성공", data, locationData, imagesData);
     router.push(`/${teamName.value}/foodboard`);
-
     mapStore.resetLocationData();
-    imageStore.resetImageData();
   } catch (error) {
     console.log("맛집 게시물 등록 실패", error);
   }
@@ -155,7 +179,7 @@ const toolbarOptions = [
           v-model="title"
           type="text"
           placeholder="제목"
-          class="border-b w-full outline-none text-center py-[15px] text-3xl bg-white01"
+          class="title-input border-b w-full outline-none text-center py-[15px] text-3xl bg-white01"
         />
       </div>
       <section
@@ -178,7 +202,7 @@ const toolbarOptions = [
             :toolbar="toolbarOptions"
           />
         </div>
-        <PhotoUpload />
+        <PhotoUpload :images="imageUrls" @update:images="updateImages" />
         <div id="tags-select" class="flex flex-col gap-[20px]">
           <div class="flex gap-[10px] items-center">
             <img :src="Baseball" class="w-[18px] h-[18px]" />
@@ -186,7 +210,7 @@ const toolbarOptions = [
               {{ errorMessage[1] }}
             </p>
           </div>
-          <TagsSelect @update:selectedTag="handleTagUpdate" />
+          <TagsSelect @update:selectedTag="updateTags" />
         </div>
       </section>
     </div>

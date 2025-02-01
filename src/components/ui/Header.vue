@@ -1,7 +1,9 @@
 <script setup>
 import searchIcon from "@/assets/icons/search.svg";
 import themeToggleIcon from "@/assets/icons/theme_toggle.svg";
+import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import logoImg from "@/assets/images/logo.svg";
+import { teamList } from "@/constants";
 import { useTeamStore } from "@/stores/teamStore";
 import { computed, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
@@ -9,14 +11,20 @@ import EmblemAnimation from "./EmblemAnimation.vue";
 import { useAuthStore } from "@/stores/auth";
 import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import { useSearchStore } from "@/stores/searchStore";
-import { teamList } from "@/constants";
+import { useTeamStore } from "@/stores/teamStore";
 import { twMerge } from "tailwind-merge";
+import { computed, ref } from "vue";
+import { RouterLink, useRoute } from "vue-router";
+import CheerSong from "../header/CheerSong.vue";
+import EmblemAnimation from "./EmblemAnimation.vue";
 
 const route = useRoute();
 const teamStore = useTeamStore();
 const authStore = useAuthStore(); // 유저 정보가 가져오기
-
-const isPageInCommunity = ref(route.fullPath.includes("board"));
+const isPageInCommunity = ref(
+  route.fullPath.includes("board") && !/board\/\d+$/.test(route.fullPath)
+);
+const isSeachbarOpen = ref(false);
 const searchStore = useSearchStore();
 const searchInput = ref("");
 
@@ -98,11 +106,10 @@ const teamNickname = computed(() => {
       <div class="flex items-center gap-[30px]">
         <!-- 검색 -->
         <form
+          v-if="isPageInCommunity"
           :class="[
-            'group h-[40px] px-[10px] flex items-center rounded-[10px] transition-all duration-300',
-            isPageInCommunity
-              ? 'bg-white02 w-[40px] hover:w-[320px]'
-              : 'w-[40px] bg-transparent',
+            'h-[35px] px-[10px] flex items-center rounded-[10px]  w-[40px]',
+            isSeachbarOpen && 'w-[320px] bg-white02',
           ]"
         >
           <input
@@ -110,10 +117,12 @@ const teamNickname = computed(() => {
             v-model="searchInput"
             @input="updateSearchKeyword"
             placeholder="현재 게시판에서만 검색할 수 있습니다"
-            class="w-0 opacity-0 transition-all duration-300 bg-white02 focus:outline-none group-hover:w-[290px] group-hover:opacity-100"
-            v-if="isPageInCommunity"
+            class="w-0 opacity-0 bg-white02 focus:outline-none"
+            :class="isSeachbarOpen && 'w-[290px] opacity-100'"
           />
-          <img :src="searchIcon" alt="검색 아이콘" class="w-[20px]" />
+          <button @click.prevent="isSeachbarOpen = !isSeachbarOpen">
+            <img :src="searchIcon" alt="검색 아이콘" class="w-[20px]" />
+          </button>
         </form>
         <!-- 유저정보 -->
         <RouterLink

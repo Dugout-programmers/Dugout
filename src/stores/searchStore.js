@@ -15,31 +15,42 @@ export const useSearchStore = defineStore("search", () => {
     allPosts.value = posts;
   };
 
-  // 한글 초성 검색 지원 함수
-  const matchChosung = (text, search) => {
-    const chosungMap = {
-      ㄱ: "가강거경고구군권근금기",
-      ㄴ: "나낙난남노누눈늑능니",
-      ㄷ: "다단달담대더도독동두뒤디",
-      ㄹ: "라락란람래러로록루류리",
-      ㅁ: "마만말망매머모목무문미",
-      ㅂ: "바박반발방배버보복부북분불비",
-      ㅅ: "사산살삼상새서석선설소속수숙순술시",
-      ㅇ: "아안알암애야어언얼엄여역연열영예오온올와요용우운울원유윤율으은을의이익인일임입잉",
-      ㅈ: "자작잔잠장재저전절점접정제조족존종주준중지직진질짐집징",
-      ㅊ: "차착찬참창채처천철청체초촉총추춘출충취",
-      ㅋ: "카코쿠크키",
-      ㅌ: "타탁탄탈탑태택탤탭터테토톤통투",
-      ㅍ: "파판팔패퍼페포폭표푸프피",
-      ㅎ: "하학한할함해허험헤현혈협호혹혼홀화환활황회효후훈훌휘휴흔흘흥히"
-    };
-    
-    return search
-      .split("")
-      .every((chosung) => 
-        chosungMap[chosung] &&
-        [...text].some((char) => chosungMap[chosung].includes(char))
-      );
+  // 한글을 초성, 중성, 종성으로 분리하는 함수
+  const splitHangul = (char) => {
+    const code = char.charCodeAt(0) - 0xac00;
+    if (code < 0 || code > 11171) return null; // 한글이 아닌 경우
+
+    const cho = Math.floor(code / 588);
+    const jung = Math.floor((code - cho * 588) / 28);
+    const jong = code % 28;
+
+    return { cho, jung, jong };
+  };
+
+  // 한글 마지막 글자 검색을 위한 함수
+  const matchLastHangulChar = (text, search) => {
+    // 검색어의 마지막 글자 확인
+    const lastChar = search[search.length - 1];
+    const lastCharCode = lastChar.charCodeAt(0);
+
+    // 마지막 글자가 한글인 경우
+    if (lastCharCode >= 0xAC00 && lastCharCode <= 0xD7A3) {
+      const { cho, jung, jong } = splitHangul(lastChar);
+
+      // 텍스트의 마지막 글자와 검색어의 마지막 글자가 동일한지 확인
+      const textLastChar = text[text.length - 1];
+      const textLastCharCode = textLastChar.charCodeAt(0);
+
+      if (textLastCharCode >= 0xAC00 && textLastCharCode <= 0xD7A3) {
+        const { cho: textCho, jung: textJung, jong: textJong } = splitHangul(textLastChar);
+
+        // 초성, 중성, 종성이 일치하는지 확인
+        return cho === textCho && jung === textJung && jong === textJong;
+      }
+    }
+
+    // 한글이 아닌 경우에는 문자 그대로 비교
+    return text.includes(search);
   };
 
   // 검색어로 필터링된 게시물 반환
@@ -56,7 +67,7 @@ export const useSearchStore = defineStore("search", () => {
 
         // 대소문자 무시하고 다중 키워드 포함 여부 확인
         const matches = keywords.every(
-          (kw) => title.includes(kw) || content.includes(kw) || matchChosung(title, kw)
+          (kw) => title.includes(kw) || content.includes(kw) || matchLastHangulChar(title, kw)
         );
 
         return matches;
