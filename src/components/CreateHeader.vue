@@ -1,6 +1,6 @@
 <script setup>
 import { useModalStore } from "@/stores/useModalStore";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Modal from "./common/Modal.vue";
 import { computed } from "vue";
 import { teamList } from "@/constants";
@@ -10,80 +10,67 @@ const props = defineProps({
   handleRegister: {
     type: Function,
   },
-  handleCancel: {
-    type: Function,
-  },
+  // handleCancel: {
+  //   type: Function,
+  // },
+});
+const modalStore = useModalStore();
+const route = useRoute();
+const router = useRouter();
+
+const teamName = computed(() => route.params.team); // 팀이름
+const boardName = computed(() => route.path.split("/")[2]); // 게시판 이름
+const postID = computed(() => route.path.split("/")[3]); // 포스트 ID
+const isEditPage = computed(() => route.path.split("/").pop() === "edit"); // 편집 페이지인지 유무 판단
+
+// css적용을 위해 url을 통해서 팀 닉네임 찾기
+const nickname = computed(() => {
+  const team = teamList.find((team) => team.name === route.params.team);
+  return team?.nickname;
 });
 
-const route = useRoute();
-const lastSegment = route.path.split("/").pop();
-const teamPage = computed(() =>
-  teamList.find((team) => team.name === route.params.team)
-);
-const modalStore = useModalStore();
-
-const confirmCancel = () => {
+// 취소 버튼 눌렀을 때 취소 모달창 띄우기
+const openCancelModal = () => {
   modalStore.openModal({
     message: "작성했던 모든 내용은 저장되지 않습니다.\n취소하시겠습니까?",
     type: "twoBtn",
     onConfirm: () => {
-      props.handleCancel();
+      handleCancel();
       modalStore.closeModal();
     },
     onCancel: modalStore.closeModal,
   });
 };
+
+// 취소 함수 핸들링
+const handleCancel = () => {
+  // 편집 페이지인 경우
+  if (isEditPage.value) {
+    router.push(`/${teamName.value}/${boardName.value}/${postID.value}`);
+  }
+  // 등록페이지인 경우
+  else {
+    router.push(`/${teamName.value}/${boardName.value}`);
+  }
+};
 </script>
 <template>
   <Modal />
-  <div class="border-b-[1px] border-b-white02">
-    <div class="w-full py-[15.5px] flex flex-row-reverse gap-5">
+  <div class="border-b border-b-white02 flex justify-end py-[15.5px] px-[30px]">
+    <div class="flex gap-5">
       <button
-        v-if="lastSegment === `edit`"
-        @click="handleRegister"
-        :class="[
-          'w-[68px]',
-          'h-[39px]',
-          'rounded-[8px]',
-          'text-black01',
-          'text-bold',
-          'text-4',
-          'cursor-pointer',
-          teamPage ? `bg-${teamPage.nickname}_opa30` : 'bg-gray01',
-        ]"
-      >
-        수정
-      </button>
-      <button
-        v-else
-        @click="handleRegister"
-        :class="[
-          'w-[68px]',
-          'h-[39px]',
-          'rounded-[8px]',
-          'text-black01',
-          'text-bold',
-          'text-4',
-          'cursor-pointer',
-          teamPage ? `bg-${teamPage.nickname}_opa30` : 'bg-gray01',
-        ]"
-      >
-        등록
-      </button>
-      <button
-        @click="confirmCancel"
-        :class="[
-          'w-[68px]',
-          'h-[39px]',
-          'rounded-[8px]',
-          'text-black01',
-          'text-bold',
-          'text-4',
-          'cursor-pointer',
-          teamPage ? `bg-${teamPage.nickname}_opa10` : 'bg-gray01',
-        ]"
+        class="w-[68px] h-[39px] rounded-[8px] text-black01 text-bold text-4 cursor-pointer"
+        :class="nickname ? `bg-${nickname}_opa10` : 'bg-gray01'"
+        @click="openCancelModal"
       >
         취소
+      </button>
+      <button
+        class="w-[68px] h-[39px] rounded-[8px] text-black01 text-bold text-4 cursor-pointer"
+        :class="nickname ? `bg-${nickname}_opa30` : 'bg-gray01'"
+        @click="handleRegister"
+      >
+        {{ isEditPage ? "수정" : "등록" }}
       </button>
     </div>
   </div>
