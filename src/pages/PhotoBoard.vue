@@ -1,5 +1,8 @@
 <script setup>
-import { getViewingCertificationPostsByClub } from "@/api/supabase-api/viewingCertificationPost";
+import {
+  getUserInfoById,
+  getViewingCertificationPostsByClub,
+} from "@/api/supabase-api/viewingCertificationPost";
 import PhotoboardCard from "@/components/photoboard/PhotoboardCard.vue";
 import { teamID } from "@/constants";
 import {
@@ -34,10 +37,33 @@ const restoreScrollPosition = () => {
   }
 };
 
+const updateUserInfoForPosts = async () => {
+  if (!photoboardList.value.length) return;
+
+  const updatedPosts = await Promise.all(
+    photoboardList.value.map(async (post) => {
+      if (!post.member_id) return post;
+
+      const userInfo = await getUserInfoById(post.member_id);
+      if (userInfo) {
+        return {
+          ...post,
+          author_image: userInfo.image,
+          name: userInfo.name,
+        };
+      }
+      return post;
+    })
+  );
+  photoboardList.value = updatedPosts;
+};
+
 const fetchPhotoboardList = async () => {
   try {
     const data = await getViewingCertificationPostsByClub(clubId.value);
     photoboardList.value = data || [];
+
+    await updateUserInfoForPosts();
 
     setTimeout(() => {
       restoreScrollPosition();
@@ -46,6 +72,10 @@ const fetchPhotoboardList = async () => {
     console.error("직관인증포토 포스트를 불러오지 못했습니다");
   }
 };
+
+// watchEffect(() => {
+//   updateUserInfoForPosts();
+// });
 
 onMounted(() => {
   fetchPhotoboardList();
@@ -82,12 +112,20 @@ const searchResults = computed(() => searchStore.filteredPosts);
       <GoToCreate :text="'직관 인증 포토 올리러 가기'" />
       <!-- 목록 -->
       <div class="w-full h-auto mb-[100px]">
-        <div v-if="photoboardList" class="grid grid-cols-3 gap-[30px] w-full">
+        <div
+          v-if="searchResults.length > 0"
+          class="grid grid-cols-3 gap-[30px] w-full"
+        >
           <PhotoboardCard
             v-for="post in searchResults"
             :key="post.id"
             :post="post"
           />
+        </div>
+        <div v-else class="flex justify-center items-center w-full col-span-3">
+          <span class="text-center"
+            >게시물이 없습니다. 게시물을 작성해보세요!</span
+          >
         </div>
       </div>
     </div>

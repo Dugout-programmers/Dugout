@@ -8,6 +8,7 @@ import SignUp from "@/pages/SignUp.vue";
 import MyPage from "@/pages/MyPage.vue";
 import Main from "@/pages/Main.vue";
 import { teamList, gameList } from "@/constants";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,12 @@ const router = createRouter({
         { path: "", name: "main", component: Main },
         { path: "news", name: "news", component: News },
         { path: "highlight", name: "highlight", component: Highlight },
-        { path: "myPage", name: "myPage", component: MyPage },
+        {
+          path: "myPage",
+          name: "myPage",
+          component: MyPage,
+          meta: { requiresAuth: true },
+        },
       ],
     },
     {
@@ -105,6 +111,7 @@ const router = createRouter({
           path: "freeboard/:id/edit",
           name: "freeboardEdit",
           component: () => import("@/pages/FreeBoardEdit.vue"),
+          meta: { requiresAuth: true },
           props: true,
         },
         {
@@ -118,6 +125,7 @@ const router = createRouter({
           path: "freeboard/create",
           name: "freeboardCreate",
           component: () => import("@/pages/FreeBoardCreate.vue"),
+          meta: { requiresAuth: true },
           props: true,
         },
 
@@ -135,11 +143,13 @@ const router = createRouter({
           path: "crewboard/create",
           name: "crewboardCreate",
           component: () => import("@/pages/CrewBoardCreate.vue"),
+          meta: { requiresAuth: true },
         },
         {
           path: "crewboard/:id/edit",
           name: "crewboardEdit",
           component: () => import("@/pages/CrewBoardEdit.vue"),
+          meta: { requiresAuth: true },
         },
 
         {
@@ -156,11 +166,13 @@ const router = createRouter({
           path: "photoboard/create",
           name: "photoboardCreate",
           component: () => import("@/pages/PhotoBoardCreate.vue"),
+          meta: { requiresAuth: true },
         },
         {
           path: "photoboard/:id/edit",
           name: "photoboardEdit",
           component: () => import("@/pages/PhotoBoardEdit.vue"),
+          meta: { requiresAuth: true },
         },
         {
           path: "foodboard",
@@ -176,12 +188,14 @@ const router = createRouter({
           path: "foodboard/create",
           name: "foodboardCreate",
           component: () => import("@/pages/FoodBoardCreate.vue"),
+          meta: { requiresAuth: true },
         },
         {
           path: "foodboard/:id/edit",
           name: "foodboardEdit",
           component: () => import("@/pages/FoodBoardEdit.vue"),
-        }
+          meta: { requiresAuth: true },
+        },
       ],
     },
     { path: "/signin", name: "SignIn", component: SignIn },
@@ -192,6 +206,20 @@ const router = createRouter({
       component: () => import("@/pages/NotFound.vue"),
     },
   ],
+});
+
+router.beforeEach((to, _, next) => {
+  const authStore = useAuthStore();
+  console.log(authStore.user, to.path);
+  // 비로그인일때 private페이지 접근할때
+  if (to.meta.requiresAuth && !authStore.user) {
+    next("/signin");
+  }
+  // 로그인상태일때 회원가입페이지, 로그인페이지 막기
+  else if (to.path === "/signin" && to.path === "/login" && authStore.user) {
+    next("/");
+  }
+  next(); // 이게 있어야 렌더링된다.
 });
 
 export default router;

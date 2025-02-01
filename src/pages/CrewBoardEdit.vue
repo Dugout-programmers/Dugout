@@ -192,9 +192,11 @@ const fetchPostDetails = async () => {
     myAge.value = post.value.author_age;
     crewGender.value = post.value.crew_sex;
     crewAge.value = post.value.crew_age;
+
+    // 🏆 "2명" -> "2" 숫자만 추출
     const membersData = post.value.members;
     const [numberPart, statusPart] = membersData.split(" ");
-    peopleNum.value = numberPart;
+    peopleNum.value = numberPart.replace(/\D/g, ""); // 숫자만 추출
     peopleStatus.value = statusPart;
   } else {
     alert("게시물 정보를 가져오는 데 실패했습니다.");
@@ -222,28 +224,41 @@ const handleUpdate = () => {
 
   try {
     updateCrewRecruitmentPost(postId, updatedData);
-    modalStore.openModal({
-      message: "게시글이 성공적으로 수정되었습니다.",
-      type: "oneBtn",
-      onConfirm: () => {
-        modalStore.closeModal();
-        router.push(`/${currentTeam}/crewboard/`);
-      },
-    });
+    router.push(`/${currentTeam}/crewboard/${postId}`);
+    // modalStore.openModal({
+    //   message: "게시글이 성공적으로 수정되었습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => {
+    //     modalStore.closeModal();
+    //     router.push(`/${currentTeam}/crewboard/${postId}`);
+    //   },
+    // });
   } catch (err) {
     console.error(err.message);
   }
 };
 
-// 게시글 작성 취소 함수
-const handleCancel = () => {
-  router.push(`/${currentTeam}/crewboard/`);
-};
+// 게시글 작성 취소 함수 -> createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   router.push(`/${currentTeam}/crewboard/`);
+// };
 
 watch(gameDateStatus, (newDate) => {
   formattedGameDate.value = formatDate(newDate);
   isDatePickerOpen.value = false;
 });
+
+// 수정 모달 띄우기
+const openEditModal = () => {
+  modalStore.openModal({
+    message: "수정을 완료하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: () => {
+      handleUpdate();
+      modalStore.closeModal();
+    },
+  });
+};
 
 onMounted(() => {
   fetchPostDetails();
@@ -251,7 +266,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="px-[50px]">
-    <CreateHeader :handleRegister="handleUpdate" :handleCancel="handleCancel" />
+    <CreateHeader :handleRegister="openEditModal" />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
         <div>

@@ -4,7 +4,12 @@ import themeToggleIcon from "@/assets/icons/theme_toggle.svg";
 import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import logoImg from "@/assets/images/logo.svg";
 import { teamList } from "@/constants";
+import { useTeamStore } from "@/stores/teamStore";
+import { computed, ref } from "vue";
+import { RouterLink, useRoute } from "vue-router";
+import EmblemAnimation from "./EmblemAnimation.vue";
 import { useAuthStore } from "@/stores/auth";
+import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import { useSearchStore } from "@/stores/searchStore";
 import { useTeamStore } from "@/stores/teamStore";
 import { twMerge } from "tailwind-merge";
@@ -96,13 +101,6 @@ const teamNickname = computed(() => {
             {{ menu.name }}
           </RouterLink>
         </nav>
-      </div>
-      <!-- 가운데 영역(음악) -->
-      <div>
-        <CheerSong
-          :selectedTeam="teamStore.selectedTeam"
-          :isSearchHovered="isSeachbarOpen"
-        />
       </div>
       <!-- 오른쪽 영역(검색 / 유저정보 / 테마) -->
       <div class="flex items-center gap-[30px]">

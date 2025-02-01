@@ -228,3 +228,21 @@ export const deleteCertificationPost = async (postId) => {
     return null;
   }
 };
+
+//사용자 정보 조회하기(게시판 목록 프로필사진, 닉네임 갱신 위해)
+export const getUserInfoById = async (member_id) => {
+  if (!member_id) return null;
+
+  const { data, error } = await supabase
+    .from("user_info")
+    .select("id, name, image")
+    .eq("id", member_id)
+    .single();
+
+  if (error) {
+    console.error("유저 정보를 가져오는 데 실패했습니다:", error.message);
+    return null;
+  }
+
+  return data;
+};

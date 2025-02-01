@@ -1,4 +1,5 @@
 <script setup>
+
 import {
   deleteRestaurantPostImage,
   updateRestaurantPostImage,
@@ -8,6 +9,7 @@ import {
   updateRestaurantLocation,
   updateRestaurantPost,
 } from "@/api/supabase-api/restaurantPost";
+
 import Baseball from "@/assets/icons/baseball.svg";
 import CreateHeader from "@/components/CreateHeader.vue";
 import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
@@ -21,12 +23,14 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const authStore = useAuthStore();
+
 const mapStore = useMapStore();
 const router = useRouter();
 const modalStore = useModalStore();
 const route = useRoute();
 const postId = route.params.id;
 const teamName = ref(route.params.team);
+
 
 const tagErrorClass = ref("");
 const tagErrorMessage = ref("태그를 1개 이상 선택해주세요");
@@ -43,6 +47,7 @@ const loadPostDetail = async () => {
   const data = await getRestaurantPostDetailsById(postId);
 
   if (!data) throw new Error("게시물 데이터를 가져올 수 없습니다.");
+
 
   const {
     title: postTitle,
@@ -106,7 +111,9 @@ const registerEditedPost = async () => {
       postId,
       title.value,
       content.value,
+
       filteredUrls[0] || null,
+
       selectedTags.value
     );
     getFinalLocation();
@@ -123,9 +130,11 @@ const registerEditedPost = async () => {
       url
     );
     await uploadImages();
-    router.push(`/${teamName.value}/foodboard`);
+
+    router.push(`/${teamName.value}/foodboard/${postId}`);
     // imageStore.resetImageData();
     // 이미지 리셋해야되나?
+
     mapStore.resetLocationData();
   } catch (error) {
     console.error("게시물 수정 실패", error);
@@ -250,6 +259,7 @@ const cancelRestaurantPost = () => {
         <div id="tags-select" class="flex flex-col gap-[20px]">
           <div class="flex gap-[10px] items-center">
             <img :src="Baseball" class="w-[18px] h-[18px]" />
+
             <p :class="tagErrorClass" class="text-[14px] text-gray03">
               {{ tagErrorMessage }}
             </p>

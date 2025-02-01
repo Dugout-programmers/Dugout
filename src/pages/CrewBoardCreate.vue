@@ -53,17 +53,15 @@ const stadiumOptions = [
   "마산 야구장",
 ];
 const myGender = ref("");
-const myGenderOptions = ["여자", "남자", "비공개"];
+const myGenderOptions = ["여자", "남자", "비공개", "무관"];
 const myAge = ref("");
-const myAgeOptions = ["20대", "30대", "50대", "60대"];
+const myAgeOptions = ["무관", "10대", "20대", "30대", "40대", "50대", "60대"];
 const crewGender = ref("");
-const crewGenderOptions = ["여자", "남자", "무관", "비공개"];
+const crewGenderOptions = ["여자", "남자", "비공개", "무관"];
 const crewAge = ref("");
-const crewAgeOptions = ["20대", "30대", "50대", "60대"];
+const crewAgeOptions = ["무관", "10대", "20대", "30대", "40대", "50대", "60대"];
 const isCrewGenderDisabled = ref(false);
-const thisDate = new Date();
 
-console.log(thisDate);
 // 필수 입력값 검증 함수
 const validateInputs = () => {
   if (!content.value) {
@@ -226,29 +224,30 @@ const handleRegister = async () => {
       member_range: peopleStatus.value,
       game_stadium: stadium.value,
     });
-
-    modalStore.openModal({
-      message: "게시글이 성공적으로 등록되었습니다.",
-      type: "oneBtn",
-      onConfirm: () => {
-        modalStore.closeModal();
-        router.push(`/${currentTeam}/crewboard/`);
-      },
-    });
+    router.push(`/${currentTeam}/crewboard/`);
+    // 통일을 위해서 게시글 등록완료 주석처리 하게씃ㅂ니다.
+    // modalStore.openModal({
+    //   message: "게시글이 성공적으로 등록되었습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => {
+    //     modalStore.closeModal();
+    //     router.push(`/${currentTeam}/crewboard/`);
+    //   },
+    // });
   } catch (error) {
     console.error("게시글 등록 실패:", error);
-    modalStore.openModal({
-      message: "게시글 등록 중 오류가 발생했습니다.",
-      type: "oneBtn",
-      onConfirm: () => modalStore.closeModal(),
-    });
+    // modalStore.openModal({
+    //   message: "게시글 등록 중 오류가 발생했습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => modalStore.closeModal(),
+    // });
   }
 };
 
-// 게시글 작성 취소 함수
-const handleCancel = () => {
-  router.push(`/${currentTeam}/crewboard/`);
-};
+// 게시글 작성 취소 함수 -> createHeader에 공통으로 넣었습니다 확인후 지워주세요!
+// const handleCancel = () => {
+//   router.push(`/${currentTeam}/crewboard/`);
+// };
 
 onMounted(async () => {
   await getUserInfo();
@@ -256,10 +255,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="px-[50px]">
-    <CreateHeader
-      :handleRegister="handleRegister"
-      :handleCancel="handleCancel"
-    />
+    <CreateHeader :handleRegister />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
         <div>
@@ -272,8 +268,8 @@ onMounted(async () => {
             <textarea
               type="text"
               v-model="content"
-              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4"
-              placeholder="직관 크루 모집글을 작성해보세요"
+              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4 bg-white01"
+              placeholder=" 직관 크루 모집글을 작성해보세요"
             />
           </div>
         </div>
