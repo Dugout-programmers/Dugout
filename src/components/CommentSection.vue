@@ -1,6 +1,10 @@
 <script setup>
 import { createComment, getComments } from "@/api/supabase-api/commonComment";
-import { addLike, getLikes, removeLike } from "@/api/supabase-api/commonLikeWithoutDuplication";
+import {
+  addLike,
+  getLikes,
+  removeLike,
+} from "@/api/supabase-api/commonLikeWithoutDuplication";
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
 import commentIcon from "@/assets/icons/comment.svg";
 import commentBtnIcon from "@/assets/icons/comment_btn.svg";
@@ -8,10 +12,13 @@ import likeIcon from "@/assets/icons/like.svg";
 import likeIconFilled from "@/assets/icons/like_fill.svg";
 import { boardToTableMapping } from "@/constants";
 import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Commentbox from "./Commentbox.vue";
+import { useAuthStore } from "@/stores/auth";
+import { useModalStore } from "@/stores/useModalStore";
 
 const route = useRoute();
+const router = useRouter();
 const postId = ref(route.params.id);
 const boardName = route.path.split("/")[2];
 const commentText = ref("");
@@ -21,9 +28,17 @@ const currentUserId = ref(null);
 const currentUserName = ref(null);
 const currentUserImage = ref(null);
 const isSubmitting = ref(false);
+const authStore = useAuthStore(); // 유저 정보가 가져오기
+const modalStore = useModalStore();
 
-const liked = computed(() => likes.value.some((like) => like.member_id === currentUserId.value));
-const sortedComments = computed(() => [...comments.value].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+const liked = computed(() =>
+  likes.value.some((like) => like.member_id === currentUserId.value)
+);
+const sortedComments = computed(() =>
+  [...comments.value].sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  )
+);
 
 const fetchLikes = async () => {
   try {
@@ -34,14 +49,38 @@ const fetchLikes = async () => {
 };
 
 const toggleLike = async () => {
+  // 비로그인이면 로그인창으로 이동
+  if (!authStore.user) {
+    modalStore.openModal({
+      message: "로그인 후 이용 가능한 서비스입니다.\n로그인 하시겠습니까?",
+      type: "twoBtn",
+      onConfirm: () => {
+        router.push("/signin");
+        modalStore.closeModal();
+      },
+      onCancel: modalStore.closeModal,
+    });
+    return;
+  }
+
   try {
     if (liked.value) {
-      likes.value = likes.value.filter(like => like.member_id !== currentUserId.value);
-      await removeLike(boardToTableMapping[boardName], postId.value, currentUserId.value);
+      likes.value = likes.value.filter(
+        (like) => like.member_id !== currentUserId.value
+      );
+      await removeLike(
+        boardToTableMapping[boardName],
+        postId.value,
+        currentUserId.value
+      );
     } else {
       const optimisticLike = { member_id: currentUserId.value };
       likes.value.push(optimisticLike);
-      const newLike = await addLike(boardToTableMapping[boardName], postId.value, currentUserId.value);
+      const newLike = await addLike(
+        boardToTableMapping[boardName],
+        postId.value,
+        currentUserId.value
+      );
       if (!newLike) {
         likes.value.pop();
       }
@@ -53,7 +92,10 @@ const toggleLike = async () => {
 
 const fetchComments = async () => {
   try {
-    comments.value = await getComments(boardToTableMapping[boardName], postId.value);
+    comments.value = await getComments(
+      boardToTableMapping[boardName],
+      postId.value
+    );
   } catch (error) {
     console.error("댓글 정보를 가져오는 중 오류 발생:", error.message);
   }
@@ -70,6 +112,20 @@ const handleCompositionEnd = () => {
 };
 
 const submitComment = async () => {
+  // 비로그인이면 로그인창으로 이동
+  if (!authStore.user) {
+    modalStore.openModal({
+      message: "로그인 후 이용 가능한 서비스입니다.\n로그인 하시겠습니까?",
+      type: "twoBtn",
+      onConfirm: () => {
+        router.push("/signin");
+        modalStore.closeModal();
+      },
+      onCancel: modalStore.closeModal,
+    });
+    return;
+  }
+
   if (!commentText.value.trim() || isSubmitting.value) return;
   isSubmitting.value = true;
   const commentContent = commentText.value.trim();
@@ -85,10 +141,17 @@ const submitComment = async () => {
   };
   comments.value.push(optimisticComment);
   try {
-    const newComment = await createComment(boardToTableMapping[boardName], currentUserId.value, postId.value, commentContent);
+    const newComment = await createComment(
+      boardToTableMapping[boardName],
+      currentUserId.value,
+      postId.value,
+      commentContent
+    );
     commentText.value = "";
     optimisticComment.id = newComment.id;
-    comments.value = comments.value.map(comment => comment.id === null ? optimisticComment : comment);
+    comments.value = comments.value.map((comment) =>
+      comment.id === null ? optimisticComment : comment
+    );
   } catch (error) {
     console.error("댓글을 생성하는 중 오류 발생:", error.message);
     comments.value.pop();
@@ -137,7 +200,11 @@ const handleKeydown = (event) => {
     <div class="flex gap-[20px]">
       <div class="flex gap-[10px]">
         <button @click="toggleLike">
-          <img :src="liked ? likeIconFilled : likeIcon" alt="좋아요 아이콘" class="w-[21px] h-18px" />
+          <img
+            :src="liked ? likeIconFilled : likeIcon"
+            alt="좋아요 아이콘"
+            class="w-[21px] h-18px"
+          />
         </button>
         <span class="text-gray02">{{ likes.length }}</span>
       </div>
@@ -147,7 +214,9 @@ const handleKeydown = (event) => {
       </div>
     </div>
 
-    <div class="border border-gray01 rounded-[10px] px-5 py-[18px] flex justify-between gap-[20px]">
+    <div
+      class="border border-gray01 rounded-[10px] px-5 py-[18px] flex justify-between gap-[20px]"
+    >
       <input
         type="text"
         placeholder="댓글을 입력해주세요"
@@ -158,12 +227,21 @@ const handleKeydown = (event) => {
         @keyup="handleKeyup"
       />
       <button @click="submitComment">
-        <img :src="commentBtnIcon" alt="댓글 전송 버튼" class="w-[24px] h-[24px]" />
+        <img
+          :src="commentBtnIcon"
+          alt="댓글 전송 버튼"
+          class="w-[24px] h-[24px]"
+        />
       </button>
     </div>
 
     <div class="flex flex-col gap-5">
-      <Commentbox v-for="comment in sortedComments" :key="comment.id" :comment="comment" :currentUserId="currentUserId" />
+      <Commentbox
+        v-for="comment in sortedComments"
+        :key="comment.id"
+        :comment="comment"
+        :currentUserId="currentUserId"
+      />
     </div>
   </div>
 </template>
