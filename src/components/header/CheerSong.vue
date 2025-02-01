@@ -6,15 +6,14 @@ import AudioPlayIcon from "@/assets/icons/audio_play.svg";
 import AudioBackIcon from "@/assets/icons/audio_back.svg";
 import AudioForwardIcon from "@/assets/icons/audio_forward.svg";
 import AudioPauseIcon from "@/assets/icons/audio_pause.svg";
-import { onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useCheerSongStore } from "@/stores/cheerSongStore";
-
-const props = defineProps({
-  selectedTeam: String,
-  isSearchHovered: Boolean,
-});
+import { useTeamStore } from "@/stores/teamStore";
+import { teamList } from "@/constants";
 
 const cheerSongStore = useCheerSongStore();
+const teamStore = useTeamStore();
+const isHovered = ref(false);
 
 //YouTube API를 동적으로 로드하는 함수
 const loadYouTubeAPI = () => {
@@ -67,6 +66,14 @@ const createYouTubePlayer = () => {
   );
 };
 
+// 팀이름에 따라 팀 닉네임 찾는 함수 -> css 사용
+const teamNickname = computed(() => {
+  const team = teamList.find(
+    (team) => team.koreanName === teamStore.selectedTeam
+  );
+  return team ? team.nickname : null; // 팀이 없으면 null 반환
+});
+
 onMounted(() => {
   console.log("🎵 CheerSong 마운트됨!");
   if (window.YT && window.YT.Player) {
@@ -82,7 +89,7 @@ onUnmounted(() => {
 });
 
 watch(
-  () => props.selectedTeam,
+  () => teamStore.selectedTeam,
   (newTeam) => {
     if (!newTeam || !cheerSongStore) return;
     const index = cheerSongStore.teamChants.findIndex((value) =>
@@ -100,54 +107,65 @@ watch(
 </script>
 <template>
   <div
-    class="w-[314.5px] h-[35px] bg-white02 rounded-[10px] flex justify-between items-center"
-    :class="{ 'w-auto px-[12px]': isSearchHovered }"
+    class="h-[35px] rounded-[50px] flex justify-center items-center"
+    :class="{
+      'w-[35px] rounded-full': !isHovered,
+      'w-[314.5px] rounded-full py-[7.5px] px-[12px]': isHovered,
+      [`bg-${teamNickname}_opa10`]: teamNickname,
+      'bg-white02': !teamNickname,
+    }"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
   >
-    <div v-if="isSearchHovered" class="flex justify-center items-center">
+    <div v-if="!isHovered">
       <img :src="HeadsetIcon" alt="헤드셋" class="w-[20px] h-[20px]" />
     </div>
-    <div v-else class="flex gap-[19.52px] ml-[13.77px]">
-      <div class="flex gap-[12.63px]">
-        <button @click="cheerSongStore.playBack">
-          <img
-            :src="AudioBackIcon"
-            alt="이전 곡 재생 아이콘"
-            class="w-[20px] h-[20px]"
-          />
-        </button>
-        <button
-          v-if="!cheerSongStore.isPlaying"
-          @click="cheerSongStore.togglePlay"
-        >
-          <img
-            :src="AudioPlayIcon"
-            alt="플레이 아이콘"
-            class="w-[20px] h-[20px]"
-          />
-        </button>
-        <button v-else @click="cheerSongStore.togglePlay">
-          <img
-            :src="AudioPauseIcon"
-            alt="재생 멈춤 아이콘"
-            class="w-[20px] h-[20px]"
-          />
-        </button>
-        <button @click="cheerSongStore.playForward">
-          <img
-            :src="AudioForwardIcon"
-            alt="다음곡 재생 아이콘"
-            class="w-[20px] h-[20px]"
-          />
-        </button>
-      </div>
-      <span class="text-[14px] text-gray03 text-semibold">{{
-        cheerSongStore.teamChants[cheerSongStore.currentIndex].team
-      }}</span>
-    </div>
     <div
-      v-if="!isSearchHovered"
-      class="mr-[14.26px] flex items-center justify-center h-full"
+      v-else
+      class="w-[314.5px] h-[35px] rounded-[10px] flex justify-between items-center"
+      :class="{
+        [`bg-${teamNickname}_opa10`]: teamNickname,
+        'bg-white02': !teamNickname,
+      }"
     >
+      <div class="flex gap-[19.52px]">
+        <div class="flex gap-[12.63px]">
+          <button @click="cheerSongStore.playBack">
+            <img
+              :src="AudioBackIcon"
+              alt="이전 곡 재생 아이콘"
+              class="w-[20px] h-[20px]"
+            />
+          </button>
+          <button
+            v-if="!cheerSongStore.isPlaying"
+            @click="cheerSongStore.togglePlay"
+          >
+            <img
+              :src="AudioPlayIcon"
+              alt="플레이 아이콘"
+              class="w-[20px] h-[20px]"
+            />
+          </button>
+          <button v-else @click="cheerSongStore.togglePlay">
+            <img
+              :src="AudioPauseIcon"
+              alt="재생 멈춤 아이콘"
+              class="w-[20px] h-[20px]"
+            />
+          </button>
+          <button @click="cheerSongStore.playForward">
+            <img
+              :src="AudioForwardIcon"
+              alt="다음곡 재생 아이콘"
+              class="w-[20px] h-[20px]"
+            />
+          </button>
+        </div>
+        <span class="text-[14px] text-gray03 font-semibold">
+          {{ cheerSongStore.teamChants[cheerSongStore.currentIndex].team }}
+        </span>
+      </div>
       <button @click="cheerSongStore.toggleAutoPlay">
         <img
           :src="cheerSongStore.isAutoPlaying ? OffAutoPlayIcon : OnAutoPlayIcon"

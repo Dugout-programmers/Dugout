@@ -69,6 +69,7 @@ export const useCheerSongStore = defineStore(
     };
 
     const playBack = () => {
+      console.log("🔄 이전 곡으로 이동 요청됨!");
       if (currentIndex.value > 0) {
         currentIndex.value--;
       } else {
