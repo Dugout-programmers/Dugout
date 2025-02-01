@@ -9,6 +9,8 @@ import RecordQuizGreen from "@/assets/images/record_quiz_card_green.svg";
 import PlayBtn from "@/assets/images/play_btn.svg";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { useModalStore } from "@/stores/useModalStore";
+import Modal from "@/components/common/Modal.vue";
 
 const router = useRouter();
 const selectedQuiz = ref(null);
@@ -18,16 +20,22 @@ const selectQuiz = (quiz) => {
   selectedQuiz.value = quiz;
 };
 
+const modalStore = useModalStore();
 // Start 버튼 핸들러
 const startQuiz = () => {
   if (selectedQuiz.value) {
     router.push(`/game/quizselect/${selectedQuiz.value}`);
   } else {
-    alert("퀴즈를 선택해주세요!");
+    modalStore.openModal({
+      message: "퀴즈를 선택해주세요!",
+      type: "oneBtn",
+      onConfirm: modalStore.closeModal(),
+    });
   }
 };
 </script>
 <template>
+  <Modal />
   <div class="relative mx-auto w-max">
     <img :src="Monitor" class="h-[670px]" />
     <div

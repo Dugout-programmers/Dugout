@@ -45,8 +45,7 @@ const handleConfirm = () => {
                 ? modalStore.modalProps.onConfirm()
                 : modalStore.closeModal()
             "
-            class="w-24 h-12 px-8 py-3.5 bg-zinc-400 rounded-lg justify-center items-center gap-2.5 flex cursor-pointer"
-          >
+            class="w-24 h-12 px-8 py-3.5 bg-zinc-400 rounded-lg justify-center items-center gap-2.5 flex cursor-pointer">
             <div class="text-black text-lg font-normal font-['Pretendard']">
               확인
             </div>
