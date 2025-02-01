@@ -41,9 +41,9 @@ const checkAuthAndRoute = () => {
       },
       onCancel: modalStore.closeModal,
     });
-  } else {
-    router.push(`/${teamName.value}/${boardName.value}/create`);
+    return;
   }
+  router.push(`/${teamName.value}/${boardName.value}/create`);
 };
 </script>
 <template>
