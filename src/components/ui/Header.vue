@@ -3,12 +3,11 @@ import searchIcon from "@/assets/icons/search.svg";
 import themeToggleIcon from "@/assets/icons/theme_toggle.svg";
 import logoImg from "@/assets/images/logo.svg";
 import { useTeamStore } from "@/stores/teamStore";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import EmblemAnimation from "./EmblemAnimation.vue";
 import { useAuthStore } from "@/stores/auth";
 import defaultImg from "@/assets/images/defaultImg_sm.svg";
-import CheerSong from "../header/CheerSong.vue";
 import { useSearchStore } from "@/stores/searchStore";
 import { teamList } from "@/constants";
 import { twMerge } from "tailwind-merge";
@@ -20,8 +19,6 @@ const authStore = useAuthStore(); // 유저 정보가 가져오기
 const isPageInCommunity = ref(route.fullPath.includes("board"));
 const searchStore = useSearchStore();
 const searchInput = ref("");
-
-const isSearchHovered = ref(false);
 
 const updateSearchKeyword = () => {
   searchStore.setKeyword(searchInput.value);
@@ -97,13 +94,6 @@ const teamNickname = computed(() => {
           </RouterLink>
         </nav>
       </div>
-      <!-- 가운데 영역(음악) -->
-      <div>
-        <CheerSong
-          :selectedTeam="teamStore.selectedTeam"
-          :isSearchHovered="isSearchHovered"
-        />
-      </div>
       <!-- 오른쪽 영역(검색 / 유저정보 / 테마) -->
       <div class="flex items-center gap-[30px]">
         <!-- 검색 -->
@@ -114,8 +104,6 @@ const teamNickname = computed(() => {
               ? 'bg-white02 w-[40px] hover:w-[320px]'
               : 'w-[40px] bg-transparent',
           ]"
-          @mouseenter="isSearchHovered = true"
-          @mouseleave="isSearchHovered = false"
         >
           <input
             type="text"
