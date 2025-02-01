@@ -226,22 +226,23 @@ const handleRegister = async () => {
       member_range: peopleStatus.value,
       game_stadium: stadium.value,
     });
-
-    modalStore.openModal({
-      message: "게시글이 성공적으로 등록되었습니다.",
-      type: "oneBtn",
-      onConfirm: () => {
-        modalStore.closeModal();
-        router.push(`/${currentTeam}/crewboard/`);
-      },
-    });
+    router.push(`/${currentTeam}/crewboard/`);
+    // 통일을 위해서 게시글 등록완료 주석처리 하게씃ㅂ니다.
+    // modalStore.openModal({
+    //   message: "게시글이 성공적으로 등록되었습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => {
+    //     modalStore.closeModal();
+    //     router.push(`/${currentTeam}/crewboard/`);
+    //   },
+    // });
   } catch (error) {
     console.error("게시글 등록 실패:", error);
-    modalStore.openModal({
-      message: "게시글 등록 중 오류가 발생했습니다.",
-      type: "oneBtn",
-      onConfirm: () => modalStore.closeModal(),
-    });
+    // modalStore.openModal({
+    //   message: "게시글 등록 중 오류가 발생했습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => modalStore.closeModal(),
+    // });
   }
 };
 
@@ -256,7 +257,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="px-[50px]">
-    <CreateHeader :handleRegister="handleRegister" />
+    <CreateHeader :handleRegister />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
         <div>

@@ -162,8 +162,8 @@ const handleRegister = async () => {
     );
 
     if (updatedPost) {
-      alert("게시물이 수정되었습니다.");
-      router.replace(`/${route.params.team}/photoboard`);
+      // alert("게시물이 수정되었습니다."); // 통일성을 위해서 일단 주석처리
+      router.replace(`/${route.params.team}/photoboard/${postId}`);
     }
   } catch (error) {
     console.error("게시물 생성 실패:", error);

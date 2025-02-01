@@ -10,9 +10,9 @@ const props = defineProps({
   handleRegister: {
     type: Function,
   },
-  // handleCancel: {
-  //   type: Function,
-  // },
+  handleCancel: {
+    type: Function,
+  },
 });
 const modalStore = useModalStore();
 const route = useRoute();
@@ -42,16 +42,35 @@ const openCancelModal = () => {
   });
 };
 
-// 취소 함수 핸들링
-const handleCancel = () => {
-  // 편집 페이지인 경우
-  if (isEditPage.value) {
-    router.push(`/${teamName.value}/${boardName.value}/${postID.value}`);
-  }
-  // 등록페이지인 경우
-  else {
-    router.push(`/${teamName.value}/${boardName.value}`);
-  }
+// 취소 함수 핸들링 (props.handleCancel이 없는 경우 기존 취소함수 실행)
+const handleCancel =
+  props.handleCancel ||
+  (() => {
+    // 편집 페이지인 경우
+    if (isEditPage.value) {
+      router.push(`/${teamName.value}/${boardName.value}/${postID.value}`);
+    }
+    // 등록페이지인 경우
+    else {
+      router.push(`/${teamName.value}/${boardName.value}`);
+    }
+  });
+
+const openRegisterEditModal = () => {
+  // 편집 페이지 유무에 따라서 메세지 달리하기
+
+  const message = isEditPage.value
+    ? "수정을 완료하시겠습니까?"
+    : "등록을 완료하시겠습니까?";
+  modalStore.openModal({
+    message,
+    type: "twoBtn",
+    onConfirm: () => {
+      props.handleRegister();
+      modalStore.closeModal();
+    },
+    onCancel: modalStore.closeModal,
+  });
 };
 </script>
 <template>
@@ -68,7 +87,7 @@ const handleCancel = () => {
       <button
         class="w-[68px] h-[39px] rounded-[8px] text-black01 text-bold text-4 cursor-pointer"
         :class="nickname ? `bg-${nickname}_opa30` : 'bg-gray01'"
-        @click="handleRegister"
+        @click="openRegisterEditModal"
       >
         {{ isEditPage ? "수정" : "등록" }}
       </button>

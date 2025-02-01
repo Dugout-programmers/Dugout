@@ -202,7 +202,7 @@ const fetchPostDetails = async () => {
 };
 
 // 작성글 업데이트 함수
-const handleUpdate = () => {
+const handleUpdate = async () => {
   const postId = route.params.id;
   if (!validateInputs()) return;
 
@@ -221,15 +221,16 @@ const handleUpdate = () => {
   };
 
   try {
-    updateCrewRecruitmentPost(postId, updatedData);
-    modalStore.openModal({
-      message: "게시글이 성공적으로 수정되었습니다.",
-      type: "oneBtn",
-      onConfirm: () => {
-        modalStore.closeModal();
-        router.push(`/${currentTeam}/crewboard/`);
-      },
-    });
+    await updateCrewRecruitmentPost(postId, updatedData);
+    router.push(`/${currentTeam}/crewboard/${postId}`);
+    // modalStore.openModal({
+    //   message: "게시글이 성공적으로 수정되었습니다.",
+    //   type: "oneBtn",
+    //   onConfirm: () => {
+    //     modalStore.closeModal();
+    //     router.push(`/${currentTeam}/crewboard/`);
+    //   },
+    // });
   } catch (err) {
     console.error(err.message);
   }

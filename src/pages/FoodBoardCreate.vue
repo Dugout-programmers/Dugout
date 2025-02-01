@@ -130,11 +130,10 @@ const submitRestaurantPost = async () => {
   }
 };
 
-// -> 일단은 취소 공통함수를 사용하려고해서 주석처리햇습니다.
-// const cancelRestaurantPost = () => {
-//   router.go(-1);
-//   mapStore.resetLocationData();
-// };
+const cancelRestaurantPost = () => {
+  router.go(-1);
+  mapStore.resetLocationData();
+};
 
 const toolbarOptions = [
   [{ header: "1" }, { header: "2" }, { font: [] }],
@@ -147,7 +146,10 @@ const toolbarOptions = [
 <template>
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister="submitRestaurantPost" />
+      <CreateHeader
+        :handleRegister="submitRestaurantPost"
+        :handleCancel="cancelRestaurantPost"
+      />
       <div>
         <input
           v-model="title"

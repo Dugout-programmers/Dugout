@@ -109,7 +109,7 @@ const handlePostUpdate = async () => {
       url
     );
     await uploadImages();
-    router.push(`/${teamName.value}/foodboard`);
+    router.push(`/${teamName.value}/foodboard/${postId}`);
     imageStore.resetImageData();
     mapStore.resetLocationData();
   } catch (error) {
@@ -180,29 +180,33 @@ const uploadImages = async () => {
   }
 };
 
-const onClickCompleteEdit = () => {
-  modalStore.openModal({
-    message: "수정을 완료하시겠습니까?",
-    type: "twoBtn",
-    onConfirm: () => {
-      handlePostUpdate();
-      modalStore.closeModal();
-      router.go(-1);
-    },
-    onCancel: modalStore.closeModal,
-  });
-};
-// -> 일단은 취소 공통함수를 사용하려고해서 주석처리햇습니다.
-// const cancelRestaurantPost = () => {
-//   router.go(-1);
-//   mapStore.resetLocationData();
+// 모달 통일
+// const onClickCompleteEdit = () => {
+//   modalStore.openModal({
+//     message: "수정을 완료하시겠습니까?",
+//     type: "twoBtn",
+//     onConfirm: () => {
+//       handlePostUpdate();
+//       modalStore.closeModal();
+//       router.go(-1);
+//     },
+//     onCancel: modalStore.closeModal,
+//   });
 // };
+
+const cancelRestaurantPost = () => {
+  router.go(-1);
+  mapStore.resetLocationData();
+};
 </script>
 
 <template>
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
-      <CreateHeader :handleRegister="onClickCompleteEdit" />
+      <CreateHeader
+        :handleRegister="handlePostUpdate"
+        :handleCancel="cancelRestaurantPost"
+      />
       <div>
         <input
           v-model="title"
