@@ -1,8 +1,8 @@
 <script setup>
 import {
   checkIfImageExists,
-  getNextOrderIndex,
-  insertNewRestaurantPostImage,
+  createRestaurantPostImage,
+  deleteRestaurantPostImage,
   updateRestaurantPostImage,
 } from "@/api/supabase-api/restaurantImage";
 import {
@@ -191,29 +191,17 @@ const handleTagError = () => {
 };
 
 const uploadImages = async () => {
-  const filteredUrls = imageUrls.value.filter((url) => url !== null);
-
   try {
-    if (filteredUrls.length === 0) return;
-
-    for (const [i, image] of filteredUrls.entries()) {
-      // 먼저 해당 order_index에 이미지가 존재하는지 확인
+    for (let i = 0; i < imageUrls.value.length; i++) {
+      const image = imageUrls.value[i];
       const existingImage = await checkIfImageExists(postId, i);
-
-      if (existingImage) {
-        // 이미지가 존재하면 덮어쓰기
-        const imageData = await updateRestaurantPostImage(postId, i, image);
-        console.log("이미지 업로드 성공", imageData);
-        imageUrls.value[i] = imageData.url;
-      } else {
-        const newOrderIndex = await getNextOrderIndex(postId);
-        const imageData = await insertNewRestaurantPostImage(
-          postId,
-          newOrderIndex,
-          image
-        );
-        console.log("새 이미지 업로드 성공", imageData);
-        imageUrls.value.push(imageData.url);
+      if (existingImage && !image) {
+        await deleteRestaurantPostImage(postId, i);
+      } else if (existingImage && image) {
+        await updateRestaurantPostImage(postId, i, image);
+        console.log(`order_index ${i}의 이미지 업데이트 성공`, imageData);
+      } else if (!existingImage && image) {
+        await createRestaurantPostImage(postId, image, i);
       }
     }
   } catch (err) {
