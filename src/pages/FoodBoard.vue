@@ -1,12 +1,12 @@
 <script setup>
 import { getRestaurantPostsByTagAndClub } from "@/api/supabase-api/restaurantPost";
+import GoToCreate from "@/components/common/GoToCreate.vue";
 import FoodBoardCard from "@/components/foodboard/FoodBoardCard.vue";
 import { foodBoardTag, teamID } from "@/constants";
+import { useSearchStore } from "@/stores/searchStore";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import deleteBtn from "../assets/icons/delete-btn.svg";
-import GoToCreate from "@/components/common/GoToCreate.vue";
-import { useSearchStore } from "@/stores/searchStore";
 
 const route = useRoute();
 const searchStore = useSearchStore();
@@ -26,7 +26,6 @@ const restoreScrollPosition = () => {
   }
 };
 
-
 const selectTag = (tag) => {
   if (selectedTag.value === tag) {
     selectedTag.value = null; // 이미 선택된 태그가 클릭되면 선택 해제
@@ -37,7 +36,8 @@ const selectTag = (tag) => {
 
 const postsFilteredWithTag = computed(() => {
   return restaurantPosts.value?.filter(
-    (post) => selectedTag.value === null || post.tags.includes(selectedTag.value)
+    (post) =>
+      selectedTag.value === null || post.tags.includes(selectedTag.value)
   );
 });
 
@@ -46,7 +46,7 @@ const fetchFoodBoardList = async () => {
     const restaurantPostsData = await getRestaurantPostsByTagAndClub(
       clubId.value,
       selectedTag.value ? [selectedTag.value] : null // 선택된 태그가 있으면 그 태그만 필터링
-      );
+    );
 
     return { data: restaurantPostsData, error: null };
   } catch (error) {
@@ -61,7 +61,6 @@ watch(selectedTag, () => {
     restoreScrollPosition();
   }, 0);
 });
-
 
 // 페이지가 로드될 때 데이터를 한 번 불러옴
 onMounted(async () => {
@@ -147,16 +146,16 @@ watch(
         <!-- 게시물 필터링 후 출력 -->
         <FoodBoardCard
           v-if="postsFilteredWithTag"
-          v-for="(restaurantPost, index) in removeDuplicatePosts(postsFilteredWithTag)"
+          v-for="(restaurantPost, index) in removeDuplicatePosts(
+            postsFilteredWithTag
+          )"
           :key="index"
           :restaurantPostData="restaurantPost"
           :teamName
         />
-        <div
-            v-else class="flex justify-center"
-          >
-            <h1>게시물이 없습니다. 게시물을 작성해보세요!</h1>
-      </div>
+        <div v-else class="flex justify-center">
+          <h1>게시물이 없습니다. 게시물을 작성해보세요!</h1>
+        </div>
       </section>
     </div>
   </div>

@@ -1,7 +1,8 @@
 <script setup>
-
 import {
-  deleteRestaurantPostImage,
+  checkIfImageExists,
+  getNextOrderIndex,
+  insertNewRestaurantPostImage,
   updateRestaurantPostImage,
 } from "@/api/supabase-api/restaurantImage";
 import {
@@ -9,7 +10,6 @@ import {
   updateRestaurantLocation,
   updateRestaurantPost,
 } from "@/api/supabase-api/restaurantPost";
-
 import Baseball from "@/assets/icons/baseball.svg";
 import CreateHeader from "@/components/CreateHeader.vue";
 import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
@@ -23,14 +23,12 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const authStore = useAuthStore();
-
 const mapStore = useMapStore();
 const router = useRouter();
 const modalStore = useModalStore();
 const route = useRoute();
 const postId = route.params.id;
 const teamName = ref(route.params.team);
-
 
 const tagErrorClass = ref("");
 const tagErrorMessage = ref("태그를 1개 이상 선택해주세요");
@@ -47,7 +45,6 @@ const loadPostDetail = async () => {
   const data = await getRestaurantPostDetailsById(postId);
 
   if (!data) throw new Error("게시물 데이터를 가져올 수 없습니다.");
-
 
   const {
     title: postTitle,
@@ -107,18 +104,19 @@ const updateTags = (tags) => {
 const registerEditedPost = async () => {
   const filteredUrls = imageUrls.value.filter((url) => url !== null);
   try {
+    // 첫 번째 이미지가 없다면 null을 전달
     await updateRestaurantPost(
       postId,
       title.value,
       content.value,
-
       filteredUrls[0] || null,
-
       selectedTags.value
     );
+
     getFinalLocation();
     const { name, address, category, longitude, latitude, contact, url } =
       location.value;
+
     await updateRestaurantLocation(
       postId,
       name,
@@ -129,12 +127,8 @@ const registerEditedPost = async () => {
       contact,
       url
     );
-    await uploadImages();
-
-    router.push(`/${teamName.value}/foodboard/${postId}`);
-    // imageStore.resetImageData();
-    // 이미지 리셋해야되나?
-
+    await uploadImages(); // 이미지 업로드 후 다시 저장
+    router.push(`/${teamName.value}/foodboard`);
     mapStore.resetLocationData();
   } catch (error) {
     console.error("게시물 수정 실패", error);
@@ -191,15 +185,28 @@ const handleTagError = () => {
     tagErrorClass.value = "";
   }, 3000);
 };
+
 const uploadImages = async () => {
   const filteredUrls = imageUrls.value.filter((url) => url !== null);
 
   try {
-    await deleteRestaurantPostImage(postId);
-    if (imageUrls.value.length === 0) return;
+    if (filteredUrls.length === 0) return;
+
     for (const [i, image] of filteredUrls.entries()) {
-      const imageData = await updateRestaurantPostImage(postId, i, image);
-      console.log("이미지 업로드 성공", imageData);
+      // 먼저 해당 order_index에 이미지가 존재하는지 확인
+      const existingImage = await checkIfImageExists(postId, i);
+
+      if (existingImage) {
+        // 이미지가 존재하면 덮어쓰기
+        const imageData = await updateRestaurantPostImage(postId, i, image);
+        console.log("이미지 업로드 성공", imageData);
+        imageUrls.value[i] = imageData.url; 
+      } else {
+        const newOrderIndex = await getNextOrderIndex(postId);
+        const imageData = await insertNewRestaurantPostImage(postId, newOrderIndex, image);
+        console.log("새 이미지 업로드 성공", imageData);
+        imageUrls.value.push(imageData.url); 
+      }
     }
   } catch (err) {
     console.error("이미지 업로드 실패", err);
@@ -259,7 +266,6 @@ const cancelRestaurantPost = () => {
         <div id="tags-select" class="flex flex-col gap-[20px]">
           <div class="flex gap-[10px] items-center">
             <img :src="Baseball" class="w-[18px] h-[18px]" />
-
             <p :class="tagErrorClass" class="text-[14px] text-gray03">
               {{ tagErrorMessage }}
             </p>

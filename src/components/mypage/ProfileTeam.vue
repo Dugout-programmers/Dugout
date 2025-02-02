@@ -23,6 +23,17 @@ const selectTeam = (team) => {
   emit("update:team", team); // 부모에게 선택한 팀 전달
   isDropdownOpen.value = false;
 };
+
+const displayedTeamText = () => {
+  if (props.isEditingProfile) {
+    if (props.tempTeam) return props.tempTeam;
+    if (props.profileTeam) return props.profileTeam;
+    else return "팀을 선택해주세요";
+  } else {
+    if (props.profileTeam) return props.profileTeam;
+    else return "팀을 선택해주세요";
+  }
+};
 </script>
 
 <template>
@@ -41,8 +52,7 @@ const selectTeam = (team) => {
           : {}
       "
     >
-      <!-- isEditingProfile이 아닐 경우 profileTeam을 보여줌 -->
-      {{ props.profileTeam || props.tempTeam || "팀을 선택해주세요" }}
+      {{ displayedTeamText() }}
       <img
         v-if="props.isEditingProfile"
         :src="myTeamToggle"

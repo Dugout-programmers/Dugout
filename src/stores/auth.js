@@ -5,7 +5,7 @@ import {
   signInWithKakao,
   signInWithEmail,
 } from "@/api/supabase-api/signIn";
-import { getCurrentUser, signOutUser } from "@/api/supabase-api/userInfo";
+import { getCurrentUser, signOutUser, updateUserInfoEnCapsulation } from "@/api/supabase-api/userInfo";
 import { supabase } from "@/supabase";
 
 export const useAuthStore = defineStore("auth", () => {

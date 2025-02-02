@@ -34,7 +34,6 @@ const updateImages = (newImages) => {
   imageUrls.value = newImages;
 };
 
-
 const updateTags = (tags) => {
   selectedTags.value = tags;
   if (selectedTags.value.length > 0) {
