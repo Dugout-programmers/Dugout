@@ -4,18 +4,12 @@ import themeToggleIcon from "@/assets/icons/theme_toggle.svg";
 import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import logoImg from "@/assets/images/logo.svg";
 import { teamList } from "@/constants";
-import { useTeamStore } from "@/stores/teamStore";
-import { computed, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
-import EmblemAnimation from "./EmblemAnimation.vue";
 import { useAuthStore } from "@/stores/auth";
-import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import { useSearchStore } from "@/stores/searchStore";
 import { useTeamStore } from "@/stores/teamStore";
 import { twMerge } from "tailwind-merge";
 import { computed, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
-import CheerSong from "../header/CheerSong.vue";
 import EmblemAnimation from "./EmblemAnimation.vue";
 
 const route = useRoute();
@@ -108,8 +102,8 @@ const teamNickname = computed(() => {
         <form
           v-if="isPageInCommunity"
           :class="[
-            'h-[35px] px-[10px] flex items-center rounded-[10px]  w-[40px]',
-            isSeachbarOpen && 'w-[320px] bg-white02',
+            'h-[35px] px-[10px] rounded-[10px] flex items-center transition-all duration-300 ease-in-out',
+            isSeachbarOpen && 'w-[320px] bg-white02 ',
           ]"
         >
           <input
@@ -117,13 +111,17 @@ const teamNickname = computed(() => {
             v-model="searchInput"
             @input="updateSearchKeyword"
             placeholder="현재 게시판에서만 검색할 수 있습니다"
-            class="w-0 opacity-0 bg-white02 focus:outline-none"
+            class="w-0 opacity-0 bg-white02 focus:outline-none transition duration-300 ease-in-out"
             :class="isSeachbarOpen && 'w-[290px] opacity-100'"
           />
-          <button @click.prevent="isSeachbarOpen = !isSeachbarOpen">
-            <img :src="searchIcon" alt="검색 아이콘" class="w-[20px]" />
+          <button
+            @click.prevent="isSeachbarOpen = !isSeachbarOpen"
+            class="w-[20px]"
+          >
+            <img :src="searchIcon" alt="검색 아이콘" />
           </button>
         </form>
+
         <!-- 유저정보 -->
         <RouterLink
           to="/myPage"

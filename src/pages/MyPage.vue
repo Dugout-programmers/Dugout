@@ -8,7 +8,7 @@ import ActiveTabs from "@/components/mypage/ActiveTabs.vue";
 import MyPostCard from "@/components/mypage/MyPostCard.vue";
 import ProfileViewAndEdit from "@/components/mypage/ProfileViewAndEdit.vue";
 import { useAuthStore } from "@/stores/auth";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -60,6 +60,12 @@ onMounted(async () => {
   if (!isLoggedIn.value) {
     router.push("/signin");
   } else {
+    fetchUserData();
+  }
+});
+
+watchEffect(() => {
+  if (isLoggedIn.value) {
     fetchUserData();
   }
 });
