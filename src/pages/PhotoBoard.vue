@@ -10,11 +10,12 @@ import {
   nextTick,
   onMounted,
   onUnmounted,
+  onUpdated,
   ref,
   watch,
   watchEffect,
 } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 import GoToCreate from "@/components/common/GoToCreate.vue";
 import { useSearchStore } from "@/stores/searchStore";
 
@@ -65,25 +66,32 @@ const fetchPhotoboardList = async () => {
 
     await updateUserInfoForPosts();
 
-    setTimeout(() => {
-      restoreScrollPosition();
-    }, 0);
+    await nextTick();
   } catch (error) {
     console.error("직관인증포토 포스트를 불러오지 못했습니다");
   }
 };
 
-// watchEffect(() => {
-//   updateUserInfoForPosts();
-// });
-
-onMounted(() => {
-  fetchPhotoboardList();
+onMounted(async () => {
+  await fetchPhotoboardList();
   window.addEventListener("scroll", saveScrollPosition);
 });
 
+onUpdated(() => {
+  restoreScrollPosition();
+});
+
+onBeforeRouteLeave((to, _, next) => {
+  if (to.path.includes("/photoboard/")) {
+    saveScrollPosition();
+  }
+  next();
+});
+
 onUnmounted(() => {
-  saveScrollPosition();
+  if (!route.path.includes("/photoboard/")) {
+    saveScrollPosition();
+  }
   window.removeEventListener("scroll", saveScrollPosition);
 });
 
