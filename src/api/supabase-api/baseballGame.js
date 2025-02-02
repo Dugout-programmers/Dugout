@@ -21,7 +21,6 @@ export const createBaseballGame = async ({ member_id }) => {
 
     if (error)
       throw new Error("Baseball 게임 기록 생성 중 문제가 발생했습니다.");
-    console.log("Baseball 게임 기록이 성공적으로 생성되었습니다.");
   } catch (err) {
     console.error("CREATE ERROR:", err.message);
     return null;
@@ -42,8 +41,6 @@ export const getBaseballGame = async () => {
       throw new Error(
         "Baseball 게임 기록을 가져오는 중 문제가 발생했습니다. 다시 시도해주세요."
       );
-
-    console.log("Baseball 게임 기록을 성공적으로 가져왔습니다.");
     return data;
   } catch (err) {
     console.error("GET ERROR:", err.message);
@@ -77,8 +74,6 @@ export const updateBaseballGame = async (userId) => {
       throw new Error(
         "Baseball 게임 기록 업데이트 중 문제가 발생했습니다. 다시 시도해주세요."
       );
-
-    console.log("Baseball 게임 기록이 성공적으로 업데이트되었습니다.");
   } catch (err) {
     console.error("UPDATE ERROR:", err.message);
     return null;

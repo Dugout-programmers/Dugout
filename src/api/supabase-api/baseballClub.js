@@ -14,8 +14,6 @@ export const getBaseballClub = async () => {
       console.error("구단 리스트를 불러오지 못했습니다.", error.message);
       return null;
     }
-
-    console.log("Baseball 구단 리스트를 성공적으로 불러왔습니다.");
     return baseball_club;
   } catch (err) {
     console.error(

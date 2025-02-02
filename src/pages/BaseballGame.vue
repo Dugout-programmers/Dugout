@@ -70,7 +70,6 @@ const startGame = async () => {
     }
   }
 
-  console.log("Target number:", targetNumber.value);
 };
 
 // 스트라이크와 볼 계산

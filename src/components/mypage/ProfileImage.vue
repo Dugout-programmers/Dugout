@@ -55,10 +55,9 @@ const handleProfileImageUpload = async () => {
           .getPublicUrl(uploadPath);
 
         if (publicUrlData) {
-          console.log("이미지 URL:", publicUrlData.publicUrl);
           emit("update:image", publicUrlData.publicUrl);
         } else {
-          console.error("공개 URL을 가져오는 데 실패했습니다.");
+          console.error("공개 URL을 가져오는 데 실패했습니다.", error);
           errorMessage.value = "이미지 URL을 가져오는 데 실패했습니다.";
         }
       }

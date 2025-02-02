@@ -22,7 +22,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.teamName, teamID[props.teamName]);
 
 const parsedContent = computed(() => {
   // HTML 문자열을 DOM 객체로 변환

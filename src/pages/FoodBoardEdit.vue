@@ -136,7 +136,6 @@ const registerEditedPost = async () => {
 
 const updateFinalLocation = (newLocation) => {
   finalSelectedLocation.value = newLocation;
-  console.log("최종장소", finalSelectedLocation.value);
 };
 
 const getFinalLocation = () => {
@@ -199,7 +198,6 @@ const uploadImages = async () => {
         await deleteRestaurantPostImage(postId, i);
       } else if (existingImage && image) {
         await updateRestaurantPostImage(postId, i, image);
-        console.log(`order_index ${i}의 이미지 업데이트 성공`, imageData);
       } else if (!existingImage && image) {
         await createRestaurantPostImage(postId, image, i);
       }

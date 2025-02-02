@@ -1,5 +1,5 @@
-import { supabase } from "@/supabase";
 import { getCurrentUser } from "./userInfo";
+import { supabase } from "@/supabase";
 
 // 특정 클럽의 모든 직관 인증 게시물을 가져오기
 export const getViewingCertificationPostsByClub = async (clubId) => {
@@ -70,7 +70,6 @@ export const createCertificationPost = async (
 ) => {
   try {
     const user = await getCurrentUser();
-    console.log("✅ 현재 로그인한 유저:", user);
     if (!user) {
       console.log("로그인을 하지 않았습니다");
       return null;
@@ -84,8 +83,6 @@ export const createCertificationPost = async (
       .single();
 
     if (userError) throw new Error("유저 정보를 불러오는 데 실패했습니다.");
-
-    console.log("📌 유저 정보 확인:", userInfo);
 
     const { data, error } = await supabase
       .from("viewing_certification_post")
@@ -105,7 +102,6 @@ export const createCertificationPost = async (
 
     if (error) throw new Error(error.message);
 
-    console.log("게시물 생성 성공", data);
     return data;
   } catch (error) {
     console.error("게시물 생성 실패: ", error);
@@ -136,8 +132,6 @@ export const uploadImageToSupabase = async (file) => {
       return null;
     }
 
-    console.log("✅ 이미지 업로드 성공:", data);
-
     // getPublicUrl()을 통해 URL 가져오기
     const { data: publicUrlData } = supabase.storage
       .from("images")
@@ -148,7 +142,6 @@ export const uploadImageToSupabase = async (file) => {
       return null;
     }
 
-    console.log("✅ 퍼블릭 URL:", publicUrlData.publicUrl);
     return publicUrlData.publicUrl;
   } catch (error) {
     console.error("이미지 업로드 실패: ", error);
@@ -189,7 +182,6 @@ export const updateCertificationPost = async (
 
     if (error) throw new Error(error.message);
 
-    console.log("게시물 수정 성공: ", data);
     return data;
   } catch (error) {
     console.error("게시물 수정 실패: ", error);
@@ -221,7 +213,6 @@ export const deleteCertificationPost = async (postId) => {
 
     if (error) throw new Error(error.message);
 
-    console.log("게시물 삭제 성공");
     return data;
   } catch (error) {
     console.error("게시물 삭제 실패: ", error);

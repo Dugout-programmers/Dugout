@@ -104,7 +104,6 @@ const registerImage = async () => {
         image,
         i
       );
-      console.log("이미지 업로드 성공", imageData);
       imagesData.push(imageData);
     } catch (err) {
       console.error(`이미지 업로드 실패 (index: ${i})`, err);

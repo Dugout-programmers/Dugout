@@ -7,6 +7,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { nextTick, ref } from "vue";
 import { useRoute } from "vue-router";
 import BaseballLogo from "@/assets/icons/baseball.svg";
+import Modal from "@/components/common/Modal.vue";
+import {useModalStore} from "@/stores/useModalStore"
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
@@ -28,6 +30,7 @@ const boardName = route.path.split("/")[2];
 const isEditing = ref(false);
 const inputRef = ref(null);
 const commentText = ref(props.comment.content);
+const modalStore = useModalStore();
 
 const fetchDeleteComment = async () => {
   console.log("현재 댓글 목록:", props.comments);
@@ -57,6 +60,7 @@ const handleEdit = () => {
 
 const handleCancel = () => {
   isEditing.value = false;
+  commentText.value = props.comment.content;
 };
 
 const fetchUpdateComment = async () => {
@@ -66,7 +70,7 @@ const fetchUpdateComment = async () => {
     comment.id === props.comment.id ? updatedComment : comment
   );
   emit("refresh-comments", updatedComments);
-  handleCancel();
+  isEditing.value = false
   try {
     const data = await updateComment(
       boardToTableMapping[boardName],
@@ -74,7 +78,7 @@ const fetchUpdateComment = async () => {
       commentText.value
     );
     const newComments = props.comments.map((comment) =>
-      comment.id === props.comment.id ? { ...comment, ...data[0] } : comment
+      comment.id === props.comment.id ? { ...comment, ...data } : comment
     );
     emit("refresh-comments", newComments);
   } catch (error) {
@@ -87,9 +91,22 @@ const fetchUpdateComment = async () => {
     emit("refresh-comments", newComments);
   }
 };
+
+const onClickDeleteComment = () => {
+  modalStore.openModal({
+    message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
+    type: "twoBtn",
+    onConfirm: async () => {
+      await fetchDeleteComment();
+      modalStore.closeModal();
+    },
+    onCancel: modalStore.closeModal(),
+  });
+}
 </script>
 
 <template>
+  <Modal/>
   <div class="pb-5 border-b border-white02">
     <div class="flex items-center justify-between">
       <div class="flex gap-[10px] items-center">
@@ -106,11 +123,11 @@ const fetchUpdateComment = async () => {
         }}</span>
       </div>
 
-      <div v-if="props.comment.member_id === currentUserId">
+      <div v-if="props.comment.member_id === props.currentUserId">
         <div class="flex text-xs text-gray02 gap-[4px]" v-if="!isEditing">
           <button class="hover:text-gray03" @click="handleEdit">수정</button>
           <span>|</span>
-          <button class="hover:text-gray03" @click="fetchDeleteComment">
+          <button class="hover:text-gray03" @click="onClickDeleteComment">
             삭제
           </button>
         </div>

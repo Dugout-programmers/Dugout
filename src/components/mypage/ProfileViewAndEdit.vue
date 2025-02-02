@@ -45,14 +45,6 @@ const saveProfileChanges = async () => {
   profileTeam.value = tempTeam.value || profileTeam.value;
   profileImage.value = tempImage.value || profileImage.value;
 
-  console.log(
-    tempDescription.value,
-    tempName.value,
-    tempImage.value,
-    tempTeam.value,
-    teamId
-  );
-
   isEditingProfile.value = false;
 
   await authStore.updateUserInfo({
@@ -88,8 +80,6 @@ const onClickLogout = () => {
     onCancel: modalStore.closeModal,
   });
 };
-
-console.log(profileDescription, profileName, profileName, profileTeam);
 </script>
 
 <template>

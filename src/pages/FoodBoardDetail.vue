@@ -26,7 +26,6 @@ const postId = ref(route.params.id);
 const fetchFoodPostDetail = async () => {
   try {
     const data = await getRestaurantPostDetailsById(postId.value);
-    console.log(data);
     postDetails.value = {
       ...data,
       images: data.images?.map((img) => img.url),

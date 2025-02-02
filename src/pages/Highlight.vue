@@ -88,7 +88,6 @@ const searchVideos = async (searchQuery) => {
     }
 
     const data = await response.json();
-    console.log("검색 결과:", data);
 
     const videosData = await Promise.all(
       data.items.map(async (item) => {
@@ -161,14 +160,12 @@ const openModal = (videoId) => {
 watch(
   selectedTeam,
   () => {
-    console.log("📌 selectedTeam 변경됨:", selectedTeam.value);
     filterVideos(); // API 호출 없이 기존 데이터에서 필터링
   },
   { deep: true }
 );
 
 onMounted(() => {
-  console.log("🚀 초기 selectedTeam 값:", selectedTeam.value);
   fetchVideosOnmount(); // 처음 한 번만 API 호출
 });
 </script>
