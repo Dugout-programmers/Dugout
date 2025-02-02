@@ -9,14 +9,8 @@ import { computed, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import EmblemAnimation from "./EmblemAnimation.vue";
 import { useAuthStore } from "@/stores/auth";
-import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import { useSearchStore } from "@/stores/searchStore";
-import { useTeamStore } from "@/stores/teamStore";
 import { twMerge } from "tailwind-merge";
-import { computed, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
-import CheerSong from "../header/CheerSong.vue";
-import EmblemAnimation from "./EmblemAnimation.vue";
 
 const route = useRoute();
 const teamStore = useTeamStore();
