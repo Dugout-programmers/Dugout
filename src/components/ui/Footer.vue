@@ -16,6 +16,7 @@ const toggleTeam = () => {
 };
 
 const navigationAndAnimation = (team) => {
+  isOpen.value = false;
   teamStore.triggerEnteringAnimation(team);
   setTimeout(() => {
     router.push(team.path);
