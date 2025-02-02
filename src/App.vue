@@ -1,15 +1,15 @@
 <script setup>
 import { RouterView } from "vue-router";
 import CheerSong from "./components/CheerSong.vue";
-import { useAuthStore } from "./stores/auth";
-import { onMounted } from "vue";
+// import { useAuthStore } from "./stores/auth";
+// import { onMounted } from "vue";
 
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 
-onMounted(async () => {
-  await authStore.initUser();
-  authStore.setupAuthListener();
-});
+// onMounted(async () => {
+//   await authStore.initUser();
+//   authStore.setupAuthListener();
+// });
 </script>
 
 <template>
