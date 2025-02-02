@@ -11,19 +11,17 @@ import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAn
 import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
 import { teamID } from "@/constants/index";
-import { useMapStore } from "@/stores/mapStore";
 import { QuillEditor } from "@vueup/vue-quill";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-const mapStore = useMapStore();
 const router = useRouter();
 const route = useRoute();
 const teamName = ref(route.params.team);
 const clubId = ref(teamID[teamName.value]);
 
 const title = ref("");
-const finalSelectedLocation = computed(() => mapStore.finalSelectedLocation);
+const finalSelectedLocation = ref({});
 const content = ref("");
 const imageUrls = ref([null, null, null]);
 const selectedTags = ref([]);
@@ -49,6 +47,10 @@ const errorMessage = ref([
   "태그를 1개 이상 선택해주세요",
 ]);
 
+const updateFinalLocation = (newLocation) => {
+  finalSelectedLocation.value = newLocation;
+};
+
 const postFormValidation = () => {
   if (!title.value.trim()) {
     const titleElement = document.querySelector(".title-input");
@@ -73,7 +75,7 @@ const postFormValidation = () => {
     return false;
   }
 
-  if (!mapStore.finalSelectedLocation) {
+  if (!finalSelectedLocation.value) {
     isMapNull.value = true;
     mapNullErrorClass.value = "error";
     setTimeout(() => {
@@ -147,7 +149,7 @@ const submitRestaurantPost = async () => {
     ]);
 
     router.push(`/${teamName.value}/foodboard`);
-    mapStore.resetLocationData();
+    finalSelectedLocation.value = null;
   } catch (error) {
     console.log("맛집 게시물 등록 실패", error);
   }
@@ -155,7 +157,7 @@ const submitRestaurantPost = async () => {
 
 const cancelRestaurantPost = () => {
   router.go(-1);
-  mapStore.resetLocationData();
+  finalSelectedLocation.value = null;
 };
 
 const toolbarOptions = [
@@ -191,7 +193,10 @@ const toolbarOptions = [
             {{ errorMessage[0] }}
           </p>
         </div>
-        <MapSelectAndView />
+        <MapSelectAndView
+          :finalSelectedLocation="finalSelectedLocation"
+          @updateFinalLocation="updateFinalLocation"
+        />
         <div class="w-full border border-white02">
           <QuillEditor
             v-model:content="content"
