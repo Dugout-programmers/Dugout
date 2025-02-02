@@ -6,6 +6,7 @@ import logoImg from "@/assets/images/logo.svg";
 import { teamList } from "@/constants";
 import { useAuthStore } from "@/stores/auth";
 import { useSearchStore } from "@/stores/searchStore";
+import { useTeamStore } from "@/stores/teamStore";
 import { twMerge } from "tailwind-merge";
 import { computed, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
