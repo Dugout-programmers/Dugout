@@ -22,7 +22,7 @@ const fetchPhotoboardDetail = async (postId) => {
 
   try {
     const data = await getCertificationPostDetailsById(postId);
-    console.log("상세데이터", data);
+
     if (data) {
       postDetail.value = data;
     } else {

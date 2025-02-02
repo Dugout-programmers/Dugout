@@ -69,7 +69,6 @@ export const createPostComment = async ({ member_id, post_id, content }) => {
       });
 
     if (error) throw new Error("댓글 작성 실패");
-    console.log("댓글 작성 성공");
   } catch (err) {
     console.error("Error adding comment:", err.message);
     return null;
@@ -160,7 +159,6 @@ export const updateCrewRecruitmentPost = async (postId, updatedData) => {
       .eq("id", postId);
 
     if (error) throw new Error("게시글 수정 실패");
-    console.log("게시글 수정 성공");
   } catch (err) {
     console.error(err.message);
     return null;
@@ -177,7 +175,6 @@ export const updatePostComment = async (commentId) => {
       })
       .eq("id", commentId);
     if (error) throw new Error("댓글 수정 실패");
-    console.log("댓글 수정 완료");
     return data;
   } catch (err) {
     console.error(err.message);
@@ -212,7 +209,6 @@ export const deletePostComment = async (commentId) => {
       .eq("id", commentId);
 
     if (error) throw new Error("댓글 삭제 실패");
-    console.log("댓글 삭제 완료");
   } catch (err) {
     console.error(err.message);
     return null;

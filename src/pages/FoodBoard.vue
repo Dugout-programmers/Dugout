@@ -56,7 +56,6 @@ const fetchFoodBoardList = async () => {
 };
 
 watch(selectedTag, () => {
-  console.log("selectedTag 변경:", selectedTag.value);
   setTimeout(() => {
     restoreScrollPosition();
   }, 0);

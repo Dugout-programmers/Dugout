@@ -70,7 +70,6 @@ const onClickLogout = () => {
   });
 };
 
-console.log(profileDescription, profileName, profileName, profileTeam);
 </script>
 
 <template>

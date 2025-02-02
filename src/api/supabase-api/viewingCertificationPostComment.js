@@ -1,5 +1,5 @@
-import { supabase } from "@/supabase";
 import { getCurrentUser } from "./userInfo";
+import { supabase } from "@/supabase";
 
 // 특정 직관 인증 게시물의 댓글 불러오기
 export const getCertificationPostComments = async (table, postId) => {
@@ -31,7 +31,6 @@ export const createCertificationPostComment = async (postId, content) => {
 
     if (error) throw new Error(error.message);
 
-    console.log("댓글 추가 성공");
     return data;
   } catch (error) {
     console.error("댓글 추가 실패: ", error);
@@ -70,7 +69,6 @@ export const updateCertificationPostComment = async (commentId, newComment) => {
 
     if (error) throw new Error(error.message);
 
-    console.log("댓글 수정 성공: ", data);
     return data;
   } catch (error) {
     console.error("댓글 수정 실패: ", error);
@@ -110,7 +108,6 @@ export const deleteCertificationPostComment = async (commentId) => {
       throw new Error("댓글 삭제에 실패했습니다.");
     }
 
-    console.log("댓글 삭제 성공");
     return data;
   } catch (error) {
     console.error("댓글 삭제 실패: ", error);

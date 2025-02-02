@@ -36,7 +36,7 @@ const fetchPhotoboardDetail = async (postId) => {
 
   try {
     const data = await getCertificationPostDetailsById(postId);
-    console.log("상세데이터", data);
+
     if (data) {
       post.value = data;
     } else {

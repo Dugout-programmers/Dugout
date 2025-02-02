@@ -55,7 +55,7 @@ const placesSearchCB = (data, status) => {
     });
     map.value?.setBounds(bounds);
   } else {
-    console.error("검색 결과가 없습니다.");
+    console.error("검색 결과가 없습니다.", error);
   }
 };
 
@@ -103,7 +103,6 @@ const onClickCloseOverLay = () => {
 
 // 최종 선택 장소 저장
 const saveFinalSelectedLocation = () => {
-  console.log("장소 저장", tempSelectedLocation.value);
   emit("updateFinalLocation", tempSelectedLocation.value);
   tempSelectedLocation.value = null;
   isSelectedLocationVisable.value = true;
@@ -254,7 +253,6 @@ const returnToMapSelect = () => {
         :lng="props.finalSelectedLocation.x"
       />
     </KakaoMap>
-    <!-- finalSelectedLocation이 null일 경우에는 기본 UI를 표시하거나 다른 안내 메시지를 보여줄 수 있음 -->
     <div
       v-else
       class="w-full h-[300px] flex justify-center items-center text-gray-500"
@@ -285,20 +283,19 @@ const returnToMapSelect = () => {
   </section>
 </template>
 <style scoped>
-/* 스크롤바 커스텀 */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px; /* 스크롤바 너비 */
-  height: 8px; /* 가로 스크롤바 높이 */
+  width: 8px; 
+  height: 8px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f0f0f0; /* 스크롤바 트랙 배경 */
-  border-radius: 4px; /* 둥글게 */
+  border-radius: 4px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: white; /* 스크롤바 색상 */
-  border-radius: 4px; /* 둥글게 */
+  background: white; 
+  border-radius: 4px; 
   border: 2px solid #f0f0f0; /* 트랙과의 간격 */
 }
 

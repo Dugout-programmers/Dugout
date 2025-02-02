@@ -45,8 +45,6 @@ const fetchUserData = async () => {
       getLikedPostsByMemberId(userId),
     ]);
 
-    console.log("유저 데이터 불러오기 완료", { posts, comments, likes });
-
     createdPosts.value = posts;
     commentedPosts.value = comments;
     likedPosts.value = likes;

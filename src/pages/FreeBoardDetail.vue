@@ -39,14 +39,13 @@ const fetchFreeboardDetail = async () => {
 
 // 게시물 삭제하는 함수
 const fetchmDeletePost = () => {
-  console.log("📌 모달 열기 시도");
   modalStore.openModal({
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
       await deleteFreePost(props.id);
       modalStore.closeModal();
-      router.push(`/${props.team}/freeboard`); // ✅ 삭제 후 이동
+      router.push(`/${props.team}/freeboard`); 
     },
     onCancel: modalStore.closeModal(),
   });

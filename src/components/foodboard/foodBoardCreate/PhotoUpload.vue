@@ -44,8 +44,6 @@ const uploadImage = async (file, index) => {
         .getPublicUrl(uploadPath);
 
       if (publicUrlData) {
-        console.log("이미지 URL:", publicUrlData.publicUrl);
-
         const updatedImages = [...props.images];
         updatedImages[index] = publicUrlData.publicUrl;
         emit("update:images", updatedImages);
