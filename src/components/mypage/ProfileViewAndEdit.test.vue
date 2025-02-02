@@ -19,10 +19,8 @@ const isLoggedIn = computed(() => authStore.isAuthenticated());
 
 const isEditingProfile = ref(false);
 const profileImage = ref(currentUserData.value.image || "");
-const profileName = ref(currentUserData.value.name || "비회원");
-const profileDescription = ref(
-  currentUserData.value.description || "로그인 후 이용해주세요"
-);
+const profileName = ref(currentUserData.value.name || "프로필 이름 없음");
+const profileDescription = ref(currentUserData.value.description || "");
 const profileTeam = ref(
   teamByClubID[currentUserData.value.baseball_club_id] || ""
 );

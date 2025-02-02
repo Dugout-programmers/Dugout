@@ -84,10 +84,18 @@ watchEffect(() => {
       </div>
       <div class="w-full max-w-[990px] mt-[40px]">
         <div
-          v-if="displayedData"
-          className="py-[10px] mb-[100.33px] border-t border-gray01  grid grid-cols-3 gap-[10px]"
+          v-if="displayedData.length > 0"
+          class="py-[10px] mb-[100.33px] border-t border-gray01 grid grid-cols-3 gap-[10px]"
         >
           <MyPostCard :displayedData="displayedData" />
+        </div>
+        <div
+          v-else
+          class="border-t border-gray01 flex flex-col items-center pt-[100px] gap-[20px]"
+        >
+          <h2 class="text-black01 text-center">
+            😊 하단 네비게이션 바를 통해 포스팅을 시작하세요 😊
+          </h2>
         </div>
       </div>
     </div>
