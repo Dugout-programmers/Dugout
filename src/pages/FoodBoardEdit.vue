@@ -238,7 +238,6 @@ const onClickCompleteEdit = () => {
 
 const cancelRestaurantPost = () => {
   router.go(-1);
-  mapStore.resetLocationData();
 };
 </script>
 
