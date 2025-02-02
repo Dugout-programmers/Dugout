@@ -1,6 +1,6 @@
 <script setup>
-import Baseball from "@/assets/icons/baseball.svg";
 import Camera from "@/assets/icons/camera.svg";
+import BaseBall from "@/assets/images/profile_ball.png";
 import { teamColors } from "@/constants/index";
 import { supabase } from "@/supabase.js";
 import { defineEmits, defineProps, ref } from "vue";
@@ -76,35 +76,38 @@ const handleProfileImageUpload = async () => {
   <div
     class="w-[240px] h-[240px] rounded-full sticky flex flex-shrink-0"
     :style="
-      !isEditingProfile && props.profileTeam
+      !props.isEditingProfile && props.profileTeam
         ? { outline: `5px solid ${teamColors[props.profileTeam]}` }
         : {}
     "
   >
-    <figure class="w-[240px] h-[240px] rounded-full object-cover relative">
+    <figure class="relative w-[240px] h-[240px]">
       <img
-        v-if="isEditingProfile && tempImage"
-        :src="tempImage"
-        class="w-[240px] h-[240px] rounded-full object-cover"
+        v-if="!props.isEditingProfile"
+        :src="props.profileImage || BaseBall"
+        alt="프로필 사진"
+        class="w-full h-full rounded-full object-cover"
       />
-      <img
-        v-else-if="profileImage"
-        :src="profileImage"
-        class="w-[240px] h-[240px] rounded-full object-cover"
-      />
-      <img v-else-if="!isEditingProfile && !profileImage" :scr="Baseball" />
-      <!-- 필터: isEditing일 때만 -->
-      <button
-        v-if="isEditingProfile"
-        @click="handleProfileImageUpload"
-        class="absolute inset-0 bg-black opacity-50 rounded-full flex justify-center items-center"
-      >
+      <div v-else class="relative w-full h-full">
+        <!-- 프로필 이미지 -->
         <img
-          :src="Camera"
-          alt="프로필 사진 수정 버튼"
-          class="w-[40px] h-auto"
+          :src="props.tempImage || props.profileImage"
+          class="w-full h-full rounded-full object-cover"
         />
-      </button>
+
+        <!-- 검은색 오버레이 -->
+        <button
+          @click="handleProfileImageUpload"
+          class="absolute inset-0 bg-black opacity-50 rounded-full flex justify-center items-center"
+        >
+          <!-- 카메라 아이콘 -->
+          <img
+            :src="Camera"
+            alt="프로필 사진 수정 버튼"
+            class="w-[50px] h-[50px] absolute"
+          />
+        </button>
+      </div>
     </figure>
   </div>
   <div v-if="errorMessage" class="text-red-500 mt-2">

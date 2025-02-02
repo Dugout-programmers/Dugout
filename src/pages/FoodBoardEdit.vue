@@ -1,8 +1,8 @@
 <script setup>
 import {
   checkIfImageExists,
-  getNextOrderIndex,
-  insertNewRestaurantPostImage,
+  createRestaurantPostImage,
+  deleteRestaurantPostImage,
   updateRestaurantPostImage,
 } from "@/api/supabase-api/restaurantImage";
 import {
@@ -16,14 +16,14 @@ import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAn
 import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
 import { useAuthStore } from "@/stores/auth";
-import { useMapStore } from "@/stores/mapStore";
+
 import { useModalStore } from "@/stores/useModalStore";
 import { QuillEditor } from "@vueup/vue-quill";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const authStore = useAuthStore();
-const mapStore = useMapStore();
+
 const router = useRouter();
 const modalStore = useModalStore();
 const route = useRoute();
@@ -39,7 +39,8 @@ const location = ref({});
 const content = ref("");
 const imageUrls = ref([null, null, null]);
 const selectedTags = ref([]);
-
+const finalSelectedLocation = ref({});
+const isMapViewVisable = ref(true);
 // 기존 포스트 로드
 const loadPostDetail = async () => {
   const data = await getRestaurantPostDetailsById(postId);
@@ -69,7 +70,7 @@ const loadPostDetail = async () => {
   selectedTags.value = tags || [];
   location.value = postLocation || {};
 
-  mapStore.setFinalSelectedLocation({
+  finalSelectedLocation.value = {
     place_name: location.value.name || "",
     address_name: location.value.address || "",
     category_name: location.value.category || "",
@@ -77,9 +78,7 @@ const loadPostDetail = async () => {
     y: location.value.latitude || "",
     phone: location.value.contact || "",
     place_url: location.value.url || "",
-  });
-
-  mapStore.setIsSelectedLocationVisable(true);
+  };
 
   const loadedImages = postDetails.value.images;
   imageUrls.value = [
@@ -129,22 +128,27 @@ const registerEditedPost = async () => {
     );
     await uploadImages(); // 이미지 업로드 후 다시 저장
     router.push(`/${teamName.value}/foodboard`);
-    mapStore.resetLocationData();
+    finalSelectedLocation.value = null;
   } catch (error) {
     console.error("게시물 수정 실패", error);
   }
 };
 
+const updateFinalLocation = (newLocation) => {
+  finalSelectedLocation.value = newLocation;
+  console.log("최종장소", finalSelectedLocation.value);
+};
+
 const getFinalLocation = () => {
-  const finalSelectedLocation = mapStore.finalSelectedLocation;
+  const newLocation = finalSelectedLocation.value;
   location.value = {
-    name: finalSelectedLocation.place_name,
-    address: finalSelectedLocation.address_name,
-    category: finalSelectedLocation.category_name,
-    longitude: finalSelectedLocation.x,
-    latitude: finalSelectedLocation.y,
-    contact: finalSelectedLocation.phone,
-    url: finalSelectedLocation.place_url,
+    name: newLocation.place_name,
+    address: newLocation.address_name,
+    category: newLocation.category_name,
+    longitude: newLocation.x,
+    latitude: newLocation.y,
+    contact: newLocation.phone,
+    url: newLocation.place_url,
   };
 };
 
@@ -187,25 +191,17 @@ const handleTagError = () => {
 };
 
 const uploadImages = async () => {
-  const filteredUrls = imageUrls.value.filter((url) => url !== null);
-
   try {
-    if (filteredUrls.length === 0) return;
-
-    for (const [i, image] of filteredUrls.entries()) {
-      // 먼저 해당 order_index에 이미지가 존재하는지 확인
+    for (let i = 0; i < imageUrls.value.length; i++) {
+      const image = imageUrls.value[i];
       const existingImage = await checkIfImageExists(postId, i);
-
-      if (existingImage) {
-        // 이미지가 존재하면 덮어쓰기
-        const imageData = await updateRestaurantPostImage(postId, i, image);
-        console.log("이미지 업로드 성공", imageData);
-        imageUrls.value[i] = imageData.url; 
-      } else {
-        const newOrderIndex = await getNextOrderIndex(postId);
-        const imageData = await insertNewRestaurantPostImage(postId, newOrderIndex, image);
-        console.log("새 이미지 업로드 성공", imageData);
-        imageUrls.value.push(imageData.url); 
+      if (existingImage && !image) {
+        await deleteRestaurantPostImage(postId, i);
+      } else if (existingImage && image) {
+        await updateRestaurantPostImage(postId, i, image);
+        console.log(`order_index ${i}의 이미지 업데이트 성공`, imageData);
+      } else if (!existingImage && image) {
+        await createRestaurantPostImage(postId, image, i);
       }
     }
   } catch (err) {
@@ -230,7 +226,6 @@ const onClickCompleteEdit = () => {
 
 const cancelRestaurantPost = () => {
   router.go(-1);
-  mapStore.resetLocationData();
 };
 </script>
 
@@ -253,7 +248,11 @@ const cancelRestaurantPost = () => {
         id="post_content--input"
         class="flex flex-col gap-[30px] mb-[142px] w-full"
       >
-        <MapSelectAndView />
+        <MapSelectAndView
+          :finalSelectedLocation="finalSelectedLocation"
+          :isMapViewVisable="isMapViewVisable"
+          @updateFinalLocation="updateFinalLocation"
+        />
         <div class="w-full border border-white02">
           <QuillEditor
             v-model:content="content"

@@ -162,9 +162,16 @@ watch(
             />
           </button>
         </div>
-        <span class="text-[14px] text-gray03 font-semibold">
-          {{ cheerSongStore.teamChants[cheerSongStore.currentIndex].team }}
-        </span>
+        <div class="relative w-[150px] overflow-hidden">
+          <div
+            class="flex whitespace-nowrap"
+            :class="{ 'marquee-animation': cheerSongStore.isPlaying }"
+          >
+            <span class="text-[14px] text-gray03 font-semibold">
+              {{ cheerSongStore.teamChants[cheerSongStore.currentIndex].team }}
+            </span>
+          </div>
+        </div>
       </div>
       <button @click="cheerSongStore.toggleAutoPlay">
         <img
@@ -178,4 +185,18 @@ watch(
     <div id="youtube-player" class="hidden"></div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+@keyframes marquee {
+  from {
+    transform: translateX(150%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-animation {
+  display: inline-block;
+  animation: marquee 5s linear infinite;
+}
+</style>
