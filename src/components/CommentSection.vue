@@ -96,6 +96,8 @@ const fetchComments = async () => {
       boardToTableMapping[boardName],
       postId.value
     );
+
+    console.log(comments.value)
   } catch (error) {
     console.error("댓글 정보를 가져오는 중 오류 발생:", error.message);
   }
@@ -133,6 +135,7 @@ const submitComment = async () => {
     id: null,
     post_id: postId.value,
     content: commentContent,
+    member_id: currentUserId.value,
     created_at: new Date().toISOString(),
     user_info: {
       name: currentUserName.value,
@@ -187,12 +190,10 @@ onMounted(async () => {
   }
 });
 
-const handleKeydown = (event) => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    submitComment();
-  }
+const refreshComments = (newComments) => {
+  comments.value = newComments;
 };
+
 </script>
 
 <template>
@@ -240,7 +241,9 @@ const handleKeydown = (event) => {
         v-for="comment in sortedComments"
         :key="comment.id"
         :comment="comment"
+        :comments = "sortedComments"
         :currentUserId="currentUserId"
+        @refresh-comments="refreshComments"
       />
     </div>
   </div>

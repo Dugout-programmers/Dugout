@@ -70,7 +70,7 @@ export const updateComment = async (table, commentId, content) => {
     console.error("Error updating free post comment:", error);
     return null;
   }
-  return data;
+  return data || [];
 };
 
 // 댓글 삭제
