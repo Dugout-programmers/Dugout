@@ -73,7 +73,7 @@ const stripHtml = (html) => {
 
 // 뉴스 페이지로 이동하는 함수
 const goToOriginNew = (link) => {
-  window.open(link, "_blank"); // 새탭으로 이동
+  window.open(link, "_blank");
 };
 // 네이버 뉴스 api 가져오기
 const getNewsData = async (keyword) => {
@@ -83,8 +83,6 @@ const getNewsData = async (keyword) => {
       params: {
         query: keyword, // 검색어
         display: 5, // 출력 개수
-        // start: 1, // 시작 위치
-        // sort: "sim", // 정렬 기준 (sim: 유사도, date: 날짜)
       },
       headers: {
         "Content-Type": "application.json",
@@ -105,7 +103,6 @@ const selectedTeam = ref([]);
 watch(
   selectedTeam,
   () => {
-    // 만약 필터가 없으면 default 야구 키워드로 검색
     if (selectedTeam.value.length === 0) {
       getNewsData(queryKeyword.value);
     } else {
@@ -117,7 +114,7 @@ watch(
     }
   },
   {
-    deep: true, // 깊은 감시자 설정
+    deep: true,
   }
 );
 
