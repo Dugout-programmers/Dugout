@@ -10,6 +10,7 @@ import { getCurrentUser } from "@/api/supabase-api/userInfo";
 import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
 
+const openDropdown = ref(null);
 const modalStore = useModalStore();
 const currentUser = ref(null);
 const router = useRouter();
@@ -225,33 +226,19 @@ const handleRegister = async () => {
       game_stadium: stadium.value,
     });
     router.push(`/${currentTeam}/crewboard/`);
-    // 통일을 위해서 게시글 등록완료 주석처리 하게씃ㅂ니다.
-    // modalStore.openModal({
-    //   message: "게시글이 성공적으로 등록되었습니다.",
-    //   type: "oneBtn",
-    //   onConfirm: () => {
-    //     modalStore.closeModal();
-    //     router.push(`/${currentTeam}/crewboard/`);
-    //   },
-    // });
   } catch (error) {
     console.error("게시글 등록 실패:", error);
-    // modalStore.openModal({
-    //   message: "게시글 등록 중 오류가 발생했습니다.",
-    //   type: "oneBtn",
-    //   onConfirm: () => modalStore.closeModal(),
-    // });
   }
 };
-
-// 게시글 작성 취소 함수 -> createHeader에 공통으로 넣었습니다 확인후 지워주세요!
-// const handleCancel = () => {
-//   router.push(`/${currentTeam}/crewboard/`);
-// };
 
 onMounted(async () => {
   await getUserInfo();
 });
+
+// 드롭다운을 열고 닫는 함수
+const handleDropdownToggle = (key) => {
+  openDropdown.value = openDropdown.value === key ? null : key;
+};
 </script>
 <template>
   <div class="px-[50px]">
@@ -284,6 +271,8 @@ onMounted(async () => {
               v-model:selectedOption="recruitStatus"
               :options="recruitOptions"
               part="모집 상태"
+              :isOpen="openDropdown === 'recruitStatus'"
+              @toggle="handleDropdownToggle('recruitStatus')"
             />
           </div>
           <div class="flex justify-between">
@@ -330,11 +319,16 @@ onMounted(async () => {
                   v-model:selectedOption="peopleNum"
                   :options="peopleNumOptions"
                   part="인원"
+                  :isOpen="openDropdown === 'peopleNum'"
+                  @toggle="handleDropdownToggle('peopleNum')"
                 />
+
                 <DropdownSelect
                   v-model:selectedOption="peopleStatus"
                   :options="peopleStatusOptions"
-                  part="인원"
+                  part="인원 상태"
+                  :isOpen="openDropdown === 'peopleStatus'"
+                  @toggle="handleDropdownToggle('peopleStatus')"
                 />
               </div>
             </div>
@@ -361,6 +355,8 @@ onMounted(async () => {
                   v-model:selectedOption="myTeam"
                   :options="myTeamOptions"
                   part="응원팀"
+                  :isOpen="openDropdown === 'myTeam'"
+                  @toggle="handleDropdownToggle('myTeam')"
                 />
               </div>
               <div
@@ -376,6 +372,8 @@ onMounted(async () => {
                   v-model:selectedOption="stadium"
                   :options="stadiumOptions"
                   part="경기 장소"
+                  :isOpen="openDropdown === 'stadium'"
+                  @toggle="handleDropdownToggle('stadium')"
                 />
               </div>
             </div>
@@ -402,6 +400,8 @@ onMounted(async () => {
                   v-model:selectedOption="myGender"
                   :options="myGenderOptions"
                   part="작성자 성별"
+                  :isOpen="openDropdown === 'myGender'"
+                  @toggle="handleDropdownToggle('myGender')"
                 />
               </div>
               <div
@@ -417,6 +417,8 @@ onMounted(async () => {
                   v-model:selectedOption="myAge"
                   :options="myAgeOptions"
                   part="작성자 연령"
+                  :isOpen="openDropdown === 'myAge'"
+                  @toggle="handleDropdownToggle('myAge')"
                 />
               </div>
             </div>
@@ -436,6 +438,8 @@ onMounted(async () => {
                 :options="crewGenderOptions"
                 :disabled="isCrewGenderDisabled"
                 part="크루 성별"
+                :isOpen="openDropdown === 'crewGender'"
+                @toggle="handleDropdownToggle('crewGender')"
               />
             </div>
             <div
@@ -451,6 +455,8 @@ onMounted(async () => {
                 v-model:selectedOption="crewAge"
                 :options="crewAgeOptions"
                 part="크루 연령"
+                :isOpen="openDropdown === 'crewAge'"
+                @toggle="handleDropdownToggle('crewAge')"
               />
             </div>
           </div>

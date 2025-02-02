@@ -16,24 +16,18 @@ const emit = defineEmits(["update:selectedTeam"]);
 const isSelected = (team) =>
   computed(() => (props.selectedTeam ?? []).some((t) => t.tag === team.tag));
 
-const selectTeam = (team) => {
+const toggleTeam = (team) => {
   console.log(isSelected(team));
   const selectedArray = Array.isArray(props.selectedTeam)
     ? props.selectedTeam
     : props.selectedTeam.value ?? [];
 
-  if (!selectedArray.includes(team)) {
+  if (selectedArray.some((t) => t.tag === team.tag)) {
+    const updatedList = selectedArray.filter((t) => t.tag !== team.tag);
+    emit("update:selectedTeam", updatedList);
+  } else {
     emit("update:selectedTeam", [...selectedArray, team]);
-    console.log("✅ 팀 추가됨:", team);
   }
-};
-const removeTeam = (team) => {
-  if (!Array.isArray(props.selectedTeam)) return;
-
-  const updatedList = props.selectedTeam.filter((t) => t.tag !== team.tag);
-  emit("update:selectedTeam", updatedList);
-  console.log("팀 제거됨:", team);
-  console.log("📌 현재 선택된 팀 목록:", props.selectedTeam.value);
 };
 
 // 팀이름에 따라 팀 닉네임 찾는 함수 -> css 사용
@@ -46,14 +40,14 @@ const teamNickname = computed(() => {
 </script>
 <template>
   <div class="w-full mx-[29px] pb-[30px] fixed bg-white01">
-    <div class="mt-[150px] min-h-[39px] overflow-x-auto scrollbar-hide">
-      <div
-        class="flex items-center gap-x-[10px] w-max flex-nowrap ml-[30px] mr-[30px]"
-      >
+    <div
+      class="mt-[150px] mx-[30px] min-h-[39px] overflow-x-auto scrollbar-hide"
+    >
+      <div class="flex items-center gap-x-[10px] w-max flex-nowrap">
         <button
           v-for="team in props.teams"
           :key="team.tag"
-          @click="selectTeam(team)"
+          @click="toggleTeam(team)"
           class="inline-flex items-center h-[39px] px-[15px] rounded-[10px] whitespace-nowrap"
           :class="
             twMerge(
@@ -70,7 +64,6 @@ const teamNickname = computed(() => {
           <p>{{ team.tag }}</p>
           <img
             v-if="isSelected(team).value"
-            @click.stop="removeTeam(team)"
             :src="deleteBtn"
             class="cursor-pointer"
           />

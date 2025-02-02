@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
-import CheerSong from "./components/header/CheerSong.vue";
+import CheerSong from "./components/CheerSong.vue";
 // import Header from "./components/ui/Header.vue";
 </script>
 
