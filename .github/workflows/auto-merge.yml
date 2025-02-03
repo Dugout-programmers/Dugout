@@ -3,7 +3,11 @@ name: Auto Merge Dev into Main
 on:
   push:
     branches:
-      - dev  # dev 브랜치에 Push하면 자동으로 main으로 PR 생성
+      - dev  # ✅ dev 브랜치에 Push하면 자동으로 main으로 PR 생성
+
+permissions:  # ✅ GITHUB_TOKEN을 사용하려면 이 설정 필요!
+  contents: write
+  pull-requests: write
 
 jobs:
   create-pull-request:
@@ -13,11 +17,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Configure Git # ✅ Git 설정 추가
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          branch: main  #  PR이 main 브랜치로 생성됨
+          token: ${{ secrets.GITHUB_TOKEN }}  # ✅ 기본 제공되는 GitHub Token 사용 (별도 설정 불필요)
+          branch: main  # ✅ PR이 main 브랜치로 생성됨
           title: "🔄 Merge dev into main"
           body: "자동으로 dev 브랜치의 변경 사항을 main으로 PR 보냄."
           labels: "automated pr"
-          assignees: "sunhyeongpp"
+          assignees: "sunhyeongpp"  # ✅ 내 GitHub ID 지정
