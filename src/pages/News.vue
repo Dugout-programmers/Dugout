@@ -1,18 +1,20 @@
 <script setup>
+import axios from "axios";
 import { computed, onMounted, ref, watch } from "vue";
 import deleteBtn from "../assets/icons/delete-btn.svg";
-import axios from "axios";
 
 // Day.js
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+import Loading from "@/components/common/Loading.vue";
 import { teamList, teamsTags } from "@/constants";
 import { useTeamStore } from "@/stores/teamStore";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { twMerge } from "tailwind-merge";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const isLoading = ref(true);
 const teamStore = useTeamStore();
 
 // 팀이름에 따라 팀 닉네임 찾는 함수 -> css 사용
@@ -57,7 +59,11 @@ const getNewsData = async (keyword) => {
     if (status === 200) {
       newsData.value = data.items;
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("뉴스 데이터를 불러오지 못했습니다", error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 onMounted(() => {
@@ -102,6 +108,7 @@ watch(
 );
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="w-full bg-white01 pb-[30px]">
     <!-- 태그부분 -->
     <div

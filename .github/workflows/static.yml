@@ -1,0 +1,127 @@
+json
+// .lighthouserc.json
+
+{
+  "ci": {
+    "collect": {
+      "url": "http://localhost:4173/",
+      "startServerCommand": "npm run preview",
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", {"minScore": 0.5}],
+        "categories:accessibility": ["warn", {"minScore": 0.7}],
+        "first-contentful-paint": ["warn", {"maxNumericValue": 3000}]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
+yaml
+# .github => workflows => lighthouse-ci.yml
+
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Vue project
+        run: npm run build
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+## Github Pages + Github Actions 사용한 CI/CD - https://velog.io/@sugar_ghost/Vue3Vite%EB%A5%BC-github-page%EB%A1%9C-%EC%98%AC%EB%A0%A4%EB%B3%B4%EC%9E%90github-action%EA%B3%BC-%ED%95%A8%EA%BB%98 - 위 블로그 포스팅 참고하여 세팅하기 - vite.config.ts
+ts
+    import { fileURLToPath, URL } from 'node:url'
+    
+    import { defineConfig } from 'vite'
+    import vue from '@vitejs/plugin-vue'
+    import vueJsx from '@vitejs/plugin-vue-jsx'
+    import vueDevTools from 'vite-plugin-vue-devtools'
+    
+    export default defineConfig({
+      plugins: [
+        vue(),
+        vueJsx(),
+        vueDevTools(),
+      ],
+      // TODO: 해당 부분 repo 이름으로 바꿔줘야 정상적으로 페이지가 작동함
+      base: '/Dugout/',
+      resolve: {
+        alias: {
+          '@': fileURLToPath(new URL('./src', import.meta.url))
+        },
+      },
+- static.yml
+yaml
+    name: Deploy static content to Pages
+    
+    on:
+      push:
+        branches: ["main"]
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    
+    jobs:
+      deploy:
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+          - name: Setup Pages
+            uses: actions/configure-pages@v5
+            
+          # 여기서부터 추가 Start
+          - uses: actions/setup-node@v3
+            with:
+              node-version: 20
+          - name: Install dependencies
+            run: npm install
+          - name: Build Vue project
+            run: npm run build
+          # 여기까지 추가 End
+         
+          - name: Upload artifact
+            uses: actions/upload-pages-artifact@v3
+            with:
+              path: './dist'
+          - name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v4

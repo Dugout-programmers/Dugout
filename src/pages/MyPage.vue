@@ -4,12 +4,15 @@ import {
   getLikedPostsByMemberId,
   getPostsByMemberId,
 } from "@/api/supabase-api/getPostsByMyId";
+import Loading from "@/components/common/Loading.vue";
 import ActiveTabs from "@/components/mypage/ActiveTabs.vue";
 import MyPostCard from "@/components/mypage/MyPostCard.vue";
 import ProfileViewAndEdit from "@/components/mypage/ProfileViewAndEdit.vue";
 import { useAuthStore } from "@/stores/auth";
 import { computed, onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
+
+const isLoading = ref(true);
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -50,6 +53,8 @@ const fetchUserData = async () => {
     likedPosts.value = likes;
   } catch (error) {
     console.error("유저 데이터 불러오기 중 오류 발생", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -69,6 +74,7 @@ watchEffect(() => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="gap-[148px] mt-[152px] overflow-x-hidden">
     <div class="px-[147px] flex flex-col items-center">
       <div class="flex w-[990px]">

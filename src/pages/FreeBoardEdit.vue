@@ -2,12 +2,17 @@
 import { onMounted, ref } from "vue";
 import CreateHeader from "@/components/common/CreateHeader.vue";
 import { useRouter } from "vue-router";
-import { teamID } from "@/constants";
 import {
   getFreePostDetailsById,
   updateFreePost,
 } from "@/api/supabase-api/freePost";
+import Loading from "@/components/common/Loading.vue";
+import CreateHeader from "@/components/CreateHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const isLoading = ref(true);
 
 const props = defineProps({
   id: String, // post_id
@@ -40,6 +45,7 @@ const handleRegister = async () => {
   findThumbnailImage(); // 썸네일 지정하기
   findThumbnailCount(); // 썸네일 개수 확인하기
   try {
+    isLoading.value = true;
     await updateFreePost(
       props.id,
       content.value,
@@ -50,6 +56,8 @@ const handleRegister = async () => {
     router.push(`/${props.team}/freeboard/${props.id}`);
   } catch (error) {
     console.error("게시물을 수정하는 도중 오류가 생겼습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -61,6 +69,8 @@ const fetchFreeboardDetail = async () => {
     content.value = data.content;
   } catch (error) {
     console.error("데이터를 불러오는 도중에 오류가 발생했습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -86,6 +96,7 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister="openEditModal" />
