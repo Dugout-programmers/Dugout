@@ -1,0 +1,22 @@
+{
+  "ci": {
+    "collect": {
+      "url": "http://localhost:4173/",
+      "startServerCommand": "npm run preview",
+      "numberOfRuns": 1,
+      "settings": {
+        "preset": "desktop"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.5 }],
+        "categories:accessibility": ["warn", { "minScore": 0.7 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 3000 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
