@@ -131,6 +131,9 @@ const teamNickname = computed(() => {
             :src="authStore.user?.image || defaultImg"
             alt="유저 프로필"
             class="w-10 h-10 rounded-full"
+            :class="{
+              'outline outline-1 outline-gray02': !authStore.user?.image,
+            }"
           />
           <span class="font-bold text-gray03">{{
             authStore.user?.name || "비회원"

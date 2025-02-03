@@ -80,18 +80,15 @@ const goToOriginNew = (link) => {
 const getNewsData = async (keyword) => {
   try {
     // 데이터 불러오기
-    const { data, status } = await axios.get("/v1/search/news.json", {
-      params: {
-        query: keyword, // 검색어
-        display: 5, // 출력 개수
-      },
-      headers: {
-        "Content-Type": "application.json",
-        "X-Naver-Client-Id": import.meta.env.VITE_NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": import.meta.env.VITE_NAVER_CLIENT_SECRET,
-      },
-    });
-    console.log(data, status);
+    const { data, status } = await axios.get(
+      "https://naver-news-api.ekdh16.workers.dev/",
+      {
+        params: {
+          query: keyword, // 검색어
+          display: 5, // 출력 개수
+        },
+      }
+    );
     if (status === 200) {
       newsData.value = data.items;
     }
@@ -221,7 +218,8 @@ onMounted(async () => {
       </div>
     </div>
     <div
-      class="flex justify-around items-center align-center px-[50px] h-[calc(100vh-143px)]">
+      class="flex justify-around items-center align-center px-[50px] h-[calc(100vh-143px)]"
+    >
       <div class="w-[450px] text-black02 text-center my-[50px] relative">
         <img :src="Ticket" />
         <div class="absolute top-0 w-full">
@@ -260,7 +258,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 자유게시판
               </div>
               <div
@@ -270,7 +269,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 직관 크루 모집
               </div>
               <div
@@ -280,7 +280,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 직관 인증 포토
               </div>
               <div
@@ -290,7 +291,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 직관 맛집 찾기
               </div>
             </template>
@@ -302,7 +304,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 마이페이지에서 구단 선택하기
               </div>
             </template>
@@ -314,7 +317,8 @@ onMounted(async () => {
                   teamStore.selectedTeam === '기본'
                     ? 'bg-white02 hover:bg-gray01'
                     : `bg-${teamNickname}_opa10 hover:bg-${teamNickname}_opa30`,
-                ]">
+                ]"
+              >
                 로그인하러 가기
               </div>
             </template>
@@ -322,7 +326,8 @@ onMounted(async () => {
         </div>
       </div>
       <div
-        class="w-[550px] px-[20px] py-[30px] bg-[#3C5C52] rounded-[10px] flex flex-col items-center gap-[30px]">
+        class="w-[550px] px-[20px] py-[30px] bg-[#3C5C52] rounded-[10px] flex flex-col items-center gap-[30px]"
+      >
         <div class="font-Galmuri11 font-bold text-[24px] text-white01">
           실시간 뉴스
         </div>
@@ -331,33 +336,37 @@ onMounted(async () => {
             v-for="(news, index) of newsData"
             :key="news.link"
             title="뉴스 바로가기"
-            class="cursor-pointer flex items-center"
-            @click="goToOriginNew(news.originallink)">
+            class="flex items-center cursor-pointer"
+            @click="goToOriginNew(news.originallink)"
+          >
             <p
-              class="font-Galmuri11 font-bold text-[18px] text-white01 w-[25px]">
+              class="font-Galmuri11 font-bold text-[18px] text-white01 w-[25px]"
+            >
               {{ index + 1 }}
             </p>
             <h2
-              class="w-full bg-black01 text-[16px] text-white01 font-Galmuri11 px-2 py-2 truncate">
+              class="w-full bg-black01 text-[16px] text-white01 font-Galmuri11 px-2 py-2 truncate"
+            >
               {{ stripHtml(news.title) }}
             </h2>
           </div>
         </div>
         <div class="w-full border border-white01"></div>
-        <div class="flex justify-between items-center w-full">
-          <div class="font-Galmuri11 font-bold text-white01">
+        <div class="flex items-center justify-between w-full">
+          <div class="font-bold font-Galmuri11 text-white01">
             BALL | STRIKE | OUT
           </div>
           <RouterLink
             to="/news"
-            class="w-[250px] border border-white01 rounded-[10px] text-white01 px-3 py-2 flex justify-between items-center">
+            class="w-[250px] border border-white01 rounded-[10px] text-white01 px-3 py-2 flex justify-between items-center"
+          >
             <p class="font-Galmuri11">더 많은 뉴스 보기</p>
             <p class="font-Galmuri11">></p>
           </RouterLink>
         </div>
       </div>
     </div>
-    <div class="marquee absolute bottom-0">
+    <div class="absolute bottom-0 marquee">
       <div class="marquee-inner" ref="marquee2">
         <span
           >DUGOUT | TIGERS | LIONS | TWINS | WIZ | BEARS | LANDERS | EAGLES |
@@ -380,13 +389,16 @@ onMounted(async () => {
     </div>
   </section>
   <section
-    class="h-[calc(100vh-100px)] w-screen bg-black01 relative overflow-hidden">
+    class="h-[calc(100vh-100px)] w-screen bg-black01 relative overflow-hidden"
+  >
     <div
-      class="absolute left-1/2 bottom-0 -translate-x-1/2 w-[100%] max-w-[1200px]">
+      class="absolute left-1/2 bottom-0 -translate-x-1/2 w-[100%] max-w-[1200px]"
+    >
       <img :src="Monitor" class="w-full h-[calc(100vh-130px)]" />
     </div>
     <div
-      class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-[50px] text-white01">
+      class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-[50px] text-white01"
+    >
       <div class="font-Galmuri11 text-[24px]">
         야구와 관련된 다양한 게임도 플레이할 수 있어요!
       </div>
@@ -402,7 +414,8 @@ onMounted(async () => {
           <div
             v-for="record in combinedRecords"
             :key="record.id"
-            class="font-Galmuri11 text-[16px]">
+            class="font-Galmuri11 text-[16px]"
+          >
             {{ record.wins || "-" }}
           </div>
         </div>
@@ -411,7 +424,8 @@ onMounted(async () => {
           <div
             v-for="record in combinedRecords"
             :key="record.id"
-            class="font-Galmuri11 text-[16px]">
+            class="font-Galmuri11 text-[16px]"
+          >
             {{ record.name || "-" }}
           </div>
         </div>
@@ -422,7 +436,8 @@ onMounted(async () => {
         </div>
         <div
           @click="handleRouting"
-          class="flex gap-[10px] cursor-pointer hover:opacity-80 transition-opacity">
+          class="flex gap-[10px] cursor-pointer hover:opacity-80 transition-opacity"
+        >
           <p class="font-Galmuri11 font-bold text-[#FEE382] text-[24px]">
             INSERT COIN
           </p>
