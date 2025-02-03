@@ -1,14 +1,6 @@
-<script setup>
-defineProps({
-  visible: {
-    type: Boolean,
-    default: false,
-  },
-});
-</script>
+<script setup></script>
 <template>
   <div
-    v-if="visible"
     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
     <svg
       class="animate-spin h-10 w-10 text-white"
