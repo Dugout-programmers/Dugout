@@ -197,7 +197,6 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <Loading />
   <section class="h-[calc(100vh-100px)] mt-[100px] w-screen overflow-hidden">
     <div class="marquee">
       <div class="marquee-inner" ref="marquee">
