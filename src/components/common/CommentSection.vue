@@ -28,7 +28,7 @@ const currentUserId = ref(null);
 const currentUserName = ref(null);
 const currentUserImage = ref(null);
 const isSubmitting = ref(false);
-const authStore = useAuthStore(); 
+const authStore = useAuthStore();
 const modalStore = useModalStore();
 
 const liked = computed(() =>
