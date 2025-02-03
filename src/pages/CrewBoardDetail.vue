@@ -4,9 +4,9 @@ import {
   getCrewRecruitmentPostDetails,
 } from "@/api/supabase-api/crewRecruitmentPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
 import Loading from "@/components/common/Loading.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -79,8 +79,7 @@ onMounted(() => {
         :time="dayjs(post.created_at).fromNow()"
         :status="post.status"
         :post="post"
-        :confirmDelete="confirmDelete"
-      />
+        :confirmDelete="confirmDelete" />
       <!-- 게시물 내용 -->
       <Loading v-if="isLoading" />
       <div class="pb-[50px] border-b border-gray01 flex flex-col gap-[50px]">

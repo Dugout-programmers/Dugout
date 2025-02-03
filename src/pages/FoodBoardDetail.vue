@@ -4,8 +4,8 @@ import {
   getRestaurantPostDetailsById,
 } from "@/api/supabase-api/restaurantPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import Loading from "@/components/common/Loading.vue";
 import LocationViewer from "@/components/foodboard/LocationViewer.vue";
 import { useModalStore } from "@/stores/useModalStore";
@@ -91,36 +91,30 @@ const onClickDelete = () => {
         :title="postDetails.title"
         :post="postDetails"
         :time="calculatedCreatedAt"
-        :confirmDelete="onClickDelete"
-      />
+        :confirmDelete="onClickDelete" />
 
       <!-- 게시물 내용 -->
       <div
         v-if="postDetails"
-        class="mt-[50px] gap-[50px] pb-[50px] flex flex-col border-b border-b-gray01"
-      >
+        class="mt-[50px] gap-[50px] pb-[50px] flex flex-col border-b border-b-gray01">
         <div class="flex flex-col gap-[30px]">
           <LocationViewer
             v-if="postDetails.location"
-            :postLocation="postDetails.location"
-          />
+            :postLocation="postDetails.location" />
           <div>
             <div
               v-html="postDetails.content"
-              class="prose ql-editor max-w-none"
-            ></div>
+              class="prose ql-editor max-w-none"></div>
           </div>
 
           <!-- 이미지 목록 -->
           <div
             v-if="postImages"
-            class="flex h-[310px] gap-[30px] justify-center"
-          >
+            class="flex h-[310px] gap-[30px] justify-center">
             <div
               v-for="(imageUrl, index) in postImages"
               :key="index"
-              class="aspect-square rounded-[10px] overflow-hidden"
-            >
+              class="aspect-square rounded-[10px] overflow-hidden">
               <img :src="imageUrl" class="object-cover w-full h-full" />
             </div>
           </div>
@@ -131,8 +125,7 @@ const onClickDelete = () => {
           <span
             v-for="(tag, index) in postDetails.tags"
             :key="index"
-            class="text-[18px] text-gray03"
-          >
+            class="text-[18px] text-gray03">
             {{ tag }}
           </span>
         </div>
