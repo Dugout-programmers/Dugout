@@ -1,7 +1,7 @@
 <script setup>
+import defaultImg from "@/assets/icons/default_profile_sm.svg";
 import searchIcon from "@/assets/icons/search.svg";
 import themeToggleIcon from "@/assets/icons/theme_toggle.svg";
-import defaultImg from "@/assets/images/defaultImg_sm.svg";
 import logoImg from "@/assets/images/logo.svg";
 import { teamList } from "@/constants";
 import { useAuthStore } from "@/stores/auth";

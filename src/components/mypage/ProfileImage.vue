@@ -1,6 +1,6 @@
 <script setup>
 import Camera from "@/assets/icons/camera.svg";
-import BaseBall from "@/assets/images/profile_ball.png";
+import DefaultProfile from "@/assets/icons/default_profile_xl.svg";
 import { teamColors } from "@/constants/index";
 import { supabase } from "@/supabase.js";
 import { defineEmits, defineProps, ref } from "vue";
@@ -83,7 +83,7 @@ const handleProfileImageUpload = async () => {
     <figure class="relative w-[240px] h-[240px]">
       <img
         v-if="!props.isEditingProfile"
-        :src="props.profileImage || BaseBall"
+        :src="props.profileImage || DefaultProfile"
         alt="프로필 사진"
         class="w-full h-full rounded-full object-cover"
       />
