@@ -20,4 +20,4 @@ jobs:
           title: "🔄 Merge dev into main"
           body: "자동으로 dev 브랜치의 변경 사항을 main으로 PR 보냄."
           labels: "automated pr"
-          assignees: "내 GitHub ID"
+          assignees: "sunhyeongpp"
