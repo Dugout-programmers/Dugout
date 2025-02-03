@@ -4,8 +4,8 @@ import {
   getCertificationPostDetailsById,
 } from "@/api/supabase-api/viewingCertificationPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Loading from "@/components/common/Loading.vue";
@@ -121,21 +121,18 @@ const confirmDelete = () => {
         :title="title"
         :post="post"
         :time="dayjs(post.created_at).fromNow()"
-        :confirm-delete="confirmDelete"
-      />
+        :confirm-delete="confirmDelete" />
       <Modal />
       <!-- 게시물 내용 -->
       <div class="pt-[50px] pb-[50px] gap-[30px] flex border-b border-b-gray01">
         <div
-          class="aspect-square w-[450px] h-[450px] rounded-[10px] overflow-hidden"
-        >
+          class="aspect-square w-[450px] h-[450px] rounded-[10px] overflow-hidden">
           <img :src="post.image" alt="" class="object-cover w-full h-full" />
         </div>
         <div class="flex-1">
           <p
             class="w-full h-full py-5 text-[18px] text-black01"
-            v-html="formattedContent"
-          ></p>
+            v-html="formattedContent"></p>
         </div>
       </div>
 

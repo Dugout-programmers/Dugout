@@ -1,6 +1,6 @@
 <script setup>
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
-import RecruitmentStatus from "./RecruitmentStatus.vue";
+import RecruitmentStatus from "./crewboard/RecruitmentStatus.vue";
 import { computed, onMounted, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";

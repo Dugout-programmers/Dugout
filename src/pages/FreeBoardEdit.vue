@@ -1,4 +1,7 @@
 <script setup>
+import { onMounted, ref } from "vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
+import { useRouter } from "vue-router";
 import {
   getFreePostDetailsById,
   updateFreePost,
@@ -103,8 +106,7 @@ onMounted(() => {
           v-model="title"
           type="text"
           placeholder="제목"
-          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01"
-        />
+          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01" />
       </div>
       <!-- 에디터 부분 -->
       <div>
@@ -113,8 +115,7 @@ onMounted(() => {
           placeholder="자유롭게 게시글을 작성해보세요."
           contentType="html"
           theme="snow"
-          toolbar="full"
-        />
+          toolbar="full" />
       </div>
     </div>
   </div>

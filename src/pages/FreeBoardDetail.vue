@@ -4,8 +4,8 @@ import {
   getFreePostDetailsById,
 } from "@/api/supabase-api/freePost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -75,8 +75,7 @@ onMounted(() => {
         :title="post.title"
         :time="dayjs(post.created_at).fromNow()"
         :post="post"
-        :confirm-delete="fetchmDeletePost"
-      />
+        :confirm-delete="fetchmDeletePost" />
       <!-- 게시물 내용 -->
       <div class="border-b border-gray01 pb-[50px]">
         <div v-html="post.content" class="prose ql-editor max-w-none"></div>
@@ -85,8 +84,7 @@ onMounted(() => {
       <!-- 코멘트 부분 -->
       <CommentSection
         :likeLength="post.like_count"
-        :commentLength="post.comment_count"
-      />
+        :commentLength="post.comment_count" />
     </div>
   </div>
 </template>
