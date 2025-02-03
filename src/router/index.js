@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 import News from "@/pages/News.vue";
 import Game from "@/pages/Game.vue";
@@ -11,7 +11,7 @@ import { teamList, gameList } from "@/constants";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
