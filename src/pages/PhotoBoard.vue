@@ -120,8 +120,8 @@ const searchResults = computed(() => searchStore.filteredPosts);
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="flex gap-[30px] flex-col px-[50px] py-[30px] items-center">
-    <div class="w-[990px] gap-[50px] flex flex-col">
+  <div class="flex gap-[30px] flex-col px-[50px] py-[30px]">
+    <div class="w-[990px] gap-[50px] flex flex-col mx-auto">
       <!-- 글쓰기 버튼 -->
       <GoToCreate :text="'직관 인증 포토 올리러 가기'" />
       <!-- 목록 -->
@@ -136,7 +136,7 @@ const searchResults = computed(() => searchStore.filteredPosts);
             :post="post"
           />
         </div>
-        <div v-else class="flex justify-center items-center w-full col-span-3">
+        <div v-else class="flex items-center justify-center w-full col-span-3">
           <span class="text-center"
             >게시물이 없습니다. 게시물을 작성해보세요!</span
           >
