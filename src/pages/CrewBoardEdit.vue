@@ -356,12 +356,6 @@ const handleDropdownToggle = (key) => {
                 <DropdownSelect
                   v-model:selectedOption="peopleNum"
                   :options="peopleNumOptions"
-                  HEAD
-                  part="인원"
-                />
-                <DropdownSelect
-                  v-model:selectedOption="peopleStatus"
-                  :options="peopleStatusOptions"
                   part="인원"
                   :isOpen="openDropdown === 'peopleNum'"
                   @toggle="handleDropdownToggle('peopleNum')"
