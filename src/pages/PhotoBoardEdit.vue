@@ -1,19 +1,21 @@
 <script setup>
-import CreateHeader from "@/components/CreateHeader.vue";
-import Camera from "@/assets/icons/camera.svg";
-import { onMounted, ref, watch, watchEffect } from "vue";
 import {
-  uploadImageToSupabase,
   getCertificationPostDetailsById,
   updateCertificationPost,
+  uploadImageToSupabase,
 } from "@/api/supabase-api/viewingCertificationPost";
-import { teamID } from "@/constants";
-import { useRoute, useRouter } from "vue-router";
-import { DatePicker } from "v-calendar";
 import CalendarIcon from "@/assets/icons/calendar.svg";
+import Camera from "@/assets/icons/camera.svg";
+import Loading from "@/components/common/Loading.vue";
 import Modal from "@/components/common/Modal.vue";
+import CreateHeader from "@/components/CreateHeader.vue";
+import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
+import { DatePicker } from "v-calendar";
+import { onMounted, ref, watch, watchEffect } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
+const isLoading = ref(true);
 const router = useRouter();
 const modalStore = useModalStore();
 
@@ -49,6 +51,8 @@ const fetchPostData = async (id) => {
     }
   } catch (error) {
     console.error("게시물 데이터를 불러오지 못했습니다:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -152,6 +156,7 @@ const handleRegister = async () => {
   }
 
   try {
+    isLoading.value = true;
     const updatedPost = await updateCertificationPost(
       postId,
       content.value,
@@ -168,6 +173,8 @@ const handleRegister = async () => {
   } catch (error) {
     console.error("게시물 생성 실패:", error);
     alert("게시물 생성에 실패했습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -224,6 +231,7 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div><h1>수정페이지</h1></div>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">

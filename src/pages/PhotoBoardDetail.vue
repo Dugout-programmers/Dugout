@@ -8,7 +8,6 @@ import CommentSection from "@/components/CommentSection.vue";
 import PostHeader from "@/components/PostHeader.vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-// day.js
 import Loading from "@/components/common/Loading.vue";
 import Modal from "@/components/common/Modal.vue";
 import { useModalStore } from "@/stores/useModalStore";
