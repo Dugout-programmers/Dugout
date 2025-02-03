@@ -27,3 +27,55 @@ npm run dev
 ```sh
 npm run build
 ```
+
+```
+pj3-2
+├─ index.html
+├─ jsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.js
+├─ public
+│  ├─ api
+│  │  └─ games
+│  │     ├─ handsomeTournament.json
+│  │     ├─ heroTournament.json
+│  │     ├─ playerQuiz.json
+│  │     ├─ recordQuiz.json
+│  │     ├─ traitorTournament.json
+│  │     └─ triviaQuiz.json
+│  └─ favicon.ico
+├─ README.md
+├─ src
+│  ├─ api
+│  │  ├─ axios.js
+│  │  └─ supabase-api
+│  ├─ App.vue
+│  ├─ assets
+│  │  ├─ icons
+│  │  └─ images
+│  ├─ components
+│  │  ├─ common
+│  │  ├─ CreateHeader.vue
+│  │  ├─ crewboard
+│  │  ├─ foodboard
+│  │  ├─ freeboard
+│  │  ├─ highlight
+│  │  ├─ mypage
+│  │  ├─ photoboard
+│  │  └─ ui
+│  ├─ constants
+│  ├─ layouts
+│  ├─ main.js
+│  ├─ pages
+│  ├─ router
+│  ├─ stores
+│  ├─ styles
+│  └─ utils
+│     ├─ getRandomQuizs.js
+│     ├─ setkakaoMap.js
+│     └─ useGameStart.js
+├─ tailwind.config.js
+└─ vite.config.js
+
+```

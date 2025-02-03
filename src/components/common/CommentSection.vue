@@ -28,7 +28,7 @@ const currentUserId = ref(null);
 const currentUserName = ref(null);
 const currentUserImage = ref(null);
 const isSubmitting = ref(false);
-const authStore = useAuthStore(); // 유저 정보가 가져오기
+const authStore = useAuthStore();
 const modalStore = useModalStore();
 
 const liked = computed(() =>
@@ -49,7 +49,6 @@ const fetchLikes = async () => {
 };
 
 const toggleLike = async () => {
-  // 비로그인이면 로그인창으로 이동
   if (!authStore.user) {
     modalStore.openModal({
       message: "로그인 후 이용 가능한 서비스입니다.\n로그인 하시겠습니까?",
@@ -150,7 +149,7 @@ const submitComment = async () => {
       commentContent
     );
     commentText.value = "";
-    optimisticComment.id = newComment.id;
+    optimisticComment.id = newComment[0].id;
     comments.value = comments.value.map((comment) =>
       comment.id === null ? optimisticComment : comment
     );
@@ -163,8 +162,8 @@ const submitComment = async () => {
 };
 
 const handleKeyup = (event) => {
+  event.preventDefault();
   if (event.key === "Enter" && !event.shiftKey && !isComposing.value) {
-    event.preventDefault();
     submitComment();
   }
 };

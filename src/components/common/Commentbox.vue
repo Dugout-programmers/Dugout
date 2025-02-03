@@ -1,14 +1,14 @@
 <script setup>
 import { deleteComment, updateComment } from "@/api/supabase-api/commonComment";
+import BaseballLogo from "@/assets/icons/baseball.svg";
+import Modal from "@/components/common/Modal.vue";
 import { boardToTableMapping } from "@/constants";
+import { useModalStore } from "@/stores/useModalStore";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { nextTick, ref } from "vue";
 import { useRoute } from "vue-router";
-import BaseballLogo from "@/assets/icons/baseball.svg";
-import Modal from "@/components/common/Modal.vue";
-import {useModalStore} from "@/stores/useModalStore"
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
@@ -70,7 +70,7 @@ const fetchUpdateComment = async () => {
     comment.id === props.comment.id ? updatedComment : comment
   );
   emit("refresh-comments", updatedComments);
-  isEditing.value = false
+  isEditing.value = false;
   try {
     const data = await updateComment(
       boardToTableMapping[boardName],
@@ -100,13 +100,13 @@ const onClickDeleteComment = () => {
       await fetchDeleteComment();
       modalStore.closeModal();
     },
-    onCancel: modalStore.closeModal(),
+    onCancel: modalStore.closeModal,
   });
-}
+};
 </script>
 
 <template>
-  <Modal/>
+  <Modal />
   <div class="pb-5 border-b border-white02">
     <div class="flex items-center justify-between">
       <div class="flex gap-[10px] items-center">
