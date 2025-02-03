@@ -28,6 +28,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+      - name: Create .env file
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env 
+          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env 
+          echo "VITE_NAVER_CLIENT_ID=${{ secrets.VITE_NAVER_CLIENT_ID }}" >> .env 
+          echo "VITE_NAVER_CLIENT_SECRET=${{ secrets.VITE_NAVER_CLIENT_SECRET }}" >> .env 
+          echo "VITE_YOUTUBE_API_KEY=${{ secrets.VITE_YOUTUBE_API_KEY }}" >> .env 
+          echo "VITE_TVINGSPORTS_CHANNEL_ID=${{ secrets.VITE_TVINGSPORTS_CHANNEL_ID }}" >> .env 
+          echo "VITE_SUPABASE_PROJECT_REF=${{ secrets.VITE_SUPABASE_PROJECT_REF }}" >> .env
 
       - name: Install dependencies
         run: npm install
