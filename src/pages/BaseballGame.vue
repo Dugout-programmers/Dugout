@@ -2,7 +2,7 @@
 import gameMonitor from "@/assets/images/gamemonitor.svg";
 import baseBallMiniGame from "@/assets/images/baseballminigame.svg";
 import ballWhite from "@/assets/images/ballwhite.svg";
-import ballColor from "@/assets/images/ballColor.svg";
+import ballColor from "@/assets/images/ballcolor.svg";
 import PlayBtn from "@/assets/images/play_btn.svg";
 import RetryBtn from "@/assets/images/retry_btn.svg";
 import Ball from "@/assets/images/baseball_ball.svg";
@@ -69,7 +69,6 @@ const startGame = async () => {
       await createBaseballGame({ member_id: auth.user.id });
     }
   }
-
 };
 
 // 스트라이크와 볼 계산
@@ -182,16 +181,19 @@ const submitGuess = async () => {
       <img :src="gameMonitor" alt="모니터 사진" class="h-[670px]" />
       <!-- 모니터 레이아웃 -->
       <div
-        class="absolute w-[586px] h-[387px] left-[71px] top-[43px] flex justify-center items-center">
+        class="absolute w-[586px] h-[387px] left-[71px] top-[43px] flex justify-center items-center"
+      >
         <!-- 게임 설명 화면 -->
         <div
           v-if="!isGameStarted && !isGameOver"
-          class="flex flex-col items-center justify-center gap-[25px]">
+          class="flex flex-col items-center justify-center gap-[25px]"
+        >
           <!-- 제목 -->
           <img
             :src="baseBallMiniGame"
             alt="야구 미니 게임"
-            class="w-[237px] h-[47px]" />
+            class="w-[237px] h-[47px]"
+          />
           <!-- 설명 -->
           <div class="flex flex-col items-center font-bold text-white01">
             <span class="font-Galmuri11">
@@ -234,17 +236,20 @@ const submitGuess = async () => {
         <!-- 게임 결과 화면 -->
         <div
           v-else-if="isGameOver"
-          class="text-white01 flex flex-col items-center">
+          class="text-white01 flex flex-col items-center"
+        >
           <p class="font-Galmuri11 font-bold text-[20px] mb-[10px]">
             상대방의 번호는
           </p>
           <div class="flex justify-between items-center">
             <div
-              class="flex items-center gap-[10px] font-bold text-[20px] text-black01">
+              class="flex items-center gap-[10px] font-bold text-[20px] text-black01"
+            >
               <div
                 v-for="(number, index) in targetNumber"
                 :key="index"
-                class="relative">
+                class="relative"
+              >
                 <img :src="Ball" class="w-[40px] h-[40px] top-0 left-0" />
                 <p class="font-Galmuri11 absolute left-[15px] top-[5px]">
                   {{ number }}
@@ -262,21 +267,24 @@ const submitGuess = async () => {
           <!-- 3초동안 게임 시작 화면 -->
           <div
             v-if="isGameStarting"
-            class="h-full text-[30px] text-white01 font-bold flex flex-col items-center absolute left-1/2 -translate-x-1/2 top-[150px]">
+            class="h-full text-[30px] text-white01 font-bold flex flex-col items-center absolute left-1/2 -translate-x-1/2 top-[150px]"
+          >
             <p class="font-Galmuri11">QUIZ</p>
             <p class="font-Galmuri11">START</p>
           </div>
           <!-- 게임 화면 -->
           <div v-else class="text-white01">
             <div
-              class="w-[60%] mx-auto py-3 rounded-b-[35px] flex items-center justify-center text-center bg-white02 font-Galmuri11 text-gray02">
+              class="w-[60%] mx-auto py-3 rounded-b-[35px] flex items-center justify-center text-center bg-white02 font-Galmuri11 text-gray02"
+            >
               예상한 숫자를 입력해주세요 ( {{ attempts }} / {{ maxAttempts }} )
             </div>
             <div class="mt-[20px] px-[20px]">
               <!-- 볼 이미지 영역 -->
               <div class="flex justify-between items-center">
                 <div
-                  class="flex items-center gap-[10px] font-bold text-[20px] text-black01">
+                  class="flex items-center gap-[10px] font-bold text-[20px] text-black01"
+                >
                   <div class="relative">
                     <img :src="Ball" class="w-[40px] h-[40px] top-0 left-0" />
                     <p class="font-Galmuri11 absolute left-[15px] top-[5px]">
@@ -303,26 +311,31 @@ const submitGuess = async () => {
                   </div>
                 </div>
                 <div
-                  class="px-[20px] py-1 bg-white02 font-Galmuri11 font-bold text-black01">
+                  class="px-[20px] py-1 bg-white02 font-Galmuri11 font-bold text-black01"
+                >
                   ME
                 </div>
               </div>
               <!-- 게임 영역 -->
               <div
                 ref="chatContainer"
-                class="mt-[20px] flex flex-col gap-2 h-[250px] overflow-y-auto px-2">
+                class="mt-[20px] flex flex-col gap-2 h-[250px] overflow-y-auto px-2"
+              >
                 <div class="flex flex-col">
                   <template
                     v-for="(message, index) in gameMessages"
-                    :key="index">
+                    :key="index"
+                  >
                     <div
                       :class="
                         message.type === 'result'
                           ? 'flex justify-start'
                           : 'flex justify-end'
-                      ">
+                      "
+                    >
                       <div
-                        class="px-2 py-2 max-w-[80%] border-t-2 border-b-2 font-Galmuri11">
+                        class="px-2 py-2 max-w-[80%] border-t-2 border-b-2 font-Galmuri11"
+                      >
                         {{ message.text }}
                       </div>
                     </div>
@@ -336,15 +349,18 @@ const submitGuess = async () => {
       <button
         v-if="!isGameStarted"
         @click="startGame"
-        class="absolute bottom-[140px] left-1/2 translate-x-[-45%] cursor-pointer">
+        class="absolute bottom-[140px] left-1/2 translate-x-[-45%] cursor-pointer"
+      >
         <img
           :src="isGameOver ? RetryBtn : PlayBtn"
-          :alt="isGameOver ? 'retry button' : 'play button'" />
+          :alt="isGameOver ? 'retry button' : 'play button'"
+        />
       </button>
       <!-- 입력 영역 -->
       <div
         v-if="isGameStarted"
-        class="absolute bottom-[140px] left-1/2 translate-x-[-45%] cursor-pointer flex gap-[10px] bg-black01">
+        class="absolute bottom-[140px] left-1/2 translate-x-[-45%] cursor-pointer flex gap-[10px] bg-black01"
+      >
         <input
           v-for="(input, index) in inputs"
           :key="index"
@@ -353,7 +369,8 @@ const submitGuess = async () => {
           v-model="inputs[index]"
           @input="handleInput(index, $event)"
           @keydown="handleKeyDown(index, $event)"
-          class="w-[35px] h-[45px] pl-[12px] font-Galmuri11 font-bold focus:outline-none rounded-[3px] drop-shadow-[0_0_3px_rgba(6,251,156,0.7)]" />
+          class="w-[35px] h-[45px] pl-[12px] font-Galmuri11 font-bold focus:outline-none rounded-[3px] drop-shadow-[0_0_3px_rgba(6,251,156,0.7)]"
+        />
       </div>
     </div>
   </div>
