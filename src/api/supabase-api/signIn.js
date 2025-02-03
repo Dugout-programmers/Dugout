@@ -6,7 +6,8 @@ export const signInWithGoogle = async () => {
     const { user, session, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.origin + "/auth/callback",
+        redirectTo:
+          "https://dugout-programmers.github.io/Dugout/#/auth/callback",
       },
     });
     if (error) throw error;
@@ -25,7 +26,8 @@ export const signInWithKakao = async () => {
     const { user, session, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
-        redirectTo: window.origin + "/auth/callback",
+        redirectTo:
+          "https://dugout-programmers.github.io/Dugout/#/auth/callback",
       },
     });
 
