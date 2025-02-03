@@ -18,54 +18,54 @@ export const useAuthStore = defineStore(
     const isLoading = ref(false);
 
     // 세션 리스너 설정
-    const setupAuthListener = () => {
-      supabase.auth.onAuthStateChange(async (event, session) => {
-        console.log("Auth state changed:", event, session);
+    // const setupAuthListener = () => {
+    //   supabase.auth.onAuthStateChange(async (event, session) => {
+    //     console.log("Auth state changed:", event, session);
 
-        if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-          if (session?.user) {
-            const { data: userInfo } = await supabase
-              .from("user_info")
-              .select("*")
-              .eq("id", session.user.id)
-              .single();
+    //     if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+    //       if (session?.user) {
+    //         const { data: userInfo } = await supabase
+    //           .from("user_info")
+    //           .select("*")
+    //           .eq("id", session.user.id)
+    //           .single();
 
-            user.value = {
-              ...session.user,
-              ...userInfo,
-            };
-          }
-        } else {
-          user.value = null;
-        }
-      });
-    };
+    //         user.value = {
+    //           ...session.user,
+    //           ...userInfo,
+    //         };
+    //       }
+    //     } else {
+    //       user.value = null;
+    //     }
+    //   });
+    // };
 
     // 사용자 정보 초기화 함수
-    const initUser = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        console.log("Initial session check:", session);
+    // const initUser = async () => {
+    //   try {
+    //     const {
+    //       data: { session },
+    //     } = await supabase.auth.getSession();
+    //     console.log("Initial session check:", session);
 
-        if (session?.user) {
-          const { data: userInfo } = await supabase
-            .from("user_info")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
+    //     if (session?.user) {
+    //       const { data: userInfo } = await supabase
+    //         .from("user_info")
+    //         .select("*")
+    //         .eq("id", session.user.id)
+    //         .single();
 
-          user.value = {
-            ...session.user,
-            ...userInfo,
-          };
-        }
-      } catch (error) {
-        console.error("사용자 정보 초기화 실패:", error);
-        user.value = null;
-      }
-    };
+    //       user.value = {
+    //         ...session.user,
+    //         ...userInfo,
+    //       };
+    //     }
+    //   } catch (error) {
+    //     console.error("사용자 정보 초기화 실패:", error);
+    //     user.value = null;
+    //   }
+    // };
 
     // 구글 로그인
     const loginWithGoogle = async () => {
@@ -74,6 +74,7 @@ export const useAuthStore = defineStore(
         const { success, user: userData, error } = await signInWithGoogle();
         if (!success) throw new Error(error);
         user.value = userData;
+        console.log("구글로그인", userData);
       } catch (error) {
         console.error("구글 로그인 실패:", error);
         throw error;
@@ -124,11 +125,12 @@ export const useAuthStore = defineStore(
         isLoading.value = true;
         user.value = null;
 
-        localStorage.removeItem("auth");
-        window.localStorage.removeItem(
-          "sb-" + import.meta.env.VITE_SUPABASE_PROJECT_REF + "-auth-token"
-        );
-        window.location.href = "/";
+        // 로컬 스토리지 삭제
+        // localStorage.removeItem("auth");
+        // window.localStorage.removeItem(
+        //   "sb-" + import.meta.env.VITE_SUPABASE_PROJECT_REF + "-auth-token"
+        // );
+        // window.location.href = "/";
 
         return { success: true };
       } catch (error) {
@@ -176,28 +178,28 @@ export const useAuthStore = defineStore(
     };
 
     // 인증 상태 변경 감지
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN") {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
+    // supabase.auth.onAuthStateChange(async (event, session) => {
+    //   if (event === "SIGNED_IN") {
+    //     const { data: profile } = await supabase
+    //       .from("profiles")
+    //       .select("*")
+    //       .eq("id", session.user.id)
+    //       .single();
 
-        user.value = {
-          ...session.user,
-          ...profile,
-        };
-      } else if (event === "SIGNED_OUT") {
-        user.value = null;
-      }
-    });
+    //     user.value = {
+    //       ...session.user,
+    //       ...profile,
+    //     };
+    //   } else if (event === "SIGNED_OUT") {
+    //     user.value = null;
+    //   }
+    // });
 
     return {
       user,
       isLoading,
-      setupAuthListener,
-      initUser,
+      // setupAuthListener,
+      // initUser,
       loginWithGoogle,
       loginWithKakao,
       loginWithEmail,
@@ -208,10 +210,9 @@ export const useAuthStore = defineStore(
     };
   },
   {
+    // 유저정보만 persist로 저장
     persist: {
-      key: "auth",
-      storage: localStorage,
-      paths: ["user"],
+      pick: ["user"],
     },
   }
 );

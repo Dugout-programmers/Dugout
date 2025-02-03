@@ -30,7 +30,7 @@ export const useCheerSongStore = defineStore(
         return;
       }
 
-      console.log(" YouTube 플레이어가 설정됨:", playerInstance);
+      // console.log(" YouTube 플레이어가 설정됨:", playerInstance);
       player.value = playerInstance;
     };
 

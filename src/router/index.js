@@ -210,7 +210,8 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   const authStore = useAuthStore();
-  console.log(authStore.user, to.path);
+  // console.log("유저정보", authStore.user);
+  // console.log("어디로 가는지", to.path);
   // 비로그인일때 private페이지 접근할때
   if (to.meta.requiresAuth && !authStore.user) {
     next("/signin");
