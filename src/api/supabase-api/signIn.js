@@ -6,7 +6,6 @@ export const signInWithGoogle = async () => {
     const { user, session, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
     });
-
     if (error) throw error;
 
     console.log("User Signed In With Google: ", user);
