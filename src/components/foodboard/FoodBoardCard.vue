@@ -1,13 +1,12 @@
 <script setup>
+import BaseballLogo from "@/assets/icons/baseball.svg";
 import commentIcon from "@/assets/icons/comment.svg";
 import likeIcon from "@/assets/icons/like.svg";
-import { teamID } from "@/constants";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { computed } from "vue";
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import BaseballLogo from "@/assets/icons/baseball.svg";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
@@ -21,7 +20,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 
 const parsedContent = computed(() => {
   // HTML 문자열을 DOM 객체로 변환
@@ -49,7 +47,7 @@ const calculatedCreatedAt = computed(() => {
           v-if="props.restaurantPostData.thumbnail_url"
           :src="props.restaurantPostData.thumbnail_url"
           alt="게시물 이미지"
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover min-w-[350px]"
         />
         <KakaoMap
           v-else-if="

@@ -1,8 +1,11 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import Loading from "@/components/common/Loading.vue";
 import HighlightList from "@/components/highlight/HighlightList.vue";
 import TeamSelector from "@/components/highlight/TeamSelector.vue";
 import VideoModal from "@/components/highlight/VideoModal.vue";
+import { onMounted, ref, watch } from "vue";
+
+const isLoading = ref(true);
 
 const teams = [
   { tag: "# LG 트윈스", searchTitle: ["LG", "트윈스", "앨지", "twins"] },
@@ -138,6 +141,7 @@ const fetchVideosOnmount = async () => {
       requiredKeywords.some((keyword) => video.title.includes(keyword)) &&
       !excludeKeywords.some((exclude) => video.title.includes(exclude))
   );
+  isLoading.value = false;
 };
 
 // 해시태그버튼 따라 필터링 - kbo, 하이라이트만 필수쿼리로 지정하면 농구, 쇼츠 등이 걸러지지 않음.
@@ -170,6 +174,7 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <TeamSelector v-model:selectedTeam="selectedTeam" :teams="teams" />
   <HighlightList :videos="videos" @playVideo="openModal" />
   <VideoModal

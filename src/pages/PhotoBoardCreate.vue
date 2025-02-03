@@ -1,17 +1,19 @@
 <script setup>
-import CreateHeader from "@/components/CreateHeader.vue";
-import Camera from "@/assets/icons/camera.svg";
-import { ref, watch } from "vue";
 import {
-  uploadImageToSupabase,
   createCertificationPost,
+  uploadImageToSupabase,
 } from "@/api/supabase-api/viewingCertificationPost";
-import { teamID } from "@/constants";
-import { useRoute, useRouter } from "vue-router";
-import { DatePicker } from "v-calendar";
 import CalendarIcon from "@/assets/icons/calendar.svg";
+import Camera from "@/assets/icons/camera.svg";
 import Modal from "@/components/common/Modal.vue";
+import CreateHeader from "@/components/CreateHeader.vue";
+import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
+import { DatePicker } from "v-calendar";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const isLoading = ref(false);
 
 const router = useRouter();
 const modalStore = useModalStore();
@@ -122,6 +124,7 @@ const handleRegister = async () => {
   }
 
   try {
+    isLoading.value = true;
     const result = await createCertificationPost(
       content.value,
       uploadedImageUrl.value,
@@ -141,6 +144,8 @@ const handleRegister = async () => {
   } catch (error) {
     console.error("게시물 생성 실패:", error);
     alert("게시물 생성에 실패했습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
