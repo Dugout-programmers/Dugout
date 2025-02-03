@@ -79,7 +79,7 @@ const getVideoStatistics = async (videoId) => {
 const searchVideos = async (searchQuery) => {
   const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
     searchQuery
-  )}&channelId=${CHANNEL_ID}&type=video&order=date&maxResults=5&key=${API_KEY}`;
+  )}&channelId=${CHANNEL_ID}&type=video&order=date&maxResults=50&key=${API_KEY}`;
   //개발할 때만 할당량 때문에 maxResults 5로 둠 (최대 50까지 가능)
 
   try {
