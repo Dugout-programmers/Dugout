@@ -61,7 +61,7 @@ const getNewsData = async (keyword) => {
       {
         params: {
           query: keyword, // 검색어
-          // display: 20, // 출력 개수
+          display: 20, // 출력 개수
         },
       }
     );
