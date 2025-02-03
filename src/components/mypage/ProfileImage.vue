@@ -73,7 +73,7 @@ const handleProfileImageUpload = async () => {
 
 <template>
   <div
-    class="w-[240px] h-[240px] rounded-full sticky flex flex-shrink-0"
+    class="w-[240px] h-[240px] rounded-full sticky flex flex-shrink-0 outline outline-gray01"
     :style="
       !props.isEditingProfile && props.profileTeam
         ? { outline: `5px solid ${teamColors[props.profileTeam]}` }
