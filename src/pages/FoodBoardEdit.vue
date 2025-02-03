@@ -11,7 +11,7 @@ import {
   updateRestaurantPost,
 } from "@/api/supabase-api/restaurantPost";
 import Baseball from "@/assets/icons/baseball.svg";
-import CreateHeader from "@/components/CreateHeader.vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
 import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
 import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
@@ -240,32 +240,27 @@ const cancelRestaurantPost = () => {
     <div class="w-[1090px] flex flex-col">
       <CreateHeader
         :handleRegister="onClickCompleteEdit"
-        :handleCancel="cancelRestaurantPost"
-      />
+        :handleCancel="cancelRestaurantPost" />
       <div>
         <input
           v-model="title"
           type="text"
           placeholder="제목"
-          class="border-b w-full outline-none text-center py-[15px] text-3xl bg-white01 title-input"
-        />
+          class="border-b w-full outline-none text-center py-[15px] text-3xl bg-white01 title-input" />
       </div>
       <section
         id="post_content--input"
-        class="flex flex-col gap-[30px] mb-[142px] w-full"
-      >
+        class="flex flex-col gap-[30px] mb-[142px] w-full">
         <MapSelectAndView
           :finalSelectedLocation="finalSelectedLocation"
           :isMapViewVisable="isMapViewVisable"
-          @updateFinalLocation="updateFinalLocation"
-        />
+          @updateFinalLocation="updateFinalLocation" />
         <div class="w-full border border-white02">
           <QuillEditor
             v-model:content="content"
             contentType="html"
             :placeholder="'맛집을 마구 공유해주세요!\n맛집 사진은 최대 3개까지 업로드할 수 있습니다.'"
-            theme="snow"
-          />
+            theme="snow" />
         </div>
         <PhotoUpload :images="imageUrls" @update:images="updateImages" />
         <div id="tags-select" class="flex flex-col gap-[20px]">
@@ -277,8 +272,7 @@ const cancelRestaurantPost = () => {
           </div>
           <TagsSelect
             :initial-tags="selectedTags"
-            @update:selectedTag="updateTags"
-          />
+            @update:selectedTag="updateTags" />
         </div>
       </section>
     </div>

@@ -4,8 +4,8 @@ import {
   getCertificationPostDetailsById,
 } from "@/api/supabase-api/viewingCertificationPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Loading from "@/components/common/Loading.vue";
@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한국어 로케일 가져오기
 import relativeTime from "dayjs/plugin/relativeTime";
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const router = useRouter();
 
@@ -37,6 +37,7 @@ const fetchPhotoboardDetail = async (postId) => {
   }
 
   try {
+    isLoading.value = true;
     const data = await getCertificationPostDetailsById(postId);
 
     if (data) {
@@ -96,9 +97,11 @@ const confirmDelete = () => {
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await deleteCertificationPost(postId.value);
       modalStore.closeModal();
       router.push(`/${route.params.team}/photoboard`); // ✅ 삭제 후 이동
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });

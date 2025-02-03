@@ -12,6 +12,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  base: "/Dugout/",
   // 네이버 api를 위한 프록시 서버
   server: {
     proxy: {
@@ -22,5 +23,8 @@ export default defineConfig({
         ws: true,
       },
     },
+  },
+  define: {
+    "process.env": {},
   },
 });

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
-import CheerSong from "./components/CheerSong.vue";
+import CheerSong from "./components/common/CheerSong.vue";
 // import { useAuthStore } from "./stores/auth";
 // import { onMounted } from "vue";
 

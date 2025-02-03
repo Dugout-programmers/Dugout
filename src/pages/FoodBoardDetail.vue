@@ -4,8 +4,8 @@ import {
   getRestaurantPostDetailsById,
 } from "@/api/supabase-api/restaurantPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import Loading from "@/components/common/Loading.vue";
 import LocationViewer from "@/components/foodboard/LocationViewer.vue";
 import { useModalStore } from "@/stores/useModalStore";
@@ -65,9 +65,11 @@ const onClickDelete = () => {
     message: "삭제한 후에는 복구할 수 없습니다\n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await handleDeletePost();
       modalStore.closeModal();
       router.go(-1);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal,
   });

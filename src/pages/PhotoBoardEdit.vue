@@ -1,18 +1,18 @@
 <script setup>
+import CreateHeader from "@/components/common/CreateHeader.vue";
+import Camera from "@/assets/icons/camera.svg";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import {
   getCertificationPostDetailsById,
   updateCertificationPost,
   uploadImageToSupabase,
 } from "@/api/supabase-api/viewingCertificationPost";
 import CalendarIcon from "@/assets/icons/calendar.svg";
-import Camera from "@/assets/icons/camera.svg";
 import Loading from "@/components/common/Loading.vue";
 import Modal from "@/components/common/Modal.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
 import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
 import { DatePicker } from "v-calendar";
-import { onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const isLoading = ref(true);
@@ -232,7 +232,6 @@ onMounted(() => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div><h1>수정페이지</h1></div>
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister="openEditModal" />

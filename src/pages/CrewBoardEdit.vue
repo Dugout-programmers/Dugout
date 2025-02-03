@@ -1,6 +1,6 @@
 <script setup>
 import DropdownSelect from "@/components/common/DropdownSelect.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
 import { onMounted, ref, watch } from "vue";
 import Baseball from "@/assets/icons/baseball.svg";
 import Calendar from "@/assets/icons/calendar.svg";
@@ -11,7 +11,11 @@ import {
 } from "@/api/supabase-api/crewRecruitmentPost";
 import { useModalStore } from "@/stores/useModalStore";
 import { teamID } from "@/constants";
+import Loading from "@/components/common/Loading.vue";
 
+const isLoading = ref(false);
+
+const openDropdown = ref(null);
 const router = useRouter();
 const currentTeam = router.currentRoute.value.params.team;
 const clubId = ref(teamID[currentTeam]); // 팀 id 가져오기
@@ -204,7 +208,7 @@ const fetchPostDetails = async () => {
 };
 
 // 작성글 업데이트 함수
-const handleUpdate = () => {
+const handleUpdate = async () => {
   const postId = route.params.id;
   if (!validateInputs()) return;
 
@@ -223,8 +227,10 @@ const handleUpdate = () => {
   };
 
   try {
-    updateCrewRecruitmentPost(postId, updatedData);
+    isLoading.value = true;
+    await updateCrewRecruitmentPost(postId, updatedData);
     router.push(`/${currentTeam}/crewboard/${postId}`);
+
     // modalStore.openModal({
     //   message: "게시글이 성공적으로 수정되었습니다.",
     //   type: "oneBtn",
@@ -235,6 +241,8 @@ const handleUpdate = () => {
     // });
   } catch (err) {
     console.error(err.message);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -263,8 +271,14 @@ const openEditModal = () => {
 onMounted(() => {
   fetchPostDetails();
 });
+
+const handleDropdownToggle = (key) => {
+  openDropdown.value = openDropdown.value === key ? null : key;
+};
 </script>
 <template>
+  <!-- 로딩창 -->
+  <Loading v-if="isLoading" />
   <div class="px-[50px]">
     <CreateHeader :handleRegister="openEditModal" />
     <div class="gap-[50px]">
@@ -279,7 +293,7 @@ onMounted(() => {
             <textarea
               type="text"
               v-model="content"
-              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4"
+              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4 bg-white01"
               placeholder="직관 크루 모집글을 작성해보세요"
             />
           </div>
@@ -295,6 +309,8 @@ onMounted(() => {
               v-model:selectedOption="recruitStatus"
               :options="recruitOptions"
               part="모집 상태"
+              :isOpen="openDropdown === 'recruitStatus'"
+              @toggle="handleDropdownToggle('recruitStatus')"
             />
           </div>
           <div class="flex justify-between">
@@ -341,11 +357,15 @@ onMounted(() => {
                   v-model:selectedOption="peopleNum"
                   :options="peopleNumOptions"
                   part="인원"
+                  :isOpen="openDropdown === 'peopleNum'"
+                  @toggle="handleDropdownToggle('peopleNum')"
                 />
                 <DropdownSelect
                   v-model:selectedOption="peopleStatus"
                   :options="peopleStatusOptions"
-                  part="인원"
+                  part="인원 상태"
+                  :isOpen="openDropdown === 'peopleStatus'"
+                  @toggle="handleDropdownToggle('peopleStatus')"
                 />
               </div>
             </div>
@@ -372,6 +392,8 @@ onMounted(() => {
                   v-model:selectedOption="myTeam"
                   :options="myTeamOptions"
                   part="응원팀"
+                  :isOpen="openDropdown === 'myTeam'"
+                  @toggle="handleDropdownToggle('myTeam')"
                 />
               </div>
               <div
@@ -387,6 +409,8 @@ onMounted(() => {
                   v-model:selectedOption="stadium"
                   :options="stadiumOptions"
                   part="경기 장소"
+                  :isOpen="openDropdown === 'stadium'"
+                  @toggle="handleDropdownToggle('stadium')"
                 />
               </div>
             </div>
@@ -413,6 +437,8 @@ onMounted(() => {
                   v-model:selectedOption="myGender"
                   :options="myGenderOptions"
                   part="작성자 성별"
+                  :isOpen="openDropdown === 'myGender'"
+                  @toggle="handleDropdownToggle('myGender')"
                 />
               </div>
               <div
@@ -428,6 +454,8 @@ onMounted(() => {
                   v-model:selectedOption="myAge"
                   :options="myAgeOptions"
                   part="작성자 연령"
+                  :isOpen="openDropdown === 'myAge'"
+                  @toggle="handleDropdownToggle('myAge')"
                 />
               </div>
             </div>
@@ -447,6 +475,8 @@ onMounted(() => {
                 :options="crewGenderOptions"
                 :disabled="isCrewGenderDisabled"
                 part="크루 성별"
+                :isOpen="openDropdown === 'crewGender'"
+                @toggle="handleDropdownToggle('crewGender')"
               />
             </div>
             <div
@@ -462,6 +492,8 @@ onMounted(() => {
                 v-model:selectedOption="crewAge"
                 :options="crewAgeOptions"
                 part="크루 연령"
+                :isOpen="openDropdown === 'crewAge'"
+                @toggle="handleDropdownToggle('crewAge')"
               />
             </div>
           </div>

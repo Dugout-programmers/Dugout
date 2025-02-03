@@ -4,8 +4,8 @@ import {
   getFreePostDetailsById,
 } from "@/api/supabase-api/freePost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -20,7 +20,7 @@ const props = defineProps({
   team: String,
 });
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const post = ref(null); // 게시물 상세 정보를 담을 변수
 const router = useRouter();
@@ -32,6 +32,7 @@ dayjs.locale("ko"); // 한국어 로케일 설정
 // 게시물 상세 정보를 가져오는 함수
 const fetchFreeboardDetail = async () => {
   try {
+    isLoading.value = true;
     const data = await getFreePostDetailsById(props.id);
     post.value = data;
   } catch (error) {
@@ -47,9 +48,11 @@ const fetchmDeletePost = () => {
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await deleteFreePost(props.id);
       modalStore.closeModal();
       router.push(`/${props.team}/freeboard`);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });

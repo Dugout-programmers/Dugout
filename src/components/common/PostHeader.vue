@@ -1,11 +1,11 @@
 <script setup>
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
-import RecruitmentStatus from "./RecruitmentStatus.vue";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import RecruitmentStatus from "@/components/crewboard/RecruitmentStatus.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
-import Modal from "./common/Modal.vue";
+import Modal from "@/components/common/Modal.vue";
 import BaseballLogo from "@/assets/icons/baseball.svg";
+import { computed, ref, watchEffect } from "vue";
 
 //profileImage, memberId, postId는 post로 한번에 전달
 //title은 게시판마다 포맷이 달라 상위 컴포넌트에서 변형해 전달
@@ -94,14 +94,16 @@ const goToEditPage = () => {
         <img
           :src="post.author_image || BaseballLogo"
           alt="유저 프로필"
-          class="w-[25px] h-[25px] rounded-full" />
+          class="w-[25px] h-[25px] rounded-full"
+        />
         <span class="text-xs text-gray03">{{ props.post.author_name }}</span>
         <span class="text-xs text-gray02">{{ props.time }}</span>
       </div>
       <!-- 수정 삭제 버튼 -->
       <div
         v-if="authStore.user && isOwner"
-        class="flex text-xs text-gray02 gap-[4px]">
+        class="flex text-xs text-gray02 gap-[4px]"
+      >
         <button @click="goToEditPage" class="hover:text-gray03">수정</button>
         <span>|</span>
         <button @click="confirmDelete" class="hover:text-gray03">삭제</button>

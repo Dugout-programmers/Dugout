@@ -1,7 +1,7 @@
 <script setup>
 import { createFreePost } from "@/api/supabase-api/freePost";
 import Loading from "@/components/common/Loading.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
 import { teamID } from "@/constants";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
@@ -58,7 +58,7 @@ const handleRegister = async () => {
       titleRef.value.focus();
     }
 
-    return;
+    return false;
   }
   // 만약 내용을 입력하지 않았을 경우
   if (content.value === "") {
@@ -67,7 +67,7 @@ const handleRegister = async () => {
     if (contentRef.value) {
       contentRef.value.focus();
     }
-    return;
+    return false;
   }
   try {
     isLoading.value = true;
@@ -80,8 +80,10 @@ const handleRegister = async () => {
       clubId.value //clubId
     );
     router.push(`/${props.team}/freeboard`);
+    return true;
   } catch (error) {
     console.error("게시물을 등록하는 도중 오류가 생겼습니다.");
+    return false;
   } finally {
     isLoading.value = false;
   }
@@ -99,8 +101,7 @@ const handleRegister = async () => {
           type="text"
           placeholder="제목"
           ref="titleRef"
-          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01"
-        />
+          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01" />
       </div>
       <!-- 에디터 부분 -->
       <div>
@@ -110,8 +111,7 @@ const handleRegister = async () => {
           placeholder="자유롭게 게시글을 작성해보세요."
           contentType="html"
           theme="snow"
-          toolbar="full"
-        />
+          toolbar="full" />
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@ import {
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
 import Baseball from "@/assets/icons/baseball.svg";
 import Loading from "@/components/common/Loading.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
 import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
 import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
@@ -130,7 +130,7 @@ const submitRestaurantPost = async () => {
   const filteredImg = imageUrls.value.filter((url) => url !== null);
   const userData = await getCurrentUser();
 
-  if (!postFormValidation()) return;
+  if (!postFormValidation()) return false;
 
   try {
     isLoading.value = true;
@@ -152,8 +152,10 @@ const submitRestaurantPost = async () => {
 
     router.push(`/${teamName.value}/foodboard`);
     finalSelectedLocation.value = null;
+    return true;
   } catch (error) {
     console.log("맛집 게시물 등록 실패", error);
+    return false;
   } finally {
     isLoading.value = false;
   }
@@ -178,20 +180,17 @@ const toolbarOptions = [
     <div class="w-[1090px] flex flex-col">
       <CreateHeader
         :handleRegister="submitRestaurantPost"
-        :handleCancel="cancelRestaurantPost"
-      />
+        :handleCancel="cancelRestaurantPost" />
       <div>
         <input
           v-model="title"
           type="text"
           placeholder="제목"
-          class="title-input border-b w-full outline-none text-center py-[15px] text-3xl bg-white01"
-        />
+          class="title-input border-b w-full outline-none text-center py-[15px] text-3xl bg-white01" />
       </div>
       <section
         id="post_content--input"
-        class="flex flex-col gap-[30px] mb-[142px] w-full"
-      >
+        class="flex flex-col gap-[30px] mb-[142px] w-full">
         <div v-if="isMapNull" class="flex gap-[10px] items-center pt-[20px]">
           <img :src="Baseball" class="w-[18px] h-[18px]" />
           <p :class="mapNullErrorClass" class="text-[14px] text-gray03">
@@ -200,16 +199,14 @@ const toolbarOptions = [
         </div>
         <MapSelectAndView
           :finalSelectedLocation="finalSelectedLocation"
-          @updateFinalLocation="updateFinalLocation"
-        />
+          @updateFinalLocation="updateFinalLocation" />
         <div class="w-full border border-white02">
           <QuillEditor
             v-model:content="content"
             contentType="html"
             :placeholder="'맛집을 마구 공유해주세요!\n맛집 사진은 최대 3개까지 업로드할 수 있습니다.'"
             theme="snow"
-            :toolbar="toolbarOptions"
-          />
+            :toolbar="toolbarOptions" />
         </div>
         <PhotoUpload :images="imageUrls" @update:images="updateImages" />
         <div id="tags-select" class="flex flex-col gap-[20px]">

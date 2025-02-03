@@ -1,13 +1,13 @@
 <script setup>
+import { onMounted, ref } from "vue";
+import CreateHeader from "@/components/common/CreateHeader.vue";
+import { useRouter } from "vue-router";
 import {
   getFreePostDetailsById,
   updateFreePost,
 } from "@/api/supabase-api/freePost";
 import Loading from "@/components/common/Loading.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
 
 const isLoading = ref(true);
 

@@ -4,9 +4,9 @@ import {
   getCrewRecruitmentPostDetails,
 } from "@/api/supabase-api/crewRecruitmentPost";
 import backIcon from "@/assets/icons/back.svg";
-import CommentSection from "@/components/CommentSection.vue";
+import CommentSection from "@/components/common/CommentSection.vue";
 import Loading from "@/components/common/Loading.vue";
-import PostHeader from "@/components/PostHeader.vue";
+import PostHeader from "@/components/common/PostHeader.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -49,9 +49,9 @@ const confirmDelete = () => {
     onConfirm: async () => {
       isLoading.value = true;
       await deleteCrewRecruitmentPost(post.value.post_id);
-      isLoading.value = false;
       modalStore.closeModal();
       router.push(`/${currentTeam}/crewboard/`);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });
@@ -63,6 +63,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- 로딩창 -->
+  <Loading v-if="isLoading" />
   <div v-if="post" class="px-[50px] py-[30px]">
     <!-- 뒤로가기 -->
     <div class="mb-[50px] flex">
@@ -82,7 +84,6 @@ onMounted(() => {
         :confirmDelete="confirmDelete"
       />
       <!-- 게시물 내용 -->
-      <Loading v-if="isLoading" />
       <div class="pb-[50px] border-b border-gray01 flex flex-col gap-[50px]">
         <span>
           {{ post.content }}
@@ -114,7 +115,7 @@ onMounted(() => {
           </div>
           <div>
             <span class="inline-block w-[100px]">크루 연령</span>
-            <span class="font-bold">| {{ post.crew_sex }}</span>
+            <span class="font-bold">| {{ post.crew_age }}</span>
           </div>
           <div>
             <span class="inline-block w-[100px]">인원</span>

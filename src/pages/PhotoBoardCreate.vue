@@ -1,17 +1,18 @@
 <script setup>
+import CreateHeader from "@/components/common/CreateHeader.vue";
+import Camera from "@/assets/icons/camera.svg";
+import { ref, watch } from "vue";
 import {
   createCertificationPost,
   uploadImageToSupabase,
 } from "@/api/supabase-api/viewingCertificationPost";
 import CalendarIcon from "@/assets/icons/calendar.svg";
-import Camera from "@/assets/icons/camera.svg";
 import Modal from "@/components/common/Modal.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
 import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
 import { DatePicker } from "v-calendar";
-import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Loading from "@/components/common/Loading.vue";
 
 const isLoading = ref(false);
 
@@ -120,7 +121,7 @@ const handleRegister = async () => {
     !uploadedImageUrl.value
   ) {
     confirmBlank();
-    return;
+    return false;
   }
 
   try {
@@ -133,17 +134,19 @@ const handleRegister = async () => {
       title.value
     );
 
-    if (result) {
-      title.value = "";
-      content.value = "";
-      gameDate.value = null;
-      clubId.value = "";
-      uploadedImageUrl.value = "";
-    }
+    // if (result) {
+    //   title.value = "";
+    //   content.value = "";
+    //   gameDate.value = null;
+    //   clubId.value = "";
+    //   uploadedImageUrl.value = "";
+    // }
     router.replace(`/${teamName.value}/photoboard`);
+    return true;
   } catch (error) {
     console.error("게시물 생성 실패:", error);
     alert("게시물 생성에 실패했습니다.");
+    return false;
   } finally {
     isLoading.value = false;
   }
@@ -172,6 +175,7 @@ watch(gameDate, (newDate) => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister="handleRegister" />
