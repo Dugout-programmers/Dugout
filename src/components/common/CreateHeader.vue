@@ -58,11 +58,14 @@ const handleCancel =
   });
 
 // 호출 제어하는 함수
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (isSubmitDisabled.value) return; // 이미 비활성화되었다면 실행하지 않음
 
-  isSubmitDisabled.value = true; // 버튼 비활성화
-  props.handleRegister();
+  const isCompleted = await props.handleRegister(); // 함수의 마지막의 return true를 해줘야함
+  // 함수가 다 실행됬을 때만 버튼 비활성화 시키기
+  if (isCompleted) {
+    isSubmitDisabled.value = true; // 버튼 비활성화
+  }
 };
 </script>
 <template>

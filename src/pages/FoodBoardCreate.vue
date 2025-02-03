@@ -130,7 +130,7 @@ const submitRestaurantPost = async () => {
   const filteredImg = imageUrls.value.filter((url) => url !== null);
   const userData = await getCurrentUser();
 
-  if (!postFormValidation()) return;
+  if (!postFormValidation()) return false;
 
   try {
     isLoading.value = true;
@@ -152,8 +152,10 @@ const submitRestaurantPost = async () => {
 
     router.push(`/${teamName.value}/foodboard`);
     finalSelectedLocation.value = null;
+    return true;
   } catch (error) {
     console.log("맛집 게시물 등록 실패", error);
+    return false;
   } finally {
     isLoading.value = false;
   }
