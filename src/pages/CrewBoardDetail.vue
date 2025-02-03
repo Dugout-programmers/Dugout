@@ -49,9 +49,9 @@ const confirmDelete = () => {
     onConfirm: async () => {
       isLoading.value = true;
       await deleteCrewRecruitmentPost(post.value.post_id);
-      isLoading.value = false;
       modalStore.closeModal();
       router.push(`/${currentTeam}/crewboard/`);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });
@@ -63,6 +63,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- 로딩창 -->
+  <Loading v-if="isLoading" />
   <div v-if="post" class="px-[50px] py-[30px]">
     <!-- 뒤로가기 -->
     <div class="mb-[50px] flex">
@@ -79,9 +81,9 @@ onMounted(() => {
         :time="dayjs(post.created_at).fromNow()"
         :status="post.status"
         :post="post"
-        :confirmDelete="confirmDelete" />
+        :confirmDelete="confirmDelete"
+      />
       <!-- 게시물 내용 -->
-      <Loading v-if="isLoading" />
       <div class="pb-[50px] border-b border-gray01 flex flex-col gap-[50px]">
         <span>
           {{ post.content }}

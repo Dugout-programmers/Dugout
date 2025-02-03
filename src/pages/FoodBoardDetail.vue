@@ -65,9 +65,11 @@ const onClickDelete = () => {
     message: "삭제한 후에는 복구할 수 없습니다\n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await handleDeletePost();
       modalStore.closeModal();
       router.go(-1);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal,
   });
@@ -91,30 +93,36 @@ const onClickDelete = () => {
         :title="postDetails.title"
         :post="postDetails"
         :time="calculatedCreatedAt"
-        :confirmDelete="onClickDelete" />
+        :confirmDelete="onClickDelete"
+      />
 
       <!-- 게시물 내용 -->
       <div
         v-if="postDetails"
-        class="mt-[50px] gap-[50px] pb-[50px] flex flex-col border-b border-b-gray01">
+        class="mt-[50px] gap-[50px] pb-[50px] flex flex-col border-b border-b-gray01"
+      >
         <div class="flex flex-col gap-[30px]">
           <LocationViewer
             v-if="postDetails.location"
-            :postLocation="postDetails.location" />
+            :postLocation="postDetails.location"
+          />
           <div>
             <div
               v-html="postDetails.content"
-              class="prose ql-editor max-w-none"></div>
+              class="prose ql-editor max-w-none"
+            ></div>
           </div>
 
           <!-- 이미지 목록 -->
           <div
             v-if="postImages"
-            class="flex h-[310px] gap-[30px] justify-center">
+            class="flex h-[310px] gap-[30px] justify-center"
+          >
             <div
               v-for="(imageUrl, index) in postImages"
               :key="index"
-              class="aspect-square rounded-[10px] overflow-hidden">
+              class="aspect-square rounded-[10px] overflow-hidden"
+            >
               <img :src="imageUrl" class="object-cover w-full h-full" />
             </div>
           </div>
@@ -125,7 +133,8 @@ const onClickDelete = () => {
           <span
             v-for="(tag, index) in postDetails.tags"
             :key="index"
-            class="text-[18px] text-gray03">
+            class="text-[18px] text-gray03"
+          >
             {{ tag }}
           </span>
         </div>

@@ -7,14 +7,12 @@ import {
   uploadImageToSupabase,
 } from "@/api/supabase-api/viewingCertificationPost";
 import CalendarIcon from "@/assets/icons/calendar.svg";
-import Camera from "@/assets/icons/camera.svg";
 import Modal from "@/components/common/Modal.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
 import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
 import { DatePicker } from "v-calendar";
-import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Loading from "@/components/common/Loading.vue";
 
 const isLoading = ref(false);
 
@@ -177,6 +175,7 @@ watch(gameDate, (newDate) => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister="handleRegister" />
