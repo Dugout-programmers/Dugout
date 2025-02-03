@@ -12,6 +12,7 @@ import axios from "axios";
 import Ticket from "@/assets/images/ticket.svg";
 import { useTeamStore } from "@/stores/teamStore";
 import { teamList } from "@/constants";
+import Loading from "@/components/common/Loading.vue";
 
 const marquee = ref(null);
 const marquee2 = ref(null);
