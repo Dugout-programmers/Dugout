@@ -115,7 +115,7 @@ onMounted(() => {
           </div>
           <div>
             <span class="inline-block w-[100px]">크루 연령</span>
-            <span class="font-bold">| {{ post.crew_sex }}</span>
+            <span class="font-bold">| {{ post.crew_age }}</span>
           </div>
           <div>
             <span class="inline-block w-[100px]">인원</span>
