@@ -21,7 +21,9 @@ const isQuizEnd = ref(false);
 // JSON 데이터 가져오기
 const fetchQuestions = async () => {
   try {
-    const response = await fetch("/api/games/recordQuiz.json"); // JSON 파일 경로
+    const response = await fetch(
+      "https://dugout-programmers.github.io/Dugout/api/games/recordQuiz.json"
+    ); // JSON 파일 경로
     if (!response.ok)
       throw new Error(`퀴즈를 불러오는 데 실패했습니다 ${error}`);
     const data = await response.json();
