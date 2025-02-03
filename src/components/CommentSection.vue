@@ -11,11 +11,11 @@ import commentBtnIcon from "@/assets/icons/comment_btn.svg";
 import likeIcon from "@/assets/icons/like.svg";
 import likeIconFilled from "@/assets/icons/like_fill.svg";
 import { boardToTableMapping } from "@/constants";
+import { useAuthStore } from "@/stores/auth";
+import { useModalStore } from "@/stores/useModalStore";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Commentbox from "./Commentbox.vue";
-import { useAuthStore } from "@/stores/auth";
-import { useModalStore } from "@/stores/useModalStore";
 
 const route = useRoute();
 const router = useRouter();
@@ -97,7 +97,7 @@ const fetchComments = async () => {
       postId.value
     );
 
-    console.log(comments.value)
+    console.log(comments.value);
   } catch (error) {
     console.error("댓글 정보를 가져오는 중 오류 발생:", error.message);
   }
@@ -114,7 +114,6 @@ const handleCompositionEnd = () => {
 };
 
 const submitComment = async () => {
-  // 비로그인이면 로그인창으로 이동
   if (!authStore.user) {
     modalStore.openModal({
       message: "로그인 후 이용 가능한 서비스입니다.\n로그인 하시겠습니까?",
@@ -193,7 +192,6 @@ onMounted(async () => {
 const refreshComments = (newComments) => {
   comments.value = newComments;
 };
-
 </script>
 
 <template>
@@ -241,7 +239,7 @@ const refreshComments = (newComments) => {
         v-for="comment in sortedComments"
         :key="comment.id"
         :comment="comment"
-        :comments = "sortedComments"
+        :comments="sortedComments"
         :currentUserId="currentUserId"
         @refresh-comments="refreshComments"
       />

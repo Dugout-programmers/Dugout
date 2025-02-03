@@ -1,14 +1,16 @@
 <script setup>
-import { ref } from "vue";
-import CreateHeader from "@/components/CreateHeader.vue";
-import { useRouter } from "vue-router";
-import { teamID } from "@/constants";
 import { createFreePost } from "@/api/supabase-api/freePost";
+import Loading from "@/components/common/Loading.vue";
+import CreateHeader from "@/components/CreateHeader.vue";
+import { teamID } from "@/constants";
 import { useAuthStore } from "@/stores/auth";
-
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 const props = defineProps({
   team: String, // url 팀이름 불러오기
 });
+
+const isLoading = ref(false);
 
 const authStore = useAuthStore(); // 유저 정보가 가져오기
 
@@ -68,6 +70,7 @@ const handleRegister = async () => {
     return;
   }
   try {
+    isLoading.value = true;
     await createFreePost(
       authStore.user.id, // member ID
       content.value,
@@ -79,10 +82,13 @@ const handleRegister = async () => {
     router.push(`/${props.team}/freeboard`);
   } catch (error) {
     console.error("게시물을 등록하는 도중 오류가 생겼습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister />

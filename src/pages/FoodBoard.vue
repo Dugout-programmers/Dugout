@@ -1,6 +1,7 @@
 <script setup>
 import { getRestaurantPostsByTagAndClub } from "@/api/supabase-api/restaurantPost";
 import GoToCreate from "@/components/common/GoToCreate.vue";
+import Loading from "@/components/common/Loading.vue";
 import FoodBoardCard from "@/components/foodboard/FoodBoardCard.vue";
 import { foodBoardTag, teamID } from "@/constants";
 import { useSearchStore } from "@/stores/searchStore";
@@ -13,7 +14,8 @@ const searchStore = useSearchStore();
 const teamName = ref(route.params.team);
 const clubId = ref(teamID[teamName.value]);
 const restaurantPosts = ref([]);
-const selectedTag = ref(null); // 하나의 태그만 선택되도록 변경
+const selectedTag = ref(null);
+const isLoading = ref(true);
 
 const saveScrollPosition = () => {
   sessionStorage.setItem("foodboard-scroll", window.scrollY.toString());
@@ -52,6 +54,8 @@ const fetchFoodBoardList = async () => {
   } catch (error) {
     console.error("데이터를 불러오는 도중에 오류가 발생했습니다.");
     return { data: null, error };
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -142,6 +146,7 @@ watch(
         </div>
       </section>
       <section class="flex flex-col gap-[30px]">
+        <Loading v-if="isLoading" />
         <!-- 게시물 필터링 후 출력 -->
         <FoodBoardCard
           v-if="postsFilteredWithTag"

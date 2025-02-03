@@ -6,6 +6,7 @@ import {
 import backIcon from "@/assets/icons/back.svg";
 import CommentSection from "@/components/CommentSection.vue";
 import PostHeader from "@/components/PostHeader.vue";
+import Loading from "@/components/common/Loading.vue";
 import LocationViewer from "@/components/foodboard/LocationViewer.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import dayjs from "dayjs";
@@ -16,6 +17,7 @@ import { useRoute, useRouter } from "vue-router";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
+const isLoading = ref(true);
 const router = useRouter();
 const route = useRoute();
 const modalStore = useModalStore();
@@ -33,6 +35,8 @@ const fetchFoodPostDetail = async () => {
     postImages.value = postDetails.value.images;
   } catch (error) {
     console.error("데이터를 불러오는 중 오류 발생:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -47,9 +51,12 @@ onMounted(() => {
 
 const handleDeletePost = async () => {
   try {
+    isLoading.value = true;
     await deleteRestaurantPost(postId.value);
   } catch (error) {
     console.error("삭제하던 중 오류가 발생했습니다", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -57,8 +64,8 @@ const onClickDelete = () => {
   modalStore.openModal({
     message: "삭제한 후에는 복구할 수 없습니다\n삭제하시겠습니까?",
     type: "twoBtn",
-    onConfirm: () => {
-      handleDeletePost();
+    onConfirm: async () => {
+      await handleDeletePost();
       modalStore.closeModal();
       router.go(-1);
     },
@@ -67,6 +74,7 @@ const onClickDelete = () => {
 };
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="px-[50px] py-[30px] items-center flex flex-col">
     <!-- 뒤로가기 버튼 -->
     <div class="mb-[50px] flex w-full">

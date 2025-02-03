@@ -9,11 +9,14 @@ import PostHeader from "@/components/PostHeader.vue";
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // day.js
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/ko"; // 한국어 로케일 가져오기
-import { useModalStore } from "@/stores/useModalStore";
+import Loading from "@/components/common/Loading.vue";
 import Modal from "@/components/common/Modal.vue";
+import { useModalStore } from "@/stores/useModalStore";
+import dayjs from "dayjs";
+import "dayjs/locale/ko"; // 한국어 로케일 가져오기
+import relativeTime from "dayjs/plugin/relativeTime";
+
+const isLoading = ref(true);
 
 const router = useRouter();
 
@@ -45,6 +48,8 @@ const fetchPhotoboardDetail = async (postId) => {
     }
   } catch (error) {
     console.error("데이터를 가져오지 못함", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -102,6 +107,7 @@ const confirmDelete = () => {
 </script>
 
 <template>
+  <Loading v-if="isLoading" />
   <div class="px-[50px] py-[30px] flex flex-col items-center">
     <!-- 뒤로가기 -->
     <div class="mb-[50px] flex w-full">

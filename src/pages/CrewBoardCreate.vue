@@ -1,14 +1,16 @@
 <script setup>
-import DropdownSelect from "@/components/common/DropdownSelect.vue";
-import CreateHeader from "@/components/CreateHeader.vue";
-import { onMounted, ref, watch } from "vue";
+import { createCrewRecruitmentPost } from "@/api/supabase-api/crewRecruitmentPost";
+import { getCurrentUser } from "@/api/supabase-api/userInfo";
 import Baseball from "@/assets/icons/baseball.svg";
 import Calendar from "@/assets/icons/calendar.svg";
-import { createCrewRecruitmentPost } from "@/api/supabase-api/crewRecruitmentPost";
-import { useRouter } from "vue-router";
-import { getCurrentUser } from "@/api/supabase-api/userInfo";
+import DropdownSelect from "@/components/common/DropdownSelect.vue";
+import Loading from "@/components/common/Loading.vue";
+import CreateHeader from "@/components/CreateHeader.vue";
 import { teamID } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+const isLoading = ref(false);
 
 const openDropdown = ref(null);
 const modalStore = useModalStore();
@@ -211,6 +213,7 @@ const getUserInfo = async () => {
 const handleRegister = async () => {
   if (!validateInputs()) return;
   try {
+    isLoading.value = true;
     await createCrewRecruitmentPost({
       member_id: currentUser.value.id,
       status: recruitStatus.value,
@@ -228,6 +231,8 @@ const handleRegister = async () => {
     router.push(`/${currentTeam}/crewboard/`);
   } catch (error) {
     console.error("게시글 등록 실패:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -241,6 +246,7 @@ const handleDropdownToggle = (key) => {
 };
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="px-[50px]">
     <CreateHeader :handleRegister />
     <div class="gap-[50px]">

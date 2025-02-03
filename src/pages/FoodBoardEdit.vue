@@ -17,10 +17,13 @@ import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue"
 import TagsSelect from "@/components/foodboard/foodBoardCreate/TagsSelect.vue";
 import { useAuthStore } from "@/stores/auth";
 
+import Loading from "@/components/common/Loading.vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { QuillEditor } from "@vueup/vue-quill";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+const isLoading = ref(true);
 
 const authStore = useAuthStore();
 
@@ -85,6 +88,7 @@ const loadPostDetail = async () => {
     ...loadedImages,
     ...Array(3 - loadedImages.length).fill(null),
   ].slice(0, 3);
+  isLoading.value = false;
 };
 
 onMounted(loadPostDetail);
@@ -103,6 +107,7 @@ const updateTags = (tags) => {
 const registerEditedPost = async () => {
   const filteredUrls = imageUrls.value.filter((url) => url !== null);
   try {
+    isLoading.value = true;
     // 첫 번째 이미지가 없다면 null을 전달
     await updateRestaurantPost(
       postId,
@@ -131,6 +136,8 @@ const registerEditedPost = async () => {
     finalSelectedLocation.value = null;
   } catch (error) {
     console.error("게시물 수정 실패", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -228,6 +235,7 @@ const cancelRestaurantPost = () => {
 </script>
 
 <template>
+  <Loading v-if="isLoading" />
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader
