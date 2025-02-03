@@ -14,14 +14,14 @@ export default defineConfig({
   },
   base: "/",
   // 네이버 api를 위한 프록시 서버
-  server: {
-    proxy: {
-      "/v1": {
-        target: "https://openapi.naver.com",
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/v1": {
+  //       target: "https://openapi.naver.com",
+  //       changeOrigin: true,
+  //       secure: false,
+  //       ws: true,
+  //     },
+  //   },
+  // },
 });
