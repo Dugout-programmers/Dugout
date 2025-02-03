@@ -123,7 +123,7 @@ watch(
         <template v-else>
           <div class="flex justify-center items-center w-full col-span-3">
             <span class="text-center">
-              게시물이 없습니다. 게시물을 작성해보세요 @_@
+              게시물이 없습니다. 게시물을 작성해보세요!
             </span>
           </div>
         </template>
