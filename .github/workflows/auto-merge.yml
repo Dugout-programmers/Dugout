@@ -1,0 +1,23 @@
+name: Auto Merge Dev into Main
+
+on:
+  push:
+    branches:
+      - dev  # dev 브랜치에 Push하면 자동으로 main으로 PR 생성
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          branch: main  #  PR이 main 브랜치로 생성됨
+          title: "🔄 Merge dev into main"
+          body: "자동으로 dev 브랜치의 변경 사항을 main으로 PR 보냄."
+          labels: "automated pr"
+          assignees: "내 GitHub ID"
