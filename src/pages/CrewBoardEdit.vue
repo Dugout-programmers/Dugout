@@ -12,6 +12,7 @@ import {
 import { useModalStore } from "@/stores/useModalStore";
 import { teamID } from "@/constants";
 
+const openDropdown = ref(null);
 const router = useRouter();
 const currentTeam = router.currentRoute.value.params.team;
 const clubId = ref(teamID[currentTeam]); // 팀 id 가져오기
@@ -263,6 +264,10 @@ const openEditModal = () => {
 onMounted(() => {
   fetchPostDetails();
 });
+
+const handleDropdownToggle = (key) => {
+  openDropdown.value = openDropdown.value === key ? null : key;
+};
 </script>
 <template>
   <div class="px-[50px]">
@@ -295,6 +300,8 @@ onMounted(() => {
               v-model:selectedOption="recruitStatus"
               :options="recruitOptions"
               part="모집 상태"
+              :isOpen="openDropdown === 'recruitStatus'"
+              @toggle="handleDropdownToggle('recruitStatus')"
             />
           </div>
           <div class="flex justify-between">
@@ -341,11 +348,16 @@ onMounted(() => {
                   v-model:selectedOption="peopleNum"
                   :options="peopleNumOptions"
                   part="인원"
+                  :isOpen="openDropdown === 'peopleNum'"
+                  @toggle="handleDropdownToggle('peopleNum')"
                 />
+
                 <DropdownSelect
                   v-model:selectedOption="peopleStatus"
                   :options="peopleStatusOptions"
-                  part="인원"
+                  part="인원 상태"
+                  :isOpen="openDropdown === 'peopleStatus'"
+                  @toggle="handleDropdownToggle('peopleStatus')"
                 />
               </div>
             </div>
@@ -372,6 +384,8 @@ onMounted(() => {
                   v-model:selectedOption="myTeam"
                   :options="myTeamOptions"
                   part="응원팀"
+                  :isOpen="openDropdown === 'myTeam'"
+                  @toggle="handleDropdownToggle('myTeam')"
                 />
               </div>
               <div
@@ -387,6 +401,8 @@ onMounted(() => {
                   v-model:selectedOption="stadium"
                   :options="stadiumOptions"
                   part="경기 장소"
+                  :isOpen="openDropdown === 'stadium'"
+                  @toggle="handleDropdownToggle('stadium')"
                 />
               </div>
             </div>
@@ -413,6 +429,8 @@ onMounted(() => {
                   v-model:selectedOption="myGender"
                   :options="myGenderOptions"
                   part="작성자 성별"
+                  :isOpen="openDropdown === 'myGender'"
+                  @toggle="handleDropdownToggle('myGender')"
                 />
               </div>
               <div
@@ -428,6 +446,8 @@ onMounted(() => {
                   v-model:selectedOption="myAge"
                   :options="myAgeOptions"
                   part="작성자 연령"
+                  :isOpen="openDropdown === 'myAge'"
+                  @toggle="handleDropdownToggle('myAge')"
                 />
               </div>
             </div>
@@ -447,6 +467,8 @@ onMounted(() => {
                 :options="crewGenderOptions"
                 :disabled="isCrewGenderDisabled"
                 part="크루 성별"
+                :isOpen="openDropdown === 'crewGender'"
+                @toggle="handleDropdownToggle('crewGender')"
               />
             </div>
             <div
@@ -462,6 +484,8 @@ onMounted(() => {
                 v-model:selectedOption="crewAge"
                 :options="crewAgeOptions"
                 part="크루 연령"
+                :isOpen="openDropdown === 'crewAge'"
+                @toggle="handleDropdownToggle('crewAge')"
               />
             </div>
           </div>
