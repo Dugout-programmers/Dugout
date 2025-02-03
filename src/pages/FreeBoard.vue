@@ -1,12 +1,13 @@
 <script setup>
 import { getFreePostsByClub } from "@/api/supabase-api/freePost";
 import GoToCreate from "@/components/common/GoToCreate.vue";
+import Loading from "@/components/common/Loading.vue";
 import FreeBoardPost from "@/components/freeboard/FreeBoardPost.vue";
 import { teamID } from "@/constants";
 import { useSearchStore } from "@/stores/searchStore";
 import {
-  nextTick,
   computed,
+  nextTick,
   onMounted,
   onUnmounted,
   ref,
@@ -14,6 +15,8 @@ import {
   watchEffect,
 } from "vue";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
+
+const isLoading = ref(true);
 
 const searchStore = useSearchStore();
 
@@ -47,6 +50,8 @@ const fetchFreeboard = async () => {
     restoreScrollPosition();
   } catch (error) {
     console.error("데이터를 불러오는 동안 에러가 발생하였습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -85,6 +90,7 @@ watch(
 );
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col px-[50px] py-[30px]">
     <div class="w-[990px] gap-[50px] flex flex-col mx-auto">
       <!-- 글쓰기 버튼 -->

@@ -6,6 +6,7 @@ import {
 } from "@/api/supabase-api/restaurantPost";
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
 import Baseball from "@/assets/icons/baseball.svg";
+import Loading from "@/components/common/Loading.vue";
 import CreateHeader from "@/components/CreateHeader.vue";
 import MapSelectAndView from "@/components/foodboard/foodBoardCreate/MapSelectAndView.vue";
 import PhotoUpload from "@/components/foodboard/foodBoardCreate/PhotoUpload.vue";
@@ -14,6 +15,7 @@ import { teamID } from "@/constants/index";
 import { QuillEditor } from "@vueup/vue-quill";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+const isLoading = ref(false);
 
 const router = useRouter();
 const route = useRoute();
@@ -131,6 +133,7 @@ const submitRestaurantPost = async () => {
   if (!postFormValidation()) return;
 
   try {
+    isLoading.value = true;
     const data = await createRestaurantPost(
       userData.id,
       content.value,
@@ -151,6 +154,8 @@ const submitRestaurantPost = async () => {
     finalSelectedLocation.value = null;
   } catch (error) {
     console.log("맛집 게시물 등록 실패", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -168,6 +173,7 @@ const toolbarOptions = [
 ];
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <section class="flex flex-col items-center">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader

@@ -3,8 +3,11 @@ import {
   getUserInfoById,
   getViewingCertificationPostsByClub,
 } from "@/api/supabase-api/viewingCertificationPost";
+import GoToCreate from "@/components/common/GoToCreate.vue";
+import Loading from "@/components/common/Loading.vue";
 import PhotoboardCard from "@/components/photoboard/PhotoboardCard.vue";
 import { teamID } from "@/constants";
+import { useSearchStore } from "@/stores/searchStore";
 import {
   computed,
   nextTick,
@@ -16,8 +19,8 @@ import {
   watchEffect,
 } from "vue";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
-import GoToCreate from "@/components/common/GoToCreate.vue";
-import { useSearchStore } from "@/stores/searchStore";
+
+const isLoading = ref(true);
 
 const searchStore = useSearchStore();
 
@@ -69,6 +72,8 @@ const fetchPhotoboardList = async () => {
     await nextTick();
   } catch (error) {
     console.error("직관인증포토 포스트를 불러오지 못했습니다");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -114,6 +119,7 @@ watchEffect(() => {
 const searchResults = computed(() => searchStore.filteredPosts);
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex gap-[30px] flex-col px-[50px] py-[30px] items-center">
     <div class="w-[990px] gap-[50px] flex flex-col">
       <!-- 글쓰기 버튼 -->

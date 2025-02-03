@@ -6,19 +6,21 @@ import {
 import backIcon from "@/assets/icons/back.svg";
 import CommentSection from "@/components/CommentSection.vue";
 import PostHeader from "@/components/PostHeader.vue";
-import { onMounted, ref } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
-import Modal from "@/components/common/Modal.vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 // day.js
+import Loading from "@/components/common/Loading.vue";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko"; // 한국어 로케일 가져오기
+import relativeTime from "dayjs/plugin/relativeTime";
 
 const props = defineProps({
   id: String, // post_id
   team: String,
 });
+
+const isLoading = ref(true);
 
 const post = ref(null); // 게시물 상세 정보를 담을 변수
 const router = useRouter();
@@ -34,6 +36,8 @@ const fetchFreeboardDetail = async () => {
     post.value = data;
   } catch (error) {
     console.error("데이터를 불러오는 도중에 오류가 발생했습니다.");
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -45,7 +49,7 @@ const fetchmDeletePost = () => {
     onConfirm: async () => {
       await deleteFreePost(props.id);
       modalStore.closeModal();
-      router.push(`/${props.team}/freeboard`); 
+      router.push(`/${props.team}/freeboard`);
     },
     onCancel: modalStore.closeModal(),
   });
@@ -56,6 +60,7 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Loading v-if="isLoading" />
   <div class="px-[50px] py-[30px] flex flex-col items-center">
     <!-- 뒤로가기 -->
     <div class="mb-[50px] flex w-full">

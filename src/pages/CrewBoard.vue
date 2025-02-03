@@ -1,12 +1,12 @@
 <script setup>
-import CrewCard from "@/components/crewboard/CrewCard.vue";
 import { getCrewRecruitmentPostsByClub } from "@/api/supabase-api/crewRecruitmentPost";
-import { ref, onMounted, watchEffect, computed, watch, onUnmounted } from "vue";
 import GoToCreate from "@/components/common/GoToCreate.vue";
-import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
-import { getCurrentUser } from "@/api/supabase-api/userInfo";
+import Loading from "@/components/common/Loading.vue";
+import CrewCard from "@/components/crewboard/CrewCard.vue";
 import { teamID } from "@/constants";
 import { useSearchStore } from "@/stores/searchStore";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
@@ -15,6 +15,7 @@ const teamName = ref(route.params.team);
 const clubId = ref(teamID[teamName.value]);
 const posts = ref([]);
 const currentUser = ref(null);
+const isLoading = ref(true);
 
 const saveScrollPosition = () => {
   sessionStorage.setItem("crewboard-scroll", window.scrollY.toString());
@@ -39,6 +40,7 @@ const fetchPosts = async () => {
   } else {
     console.log("직관 크루 모집 게시물이 없습니다.");
   }
+  isLoading.value = false;
 };
 
 // 🔥 searchResults를 computed로 정의 (검색 필터 적용)
@@ -103,6 +105,7 @@ watch(
 </script>
 
 <template>
+  <Loading v-if="isLoading" />
   <div class="flex flex-col px-[50px] py-[30px] items-center">
     <div class="flex flex-col gap-[50px] w-[990px]">
       <div class="cursor-pointer">

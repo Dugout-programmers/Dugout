@@ -1,21 +1,25 @@
 <script setup>
+import {
+  deleteCrewRecruitmentPost,
+  getCrewRecruitmentPostDetails,
+} from "@/api/supabase-api/crewRecruitmentPost";
 import backIcon from "@/assets/icons/back.svg";
 import CommentSection from "@/components/CommentSection.vue";
+import Loading from "@/components/common/Loading.vue";
 import PostHeader from "@/components/PostHeader.vue";
-import { getCrewRecruitmentPostDetails } from "@/api/supabase-api/crewRecruitmentPost";
+import { useModalStore } from "@/stores/useModalStore";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { deleteCrewRecruitmentPost } from "@/api/supabase-api/crewRecruitmentPost";
-import { useModalStore } from "@/stores/useModalStore";
-import Modal from "@/components/common/Modal.vue";
 // day.js
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko"; // 한국어 로케일 가져오기
+import relativeTime from "dayjs/plugin/relativeTime";
 
 // day.js
 dayjs.extend(relativeTime); // relativeTime 플러그인 활성화
 dayjs.locale("ko"); // 한국어 로케일 설정
+
+const isLoading = ref(true);
 
 const modalStore = useModalStore();
 const route = useRoute();
@@ -31,6 +35,7 @@ const fetchPostDetails = async () => {
   } else {
     alert("게시물 정보를 가져오는 데 실패했습니다.");
   }
+  isLoading.value = false;
 };
 
 const handleBack = () => {
@@ -42,7 +47,9 @@ const confirmDelete = () => {
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await deleteCrewRecruitmentPost(post.value.post_id);
+      isLoading.value = false;
       modalStore.closeModal();
       router.push(`/${currentTeam}/crewboard/`);
     },
@@ -75,6 +82,7 @@ onMounted(() => {
         :confirmDelete="confirmDelete"
       />
       <!-- 게시물 내용 -->
+      <Loading v-if="isLoading" />
       <div class="pb-[50px] border-b border-gray01 flex flex-col gap-[50px]">
         <span>
           {{ post.content }}
