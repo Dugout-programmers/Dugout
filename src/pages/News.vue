@@ -43,19 +43,29 @@ const goToOriginNew = (link) => {
 const getNewsData = async (keyword) => {
   try {
     // 데이터 불러오기
-    const { data, status } = await axios.get("/v1/search/news.json", {
-      params: {
-        query: keyword, // 검색어
-        display: 10, // 출력 개수
-        // start: 1, // 시작 위치
-        // sort: "sim", // 정렬 기준 (sim: 유사도, date: 날짜)
-      },
-      headers: {
-        "Content-Type": "application.json",
-        "X-Naver-Client-Id": import.meta.env.VITE_NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": import.meta.env.VITE_NAVER_CLIENT_SECRET,
-      },
-    });
+    // const { data, status } = await axios.get("/v1/search/news.json", {
+    //   params: {
+    //     query: keyword, // 검색어
+    //     display: 10, // 출력 개수
+    //     // start: 1, // 시작 위치
+    //     // sort: "sim", // 정렬 기준 (sim: 유사도, date: 날짜)
+    //   },
+    //   headers: {
+    //     "Content-Type": "application.json",
+    //     "X-Naver-Client-Id": import.meta.env.VITE_NAVER_CLIENT_ID,
+    //     "X-Naver-Client-Secret": import.meta.env.VITE_NAVER_CLIENT_SECRET,
+    //   },
+    // });
+    const { data, status } = await axios.get(
+      "https://naver-news-api.ekdh16.workers.dev/",
+      {
+        params: {
+          query: keyword, // 검색어
+          // display: 20, // 출력 개수
+        },
+      }
+    );
+
     if (status === 200) {
       newsData.value = data.items;
     }

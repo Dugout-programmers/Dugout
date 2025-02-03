@@ -12,19 +12,16 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  base: "/Dugout/",
+  base: "/",
   // 네이버 api를 위한 프록시 서버
-  server: {
-    proxy: {
-      "/v1": {
-        target: "https://openapi.naver.com",
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-    },
-  },
-  define: {
-    "process.env": {},
-  },
+  // server: {
+  //   proxy: {
+  //     "/v1": {
+  //       target: "https://openapi.naver.com",
+  //       changeOrigin: true,
+  //       secure: false,
+  //       ws: true,
+  //     },
+  //   },
+  // },
 });

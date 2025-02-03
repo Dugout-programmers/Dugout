@@ -30,7 +30,9 @@ const goToTournament = () => {
 // API에서 참가자 불러오기
 const fetchParticipants = async () => {
   try {
-    const response = await fetch("/api/games/traitorTournament.json");
+    const response = await fetch(
+      "https://dugout-programmers.github.io/Dugout/api/games/traitorTournament.json"
+    );
     const data = await response.json();
 
     // 참가자 16명을 랜덤으로 가져와 participants 배열에 저장
