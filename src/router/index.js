@@ -1,13 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import News from "@/pages/News.vue";
-import Game from "@/pages/Game.vue";
 import Highlight from "@/pages/Highlight.vue";
 import SignIn from "@/pages/SignIn.vue";
 import SignUp from "@/pages/SignUp.vue";
 import MyPage from "@/pages/MyPage.vue";
 import Main from "@/pages/Main.vue";
-import { teamList, gameList } from "@/constants";
+import { teamList } from "@/constants";
 import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({

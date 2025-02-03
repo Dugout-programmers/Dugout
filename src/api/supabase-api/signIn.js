@@ -5,9 +5,10 @@ export const signInWithGoogle = async () => {
   try {
     const { user, session, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-    }
-  
-  );
+      options: {
+        redirectTo: "https://lhpfyozvberhdwovcvoh.supabase.co/auth/v1/callback",
+      },
+    });
     if (error) throw error;
 
     console.log("User Signed In With Google: ", user);
@@ -23,6 +24,9 @@ export const signInWithKakao = async () => {
   try {
     const { user, session, error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
+      options: {
+        redirectTo: "https://lhpfyozvberhdwovcvoh.supabase.co/auth/v1/callback",
+      },
     });
 
     if (error) throw error;
