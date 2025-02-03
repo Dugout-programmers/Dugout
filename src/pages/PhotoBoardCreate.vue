@@ -123,7 +123,7 @@ const handleRegister = async () => {
     !uploadedImageUrl.value
   ) {
     confirmBlank();
-    return;
+    return false;
   }
 
   try {
@@ -136,17 +136,19 @@ const handleRegister = async () => {
       title.value
     );
 
-    if (result) {
-      title.value = "";
-      content.value = "";
-      gameDate.value = null;
-      clubId.value = "";
-      uploadedImageUrl.value = "";
-    }
+    // if (result) {
+    //   title.value = "";
+    //   content.value = "";
+    //   gameDate.value = null;
+    //   clubId.value = "";
+    //   uploadedImageUrl.value = "";
+    // }
     router.replace(`/${teamName.value}/photoboard`);
+    return true;
   } catch (error) {
     console.error("게시물 생성 실패:", error);
     alert("게시물 생성에 실패했습니다.");
+    return false;
   } finally {
     isLoading.value = false;
   }
@@ -184,14 +186,16 @@ watch(gameDate, (newDate) => {
           v-model="title"
           type="text"
           placeholder="제목"
-          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01" />
+          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01"
+        />
       </div>
       <div class="gap-[50px]">
         <div class="mt-[40px] mb-[85px]">
           <div class="flex flex-col gap-[30px]">
             <div class="flex justify-between">
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2 px-[20px] mb-[30px]">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2 px-[20px] mb-[30px]"
+              >
                 <div class="“w-[100px]“">
                   <span
                     class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -201,18 +205,21 @@ watch(gameDate, (newDate) => {
                 <div class="relative flex w-full">
                   <button
                     @click="isDatePickerOpen = !isDatePickerOpen"
-                    class="flex items-center justify-between w-full h-[40px] px-[15px] bg-white02 text-black01 text-[18px] rounded-[8px] border">
+                    class="flex items-center justify-between w-full h-[40px] px-[15px] bg-white02 text-black01 text-[18px] rounded-[8px] border"
+                  >
                     <span>{{ formattedGameDate || "날짜를 선택하세요" }}</span>
                     <img :src="CalendarIcon" class="w-[18px] h-[18px]" />
                   </button>
                   <div
                     v-if="isDatePickerOpen"
-                    class="absolute left-0 z-10 w-full top-full">
+                    class="absolute left-0 z-10 w-full top-full"
+                  >
                     <DatePicker
                       v-model="gameDate"
                       mode="single"
                       expanded
-                      @update:modelValue="selectDate" />
+                      @update:modelValue="selectDate"
+                    />
                   </div>
                 </div>
               </div>
@@ -225,14 +232,17 @@ watch(gameDate, (newDate) => {
                 id="imageUpload"
                 class="hidden"
                 accept="image/*"
-                @change="handleFileChange" />
+                @change="handleFileChange"
+              />
               <div
                 class="aspect-square w-full rounded-[10px] bg-white02 flex justify-center items-center cursor-pointer"
-                @click="triggerFileInput">
+                @click="triggerFileInput"
+              >
                 <img
                   v-if="selectedImage"
                   :src="selectedImage"
-                  class="w-full h-full object-cover rounded-[10px]" />
+                  class="w-full h-full object-cover rounded-[10px]"
+                />
                 <img v-else :src="Camera" />
               </div>
             </div>
@@ -241,7 +251,8 @@ watch(gameDate, (newDate) => {
               v-model="content"
               class="w-full p-0 outline-none resize-none text-4 bg-white01 placeholder-gray01 placeholder-4 white-space:pre-line;"
               placeholder="인증 사진은 단 하나만 업로드할 수 있으며,&#10;인증 글은 최대 500자까지만 작성 가능합니다!"
-              @input="handleInput" />
+              @input="handleInput"
+            />
           </div>
         </div>
       </div>

@@ -58,7 +58,7 @@ const handleRegister = async () => {
       titleRef.value.focus();
     }
 
-    return;
+    return false;
   }
   // 만약 내용을 입력하지 않았을 경우
   if (content.value === "") {
@@ -67,7 +67,7 @@ const handleRegister = async () => {
     if (contentRef.value) {
       contentRef.value.focus();
     }
-    return;
+    return false;
   }
   try {
     isLoading.value = true;
@@ -80,8 +80,10 @@ const handleRegister = async () => {
       clubId.value //clubId
     );
     router.push(`/${props.team}/freeboard`);
+    return true;
   } catch (error) {
     console.error("게시물을 등록하는 도중 오류가 생겼습니다.");
+    return false;
   } finally {
     isLoading.value = false;
   }

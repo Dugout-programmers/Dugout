@@ -211,7 +211,7 @@ const getUserInfo = async () => {
 
 // 크루 모집 게시글 등록 함수
 const handleRegister = async () => {
-  if (!validateInputs()) return;
+  if (!validateInputs()) return false;
   try {
     isLoading.value = true;
     await createCrewRecruitmentPost({
@@ -229,8 +229,10 @@ const handleRegister = async () => {
       game_stadium: stadium.value,
     });
     router.push(`/${currentTeam}/crewboard/`);
+    return true;
   } catch (error) {
     console.error("게시글 등록 실패:", error);
+    return false;
   } finally {
     isLoading.value = false;
   }
