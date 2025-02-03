@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ko"; // 한국어 로케일 가져오기
 import relativeTime from "dayjs/plugin/relativeTime";
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const router = useRouter();
 
@@ -37,6 +37,7 @@ const fetchPhotoboardDetail = async (postId) => {
   }
 
   try {
+    isLoading.value = true;
     const data = await getCertificationPostDetailsById(postId);
 
     if (data) {
@@ -96,9 +97,11 @@ const confirmDelete = () => {
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await deleteCertificationPost(postId.value);
       modalStore.closeModal();
       router.push(`/${route.params.team}/photoboard`); // ✅ 삭제 후 이동
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });
@@ -121,18 +124,21 @@ const confirmDelete = () => {
         :title="title"
         :post="post"
         :time="dayjs(post.created_at).fromNow()"
-        :confirm-delete="confirmDelete" />
+        :confirm-delete="confirmDelete"
+      />
       <Modal />
       <!-- 게시물 내용 -->
       <div class="pt-[50px] pb-[50px] gap-[30px] flex border-b border-b-gray01">
         <div
-          class="aspect-square w-[450px] h-[450px] rounded-[10px] overflow-hidden">
+          class="aspect-square w-[450px] h-[450px] rounded-[10px] overflow-hidden"
+        >
           <img :src="post.image" alt="" class="object-cover w-full h-full" />
         </div>
         <div class="flex-1">
           <p
             class="w-full h-full py-5 text-[18px] text-black01"
-            v-html="formattedContent"></p>
+            v-html="formattedContent"
+          ></p>
         </div>
       </div>
 

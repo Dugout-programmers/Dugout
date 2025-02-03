@@ -11,6 +11,9 @@ import {
 } from "@/api/supabase-api/crewRecruitmentPost";
 import { useModalStore } from "@/stores/useModalStore";
 import { teamID } from "@/constants";
+import Loading from "@/components/common/Loading.vue";
+
+const isLoading = ref(false);
 
 const openDropdown = ref(null);
 const router = useRouter();
@@ -205,7 +208,7 @@ const fetchPostDetails = async () => {
 };
 
 // 작성글 업데이트 함수
-const handleUpdate = () => {
+const handleUpdate = async () => {
   const postId = route.params.id;
   if (!validateInputs()) return;
 
@@ -224,8 +227,10 @@ const handleUpdate = () => {
   };
 
   try {
-    updateCrewRecruitmentPost(postId, updatedData);
+    isLoading.value = true;
+    await updateCrewRecruitmentPost(postId, updatedData);
     router.push(`/${currentTeam}/crewboard/${postId}`);
+
     // modalStore.openModal({
     //   message: "게시글이 성공적으로 수정되었습니다.",
     //   type: "oneBtn",
@@ -236,6 +241,8 @@ const handleUpdate = () => {
     // });
   } catch (err) {
     console.error(err.message);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -270,6 +277,8 @@ const handleDropdownToggle = (key) => {
 };
 </script>
 <template>
+  <!-- 로딩창 -->
+  <Loading v-if="isLoading" />
   <div class="px-[50px]">
     <CreateHeader :handleRegister="openEditModal" />
     <div class="gap-[50px]">
@@ -284,8 +293,9 @@ const handleDropdownToggle = (key) => {
             <textarea
               type="text"
               v-model="content"
-              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4"
-              placeholder="직관 크루 모집글을 작성해보세요" />
+              class="w-full p-0 outline-none resize-none text-4 placeholder-gray01 placeholder-4 bg-white01"
+              placeholder="직관 크루 모집글을 작성해보세요"
+            />
           </div>
         </div>
         <div class="flex flex-col gap-[30px]">
@@ -300,11 +310,13 @@ const handleDropdownToggle = (key) => {
               :options="recruitOptions"
               part="모집 상태"
               :isOpen="openDropdown === 'recruitStatus'"
-              @toggle="handleDropdownToggle('recruitStatus')" />
+              @toggle="handleDropdownToggle('recruitStatus')"
+            />
           </div>
           <div class="flex justify-between">
             <div
-              class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+              class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+            >
               <div class="w-[100px]">
                 <span
                   class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -312,24 +324,28 @@ const handleDropdownToggle = (key) => {
                 >
               </div>
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+              >
                 <div class="relative w-full">
                   <button
                     @click="isDatePickerOpen = !isDatePickerOpen"
-                    class="flex items-center justify-between w-full h-[40px] px-[15px] bg-white02 text-black01 text-[18px] rounded-[8px] border">
+                    class="flex items-center justify-between w-full h-[40px] px-[15px] bg-white02 text-black01 text-[18px] rounded-[8px] border"
+                  >
                     <span>{{ formattedGameDate || "날짜를 선택하세요" }}</span>
                     <img :src="Calendar" class="w-[18px] h-[18px]" />
                   </button>
                   <div
                     v-if="isDatePickerOpen"
-                    class="absolute z-10 mt-2 left-[350px] top-[-10px]">
+                    class="absolute z-10 mt-2 left-[350px] top-[-10px]"
+                  >
                     <VDatePicker v-model="gameDateStatus" mode="single" />
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="flex justify-between items-center h-[40px] gap-2 w-[425px]">
+              class="flex justify-between items-center h-[40px] gap-2 w-[425px]"
+            >
               <div class="w-[100px]">
                 <span
                   class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -341,19 +357,22 @@ const handleDropdownToggle = (key) => {
                   v-model:selectedOption="peopleNum"
                   :options="peopleNumOptions"
                   HEAD
-                  part="인원" />
+                  part="인원"
+                />
                 <DropdownSelect
                   v-model:selectedOption="peopleStatus"
                   :options="peopleStatusOptions"
                   part="인원"
                   :isOpen="openDropdown === 'peopleNum'"
-                  @toggle="handleDropdownToggle('peopleNum')" />
+                  @toggle="handleDropdownToggle('peopleNum')"
+                />
                 <DropdownSelect
                   v-model:selectedOption="peopleStatus"
                   :options="peopleStatusOptions"
                   part="인원 상태"
                   :isOpen="openDropdown === 'peopleStatus'"
-                  @toggle="handleDropdownToggle('peopleStatus')" />
+                  @toggle="handleDropdownToggle('peopleStatus')"
+                />
               </div>
             </div>
           </div>
@@ -367,7 +386,8 @@ const handleDropdownToggle = (key) => {
             </div>
             <div class="flex justify-between">
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+              >
                 <div class="w-[100px]">
                   <span
                     class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -379,10 +399,12 @@ const handleDropdownToggle = (key) => {
                   :options="myTeamOptions"
                   part="응원팀"
                   :isOpen="openDropdown === 'myTeam'"
-                  @toggle="handleDropdownToggle('myTeam')" />
+                  @toggle="handleDropdownToggle('myTeam')"
+                />
               </div>
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+              >
                 <div class="w-[100px]">
                   <span
                     class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -394,7 +416,8 @@ const handleDropdownToggle = (key) => {
                   :options="stadiumOptions"
                   part="경기 장소"
                   :isOpen="openDropdown === 'stadium'"
-                  @toggle="handleDropdownToggle('stadium')" />
+                  @toggle="handleDropdownToggle('stadium')"
+                />
               </div>
             </div>
           </div>
@@ -408,7 +431,8 @@ const handleDropdownToggle = (key) => {
             </div>
             <div class="flex justify-between">
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+              >
                 <div class="w-[100px]">
                   <span
                     class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -420,10 +444,12 @@ const handleDropdownToggle = (key) => {
                   :options="myGenderOptions"
                   part="작성자 성별"
                   :isOpen="openDropdown === 'myGender'"
-                  @toggle="handleDropdownToggle('myGender')" />
+                  @toggle="handleDropdownToggle('myGender')"
+                />
               </div>
               <div
-                class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+                class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+              >
                 <div class="w-[100px]">
                   <span
                     class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -435,13 +461,15 @@ const handleDropdownToggle = (key) => {
                   :options="myAgeOptions"
                   part="작성자 연령"
                   :isOpen="openDropdown === 'myAge'"
-                  @toggle="handleDropdownToggle('myAge')" />
+                  @toggle="handleDropdownToggle('myAge')"
+                />
               </div>
             </div>
           </div>
           <div class="flex justify-between">
             <div
-              class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+              class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+            >
               <div class="w-[100px]">
                 <span
                   class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -454,10 +482,12 @@ const handleDropdownToggle = (key) => {
                 :disabled="isCrewGenderDisabled"
                 part="크루 성별"
                 :isOpen="openDropdown === 'crewGender'"
-                @toggle="handleDropdownToggle('crewGender')" />
+                @toggle="handleDropdownToggle('crewGender')"
+              />
             </div>
             <div
-              class="flex justify-between items-center h-[40px] w-[425px] gap-2">
+              class="flex justify-between items-center h-[40px] w-[425px] gap-2"
+            >
               <div class="w-[100px]">
                 <span
                   class="text-black01 text-bold text-[18px] whitespace-nowrap"
@@ -469,7 +499,8 @@ const handleDropdownToggle = (key) => {
                 :options="crewAgeOptions"
                 part="크루 연령"
                 :isOpen="openDropdown === 'crewAge'"
-                @toggle="handleDropdownToggle('crewAge')" />
+                @toggle="handleDropdownToggle('crewAge')"
+              />
             </div>
           </div>
         </div>

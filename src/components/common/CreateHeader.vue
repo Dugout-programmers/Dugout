@@ -1,7 +1,7 @@
 <script setup>
 import { useModalStore } from "@/stores/useModalStore";
 import { useRoute, useRouter } from "vue-router";
-import Modal from "./common/Modal.vue";
+import Modal from "@/components/common/Modal.vue";
 import { computed, ref } from "vue";
 import { teamList } from "@/constants";
 
@@ -62,6 +62,7 @@ const handleSubmit = async () => {
   if (isSubmitDisabled.value) return; // 이미 비활성화되었다면 실행하지 않음
 
   const isCompleted = await props.handleRegister(); // 함수의 마지막의 return true를 해줘야함
+  console.log(isCompleted);
   // 함수가 다 실행됬을 때만 버튼 비활성화 시키기
   if (isCompleted) {
     isSubmitDisabled.value = true; // 버튼 비활성화

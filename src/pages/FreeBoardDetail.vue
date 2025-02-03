@@ -20,7 +20,7 @@ const props = defineProps({
   team: String,
 });
 
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 const post = ref(null); // 게시물 상세 정보를 담을 변수
 const router = useRouter();
@@ -32,6 +32,7 @@ dayjs.locale("ko"); // 한국어 로케일 설정
 // 게시물 상세 정보를 가져오는 함수
 const fetchFreeboardDetail = async () => {
   try {
+    isLoading.value = true;
     const data = await getFreePostDetailsById(props.id);
     post.value = data;
   } catch (error) {
@@ -47,9 +48,11 @@ const fetchmDeletePost = () => {
     message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
     type: "twoBtn",
     onConfirm: async () => {
+      isLoading.value = true;
       await deleteFreePost(props.id);
       modalStore.closeModal();
       router.push(`/${props.team}/freeboard`);
+      isLoading.value = false;
     },
     onCancel: modalStore.closeModal(),
   });
@@ -75,7 +78,8 @@ onMounted(() => {
         :title="post.title"
         :time="dayjs(post.created_at).fromNow()"
         :post="post"
-        :confirm-delete="fetchmDeletePost" />
+        :confirm-delete="fetchmDeletePost"
+      />
       <!-- 게시물 내용 -->
       <div class="border-b border-gray01 pb-[50px]">
         <div v-html="post.content" class="prose ql-editor max-w-none"></div>
@@ -84,7 +88,8 @@ onMounted(() => {
       <!-- 코멘트 부분 -->
       <CommentSection
         :likeLength="post.like_count"
-        :commentLength="post.comment_count" />
+        :commentLength="post.comment_count"
+      />
     </div>
   </div>
 </template>
