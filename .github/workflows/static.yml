@@ -2,8 +2,7 @@
     
     on:
       push:
-        branches: 
-            - main
+        branches: ["main"]
     
     permissions:
       contents: read
@@ -26,9 +25,6 @@
           - name: Checkout
             uses: actions/checkout@v4
             
-          - name: Setup Pages
-            uses: actions/configure-pages@v5
-            
           - uses: actions/setup-node@v3
             with:
               node-version: 20
@@ -38,6 +34,9 @@
             
           - name: Build Vue project
             run: npm run build
+
+          - name: Setup Pages
+            uses: actions/configure-pages@v5
          
           - name: Upload artifact
             uses: actions/upload-pages-artifact@v3
