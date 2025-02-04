@@ -80,7 +80,7 @@ const goToDetail = () => {
           alt="유저 프로필"
           class="w-[25px] h-[25px] rounded-full"
           :class="{
-            'outline outline-1 outline-gray02': !props.post.author_image,
+            'outline outline-1 outline-gray02': !props.post?.author_image,
           }"
         />
         <span class="text-xs text-gray03">{{
