@@ -12,6 +12,8 @@ import { useRoute } from "vue-router";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
+const isVisable = ref(false);
+
 const props = defineProps({
   comment: {
     type: Object,
@@ -93,20 +95,19 @@ const fetchUpdateComment = async () => {
 };
 
 const onClickDeleteComment = () => {
-  modalStore.openModal({
-    message: "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?",
-    type: "twoBtn",
-    onConfirm: async () => {
-      await fetchDeleteComment();
-      modalStore.closeModal();
-    },
-    onCancel: modalStore.closeModal,
-  });
+  modalStore.isVisible = true;
+  modalStore.modalProps.message =
+    "삭제 후에는 복구할 수 없습니다 \n삭제하시겠습니까?";
+  modalStore.modalProps.onConfirm = async () => {
+    await fetchDeleteComment();
+    modalStore.closeModal();
+  };
+  modalStore.modalProps.onCancel = modalStore.closeModal;
 };
 </script>
 
 <template>
-  <Modal />
+  <Modal v-if="isVisable" />
   <div class="pb-5 border-b border-white02">
     <div class="flex items-center justify-between">
       <div class="flex gap-[10px] items-center">
