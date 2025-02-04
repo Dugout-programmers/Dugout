@@ -86,6 +86,9 @@ const handleProfileImageUpload = async () => {
         :src="props.profileImage || DefaultProfile"
         alt="프로필 사진"
         class="w-full h-full rounded-full object-cover"
+        :class="{
+          'outline outline-1 outline-gray02': !props.profileImage,
+        }"
       />
       <div v-else class="relative w-full h-full">
         <!-- 프로필 이미지 -->

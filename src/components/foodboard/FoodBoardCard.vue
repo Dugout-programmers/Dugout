@@ -96,6 +96,10 @@ const calculatedCreatedAt = computed(() => {
               <img
                 :src="props.restaurantPostData.author_image || BaseballLogo"
                 class="w-full h-full object-cover"
+                :class="{
+                  'outline outline-1 outline-gray02':
+                    !props.restaurantPostData.author_image,
+                }"
               />
             </div>
             <span class="text-gray03">{{ props.restaurantPostData.name }}</span>

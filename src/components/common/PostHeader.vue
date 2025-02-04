@@ -95,6 +95,9 @@ const goToEditPage = () => {
           :src="post.author_image || BaseballLogo"
           alt="유저 프로필"
           class="w-[25px] h-[25px] rounded-full"
+          :class="{
+            'outline outline-1 outline-gray02': !post.author_image,
+          }"
         />
         <span class="text-xs text-gray03">{{ props.post.author_name }}</span>
         <span class="text-xs text-gray02">{{ props.time }}</span>

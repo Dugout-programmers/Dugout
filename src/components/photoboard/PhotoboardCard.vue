@@ -61,6 +61,9 @@ watch(
         <img
           :src="props.post.author_image || BaseballLogo"
           class="w-[25px] h-[25px] object-cover rounded-full flex-nowrap"
+          :class="{
+            'outline outline-1 outline-gray02': !props.post.author_image,
+          }"
         />
         <p>{{ props.post.name || "작성자이름 없음" }}</p>
       </div>
