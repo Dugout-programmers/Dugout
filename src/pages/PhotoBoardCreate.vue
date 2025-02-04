@@ -176,7 +176,7 @@ watch(gameDate, (newDate) => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col w-[1090px] mx-auto">
     <div class="w-[1090px] flex flex-col">
       <CreateHeader :handleRegister="handleRegister" />
       <Modal />

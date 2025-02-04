@@ -106,8 +106,8 @@ watch(
 
 <template>
   <Loading v-if="isLoading" />
-  <div class="flex flex-col px-[50px] py-[30px] items-center">
-    <div class="flex flex-col gap-[50px] w-[990px]">
+  <div class="flex flex-col px-[50px] py-[30px]">
+    <div class="flex flex-col gap-[50px] w-[990px] mx-auto">
       <div class="cursor-pointer">
         <GoToCreate :text="'직관 크루 모집에 글 쓰러 가기'" />
       </div>
@@ -121,7 +121,7 @@ watch(
           />
         </template>
         <template v-else>
-          <div class="flex justify-center items-center w-full col-span-3">
+          <div class="flex items-center justify-center w-full col-span-3">
             <span class="text-center">
               게시물이 없습니다. 게시물을 작성해보세요!
             </span>

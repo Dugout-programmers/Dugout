@@ -91,8 +91,8 @@ const handleRegister = async () => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="flex flex-col items-center">
-    <div class="w-[1090px] flex flex-col">
+  <div class="flex flex-col">
+    <div class="w-[1090px] flex flex-col mx-auto">
       <CreateHeader :handleRegister />
       <!-- 제목부분 -->
       <div>
@@ -101,7 +101,8 @@ const handleRegister = async () => {
           type="text"
           placeholder="제목"
           ref="titleRef"
-          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01" />
+          class="py-[15px] border-b border-white02 w-full outline-none text-3xl text-center bg-white01"
+        />
       </div>
       <!-- 에디터 부분 -->
       <div>
@@ -111,8 +112,10 @@ const handleRegister = async () => {
           placeholder="자유롭게 게시글을 작성해보세요."
           contentType="html"
           theme="snow"
-          toolbar="full" />
+          toolbar="full"
+        />
       </div>
+      {{ content }}
     </div>
   </div>
 </template>
