@@ -115,7 +115,6 @@ const handleRegister = async () => {
           toolbar="full"
         />
       </div>
-      {{ content }}
     </div>
   </div>
 </template>
