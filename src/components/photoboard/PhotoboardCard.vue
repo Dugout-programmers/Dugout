@@ -4,7 +4,7 @@ import Comment from "@/assets/icons/comment.svg";
 import { useRoute } from "vue-router";
 import { getCertificationPostDetailsById } from "@/api/supabase-api/viewingCertificationPost";
 import { onMounted, ref, watch } from "vue";
-import BaseballLogo from "@/assets/icons/baseball.svg";
+import BaseballLogo from "@/assets/icons/default_profile_xl.svg";
 
 const route = useRoute();
 

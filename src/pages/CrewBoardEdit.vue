@@ -2,7 +2,7 @@
 import DropdownSelect from "@/components/common/DropdownSelect.vue";
 import CreateHeader from "@/components/common/CreateHeader.vue";
 import { onMounted, ref, watch } from "vue";
-import Baseball from "@/assets/icons/baseball.svg";
+import Baseball from "@/assets/icons/default_profile_xl.svg";
 import Calendar from "@/assets/icons/calendar.svg";
 import { useRoute, useRouter } from "vue-router";
 import {

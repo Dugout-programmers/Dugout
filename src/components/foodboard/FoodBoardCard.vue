@@ -1,5 +1,5 @@
 <script setup>
-import BaseballLogo from "@/assets/icons/baseball.svg";
+import BaseballLogo from "@/assets/icons/default_profile_xl.svg";
 import commentIcon from "@/assets/icons/comment.svg";
 import likeIcon from "@/assets/icons/like.svg";
 import dayjs from "dayjs";
