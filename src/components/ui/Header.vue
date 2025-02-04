@@ -51,7 +51,7 @@ const menuList = [
   { name: "HIGHLIGHT", path: "/highlight" },
   { name: "GAME", path: "/game" },
 ];
-const isActive = (path) => route.path === path; // 메뉴 활성화 목록 확인
+const isActive = (path) => route.path.startsWith(path); // 메뉴 활성화 목록 확인
 
 // 팀이름에 따라 팀 닉네임 찾는 함수 -> css 사용
 const teamNickname = computed(() => {
@@ -111,7 +111,7 @@ const teamNickname = computed(() => {
             v-model="searchInput"
             @input="updateSearchKeyword"
             placeholder="현재 게시판에서만 검색할 수 있습니다"
-            class="w-0 opacity-0 bg-white02 focus:outline-none transition duration-300 ease-in-out"
+            class="w-0 transition duration-300 ease-in-out opacity-0 bg-white02 focus:outline-none"
             :class="isSeachbarOpen && 'w-[290px] opacity-100'"
           />
           <button
