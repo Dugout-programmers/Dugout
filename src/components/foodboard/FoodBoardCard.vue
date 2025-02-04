@@ -92,7 +92,7 @@ const calculatedCreatedAt = computed(() => {
         <!-- 닉네임 / 작성일 -->
         <div class="flex items-center w-[280px] bottom-0 justify-between">
           <div class="flex text-[12px] gap-[10px] items-center">
-            <div class="w-[25px] h-[25px] rounded-full overflow-hidden">
+            <div class="w-[25px] h-[25px] rounded-full overflow-visible">
               <img
                 :src="props.restaurantPostData.author_image || BaseballLogo"
                 class="w-full h-full object-cover"
