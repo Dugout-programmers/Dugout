@@ -1,13 +1,13 @@
-
 # ⚾ SIXPACK - 야구 커뮤니티(DUGOUT)
+https://programmers-dugout.netlify.app/
 
 ## 🧑🏻‍💻👩🏻‍💻Developers
 
-|                                                 Frontend                                                  |                                                 Frontend                                                  |                                                 Frontend                                                  |                                                 Frontend                                                  |                                                 Frontend                                                  |
-| :-------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/5da96811-cf1c-4a90-b8d0-f32a2c963d63"  width="100"/> | <img src="https://github.com/user-attachments/assets/72e19e75-5d88-453e-9dbf-66d8cfff57b4"  width="100"/> | <img src='https://github.com/user-attachments/assets/9fe42332-5c5f-4992-90ed-a3250b445e5a'  width="100"/> | <img src="https://github.com/user-attachments/assets/ecfdea20-5919-4044-af7b-d034f8e01ce7"  width="100"/> | <img src="https://github.com/user-attachments/assets/ff874a01-a97b-45b0-ac65-44c4c6ef1d7f"  width="100"/> |
-|                                                  김동찬                                                   |                                                  박선형                                                   |                                                  이수빈                                                   |                                                  이준영                                                   |                                                  정현승                                                   |
-|                                  [@kdc9050](https://github.com/kdc9050)                                   |                              [@sunhyeongpp](https://github.com/sunhyeongpp)                               |                           [@ddongguri-bing](https://github.com/ddongguri-bing)                            |                                 [@osanThor](https://github.com/osanThor)                                  |                                  [@denshou](https://github.com/denshou)                                   |
+|                                                        Frontend                                                        |                                                        Frontend                                                        |                                                        Frontend                                                        |                                                        Frontend                                                        |                                                        Frontend                                                        |
+| :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
+| <img src="https://github.com/user-attachments/assets/b84191df-d009-4730-b32f-ba4996b5b522"  width="100" height="140"/> | <img src="https://github.com/user-attachments/assets/72e19e75-5d88-453e-9dbf-66d8cfff57b4"  width="100" height='140'/> | <img src='https://github.com/user-attachments/assets/9f2b5c6a-a9c9-44ab-ad90-66ff282c4a59'  width="100" height='140'/> | <img src="https://github.com/user-attachments/assets/5ad72da8-7c26-4e25-be1b-bfc49eb9eacb"  width="100" height='140'/> | <img src="https://github.com/user-attachments/assets/b4d7bb7e-d122-4528-87bd-d947a6ddcdb4"  width="100" height='140'/> |
+|                                                         강수영                                                         |                                                         박선형                                                         |                                                         이수빈                                                         |                                                         김예빈                                                         |                                                         왕정훈                                                         |
+|                                     [@kangsuyeong](https://github.com/kangsuyeong)                                     |                                     [@sunhyeongpp](https://github.com/sunhyeongpp)                                     |                                  [@ddongguri-bing](https://github.com/ddongguri-bing)                                  |                                      [@engsal-bin](https://github.com/engsal-bin)                                      |                                         [@wjh1010](https://github.com/wjh1010)                                         |
 
 <br/>
 
@@ -15,11 +15,12 @@
 
 ### Project setting
 
-<img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/ReactRouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white"> <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"> <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
+<img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white"> <img src="https://img.shields.io/badge/vue-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white"> <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
 
-### React Compiler
+### DB
 
-  <img src="https://img.shields.io/badge/SWC-F8C457?style=for-the-badge&logo=swc&logoColor=black">
+<img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
 
 ### Design
 
@@ -31,25 +32,47 @@
 
 <br/>
 
-## 📝 Code Convention
 
-### Commit Message
-
-- [FEAT]: 코드 새로운 기능 구현.
-- [FIX]: 코드 버그 수정.
-- [REFACTOR]: 코드의 기능을 바꾸지 않고 코드 구조를 개선.
-- [STYLE]: 코드 포맷팅(세미콜론 누락 수정, 코드 로직 변경이 없는 경우).
-- [DOCS]: 문서 수정.
-- [CONF]: 프로젝트 설정 파일 변경(설정 중심).
-- [CHORE]: 개발 환경 설정(일반적인 유지 관리나 작업).
-- [DESIGN]: csse등 UI 디자인 변경.
-- [RENAME]: 파일 명/폴더 명을 수정.
-- [REMOVE]: 코드(파일)의 삭제.
-- [COMMENT]: 필요한 주석 추가 및 변경.
-
-<br/>
 
 ## ✅ Implementation
+
+- 카카오, 구글 소셜 로그인과 일반 로그인을 제공하며 입력 요소 미작성시 경고 메시지가 활성화되며 비밀번호 유효성에 대한 검사가 이뤄짐
+
+- 좌측 하단 헤드셋 버튼을 호버하면 응원가 플레이바를 통해 응원가를 플레이할 수 있음
+
+- 사용자가 원하는 구단 테마를 고르면 화면 전체에 각 구단 엠블럼 뜨며 
+각 구단 테마색으로 디자인 변경되며 하단 응원가 시작 곡이 해당 구단 응원가로 변경됨
+
+- 로그인 후 팬으로 선택한 구단의 게시판 버튼을 통해 각 게시판으로 이동하거나 하단 네비게시션바를 통해 각 구단 로고를 통해 각 구단 페이지로 이동할 수 있음
+
+- 마이페이지이에서 자신의 응원팀과 닉네임, 프로필 설명, 프로필 사진을 설정 및 변경할 수 있으며 자신이 작성한 게시물과 댓글, 좋아요를 누른 게시물을 탭으로 전환하며 확인할 수 있음
+
+- 각 구단 페이지에는 KBO 10개 구단의 자유게시판, 직관크루모집 게시판, 직관인증포토 게시판, 직관맛집찾기 게시판이 있으며 구단별로 메인 색상이 변경됨. 
+
+- 게시판별 필수 입력 요소가 있으며 입력 요소가 채워지지 않은 채 등록을 시도할 경우 안내 문구를 통해 혼란을 방지함
+
+- 게시판별 특징: 
+(1) 자유게시판 : 제목과 내용(텍스트 혹은 사진)을 작성해 게시글을 등록할 수 있음. 다양한 편집 스타일(글꼴 크기 정렬)을 제공함. 블로그 처럼 툴바를 통해 사진을 업로드할 수 있는 것이 특징
+(2) 직관 크루 모집 게시판 : 크루 조건(모집 상태, 경기일, 모집인원, 응원팀, 경기장소, 작성자 성별, 작성자 연령)과 게시글 내용을 작성해 게시글을 등록할 수 있음. 작성자 성별을 비공개 설정 시, 크루 성별은 자동 비공개 설정됨
+(3) 직관 인증 포토 게시판 : 제목, 내용, 경기일, 사진을 모두 작성해야 게시글을 등록할 수 있음. 사진은 1개, 게시글은 최대 500자로 사진 위주의 게시물을 지향함
+(4) 직관 맛집 찾기 게시판 : 카카오맵과 사진(3개 이하로 제한)을 통해 야구 팬들이 필요한 맛집 정보를 공유하는 것이 주 목적인 게시판임. 다양한 편집 스타일 제공.‘야구장 내부 맛집', ‘야구장 주변 맛집', ‘야구 볼 수 있는 식당'태그를 선택해 게시글을 작성하며 목록에서는 태그로 필터링해 게시물을 열람할 수 있음. 게시글에 지도 등록하지 않으면 사진을, 사진 등록하지 않으면 지도를,  모두 등록하면 사진을 목록 썸네일로 보여줌
+
+- 인증된 사용자는 게시물을 작성할 수 있으며 수정과 삭제가 가능하며 게시물에 좋아요와 댓글을 달고 수정 삭제할 수 있음
+
+- 각 게시판 목록에서는 검색 버튼이 나타나며 해당 버튼을 클릭하여 게시판에 대한 검사를 개별적으로 할 수 있음
+
+- 메인 상단에서는 환영 문구와 실시간 뉴스 5개를 확인할 수 있으며 클릭하면 해당 뉴스 링크로 이동할 수 있으며, ‘더 많은 뉴스 보기' 버튼을 통해 뉴스 페이지로 이동할 수 있음. 뉴스 페이지에서 태그를 통해 각 팀이 언급된 뉴스를 필터링해 확인할 수 있음 (중복 선택 가능)
+
+- 메인 하단은 실시간 게임 랭킹 1, 2, 3순위 사용자와 점수를 확인할 수 있음
+INSERT COIN 버튼을 통해 로그인 전 사용자는 로그인 페이지로, 
+로그인한 사용자는 게임 페이지로 이동할 수 있음
+
+-  TVING SPORTS 유튜브 계정에 올라온 
+KBO 하이라이트 영상을 모아 볼 수 있으며 태그를 통해 각 팀의 하이라이트 영상을 필터링과 모달을 통한 영상 플레이를 할 수 있음
+
+- 커뮤니티의 오락성을 위해 별도의 게임 탭을 추가했으며 야구 게임, 야구 퀴즈, 야구 토너먼트를 즐길 수 있음. 야구 게임은 총 10번의 기회로 상대방의 볼 번호 4자리를 맞추는 게임이며 점수에 따라 랭킹에 기록됨. 퀴즈는 주관식 토너먼트는 객관식으로 이상형 월드컵과 비슷한 포멧임. 모든 게임은 리트라이로 재시작이 가능함
+
+
 
 ## 🗂️ Folder
 
@@ -59,24 +82,32 @@
  ┣ 📂api
  ┣ 📂assets
  ┣ 📂components
- ┃ ┣ 📂board
  ┃ ┣ 📂common
- ┃ ┃ ┣ 📂skeleton
- ┃ ┣ 📂search
  ┃ ┣ 📂ui
- ┃ ┗ 📂user
+ ┃ ┣ 📂crewboard
+ ┃ ┣ 📂foodboard
+ ┃ ┣ 📂freeboard
+ ┃ ┣ 📂photoboard
+ ┃ ┣ 📂highlight
+ ┃ ┗ 📂mypage
  ┣ 📂constants
- ┣ 📂hooks
  ┣ 📂layouts
+ ┃ ┣ BoardLayout
+ ┃ ┣ GameLayout
+ ┃ ┗ RootLayout
  ┣ 📂pages
- ┣ 📂stores
+ ┣ 📂router
  ┣ 📂styles
- ┣ 📂types
- ┗ 📂utils
+ ┣ 📂utils
+ ┣ 📂stores
+ ┣ App.vue
+ ┣ main.js
+ ┗ supabase.js
+
+
 ```
 
 ## 🌟 Result
-
 
 <table>
   <tbody>
@@ -94,8 +125,6 @@
     </tr>
   </tbody>
 </table>
-
-
 
 ### Preview
 
