@@ -67,13 +67,13 @@ onMounted(() => {
   <Loading v-if="isLoading" />
   <div v-if="post" class="px-[50px] py-[30px]">
     <!-- 뒤로가기 -->
-    <div class="mb-[50px] flex">
+    <div class="mb-[50px] flex w-full">
       <button @click="handleBack">
         <img :src="backIcon" alt="뒤로가기 아이콘" />
       </button>
     </div>
     <!-- 상세페이지 -->
-    <div class="flex flex-col gap-[50px]">
+    <div class="flex flex-col gap-[50px] w-[990px] mx-auto">
       <!-- 상세 페이지 정보 -->
       <PostHeader
         crewBoard

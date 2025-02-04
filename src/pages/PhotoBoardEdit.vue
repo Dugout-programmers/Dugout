@@ -232,8 +232,8 @@ onMounted(() => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="flex flex-col items-center">
-    <div class="w-[1090px] flex flex-col">
+  <div class="flex flex-col">
+    <div class="w-[1090px] flex flex-col mx-auto">
       <CreateHeader :handleRegister="openEditModal" />
       <Modal />
       <div>

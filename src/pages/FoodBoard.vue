@@ -120,8 +120,8 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col px-[50px] py-[30px] items-center">
-    <div class="w-[990px] gap-[50px] flex flex-col">
+  <div class="flex flex-col px-[50px] py-[30px]">
+    <div class="w-[990px] gap-[50px] flex flex-col mx-auto">
       <GoToCreate :text="'직관 맛집 공유하기'" />
       <section class="min-h-[39px] overflow-x-auto scrollbar-hide">
         <div class="flex items-center gap-x-[10px] w-max flex-nowrap">

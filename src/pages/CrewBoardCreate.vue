@@ -249,7 +249,7 @@ const handleDropdownToggle = (key) => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="px-[50px]">
+  <div class="px-[50px] w-[1090px] mx-auto">
     <CreateHeader :handleRegister />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">

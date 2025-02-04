@@ -77,7 +77,7 @@ const onClickDelete = () => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="px-[50px] py-[30px] items-center flex flex-col">
+  <div class="px-[50px] py-[30px] flex flex-col">
     <!-- 뒤로가기 버튼 -->
     <div class="mb-[50px] flex w-full">
       <button @click="router.go(-1)">
@@ -86,7 +86,7 @@ const onClickDelete = () => {
     </div>
 
     <!-- 게시물 상세 페이지 -->
-    <div class="flex flex-col gap-[50px] w-[990px]">
+    <div class="flex flex-col gap-[50px] w-[990px] mx-auto">
       <!-- 헤더 정보 -->
       <PostHeader
         v-if="postDetails"
