@@ -4,7 +4,7 @@ import RecruitmentStatus from "@/components/crewboard/RecruitmentStatus.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import Modal from "@/components/common/Modal.vue";
-import BaseballLogo from "@/assets/icons/baseball.svg";
+import BaseballLogo from "@/assets/icons/default_profile_xl.svg";
 import { computed, ref, watchEffect } from "vue";
 
 //profileImage, memberId, postId는 post로 한번에 전달

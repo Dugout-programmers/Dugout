@@ -5,8 +5,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko"; // 한국어 로케일 가져오기
 import { computed } from "vue";
-import BaseballLogo from "@/assets/icons/baseball.svg";
-
+import BaseballLogo from "@/assets/icons/default_profile_xl.svg";
 
 // day.js
 dayjs.extend(relativeTime); // relativeTime 플러그인 활성화

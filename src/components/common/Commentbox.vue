@@ -1,6 +1,6 @@
 <script setup>
 import { deleteComment, updateComment } from "@/api/supabase-api/commonComment";
-import BaseballLogo from "@/assets/icons/baseball.svg";
+import BaseballLogo from "@/assets/icons/default_profile_xl.svg";
 import Modal from "@/components/common/Modal.vue";
 import { boardToTableMapping } from "@/constants";
 import { useModalStore } from "@/stores/useModalStore";

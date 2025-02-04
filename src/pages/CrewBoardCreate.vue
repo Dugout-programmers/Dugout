@@ -1,7 +1,7 @@
 <script setup>
 import { createCrewRecruitmentPost } from "@/api/supabase-api/crewRecruitmentPost";
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
-import Baseball from "@/assets/icons/baseball.svg";
+import Baseball from "@/assets/icons/default_profile_xl.svg";
 import Calendar from "@/assets/icons/calendar.svg";
 import DropdownSelect from "@/components/common/DropdownSelect.vue";
 import Loading from "@/components/common/Loading.vue";
