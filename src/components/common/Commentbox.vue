@@ -114,6 +114,9 @@ const onClickDeleteComment = () => {
           :src="props.comment.user_info.image || BaseballLogo"
           alt="유저 프로필"
           class="w-[35px] h-[35px] rounded-full"
+          :class="{
+            'outline outline-1 outline-gray02': !props.comment.user_info.image,
+          }"
         />
         <span class="text-sm font-bold text-gray03">{{
           props.comment.user_info.name

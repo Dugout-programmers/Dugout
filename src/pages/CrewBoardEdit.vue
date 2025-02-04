@@ -2,7 +2,7 @@
 import DropdownSelect from "@/components/common/DropdownSelect.vue";
 import CreateHeader from "@/components/common/CreateHeader.vue";
 import { onMounted, ref, watch } from "vue";
-import Baseball from "@/assets/icons/default_profile_xl.svg";
+import Baseball from "@/assets/icons/baseball.svg";
 import Calendar from "@/assets/icons/calendar.svg";
 import { useRoute, useRouter } from "vue-router";
 import {
@@ -279,7 +279,7 @@ const handleDropdownToggle = (key) => {
 <template>
   <!-- 로딩창 -->
   <Loading v-if="isLoading" />
-  <div class="px-[50px] w-[1090px] mx-auto">
+  <div class="px-[50px]">
     <CreateHeader :handleRegister="openEditModal" />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">

@@ -1,7 +1,7 @@
 <script setup>
 import { createCrewRecruitmentPost } from "@/api/supabase-api/crewRecruitmentPost";
 import { getCurrentUser } from "@/api/supabase-api/userInfo";
-import Baseball from "@/assets/icons/default_profile_xl.svg";
+import Baseball from "@/assets/icons/baseball.svg";
 import Calendar from "@/assets/icons/calendar.svg";
 import DropdownSelect from "@/components/common/DropdownSelect.vue";
 import Loading from "@/components/common/Loading.vue";
@@ -249,7 +249,7 @@ const handleDropdownToggle = (key) => {
 </script>
 <template>
   <Loading v-if="isLoading" />
-  <div class="px-[50px] w-[1090px] mx-auto">
+  <div class="px-[50px]">
     <CreateHeader :handleRegister />
     <div class="gap-[50px]">
       <div class="mt-[40px] mb-[85px] gap-[30px]">
