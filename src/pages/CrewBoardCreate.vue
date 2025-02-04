@@ -56,7 +56,7 @@ const stadiumOptions = [
   "마산 야구장",
 ];
 const myGender = ref("");
-const myGenderOptions = ["여자", "남자", "비공개", "무관"];
+const myGenderOptions = ["여자", "남자", "비공개"];
 const myAge = ref("");
 const myAgeOptions = ["무관", "10대", "20대", "30대", "40대", "50대", "60대"];
 const crewGender = ref("");
